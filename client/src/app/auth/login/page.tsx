@@ -1,9 +1,12 @@
+import { LoginForm } from "@/components/auth/LoginForm";
 import MaxwidthWrapper from "@/components/common/MaxwidthWrapper";
 
 export default function page() {
   return (
     <main>
-      <MaxwidthWrapper>hello</MaxwidthWrapper>
+      <MaxwidthWrapper>
+        <LoginForm />
+      </MaxwidthWrapper>
     </main>
   );
 }

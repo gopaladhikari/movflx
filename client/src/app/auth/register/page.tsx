@@ -1,9 +1,12 @@
+import { RegisterForm } from "@/components/auth/RegisterForm";
 import MaxwidthWrapper from "@/components/common/MaxwidthWrapper";
 
 export default function page() {
   return (
     <main>
-      <MaxwidthWrapper>hello</MaxwidthWrapper>
+      <MaxwidthWrapper>
+        <RegisterForm />
+      </MaxwidthWrapper>
     </main>
   );
 }

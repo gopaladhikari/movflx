@@ -1,5 +1,4 @@
 {
-  "root": true,
   "extends": [
     "airbnb",
     "airbnb-typescript",
@@ -10,6 +9,14 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
   "parserOptions": {
-    "project": "client/tsconfig.json"
+    "project": "tsconfig.json"
+  },
+  "rules": {
+    "import/extensions": 0,
+    "import/prefer-default-export": 0,
+    "react/require-default-props": 0,
+    "tailwindcss/no-custom-classname": 0,
+    "jsx-a11y/label-has-associated-control": 0,
+    "react/jsx-props-no-spreading": 0
   }
 }
