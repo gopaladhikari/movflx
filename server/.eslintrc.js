@@ -1,9 +1,13 @@
-module.exports = {
+export default {
   env: {
     node: true,
     es2021: true,
   },
-  extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  extends: [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:node/recommended",
+  ],
   overrides: [
     {
       env: {
@@ -17,7 +21,7 @@ module.exports = {
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    ecmaVersion: "latest",
+    ecmaVersion: 2020,
     sourceType: "module",
   },
   plugins: ["@typescript-eslint"],

@@ -1,7 +1,7 @@
 import { config } from "dotenv";
-import { connectDB } from "./db";
 import { app } from "./app";
 import { env } from "./conf/env";
+import { connectDB } from "./db";
 
 config();
 
