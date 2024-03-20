@@ -1,9 +1,10 @@
-import "./globals.css";
+import "../styles/globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { site } from "@/config/site";
 import { Providers } from "@/context/providers";
 import { Header } from "@/components/common/Header";
+import { cn } from "@/utils/cn";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>
+      <body
+        className={cn("bg-black/80", inter.className)}
+        suppressHydrationWarning
+      >
         <Providers>
           <Header />
           {children}
