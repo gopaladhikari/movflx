@@ -1,11 +1,7 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 
-export const dbHandler =
-  (requestHandler: RequestHandler) =>
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      requestHandler(req, res, next);
-    } catch (error) {
-      res.status(500).json({ error: (error as Error).message });
-    }
+export const dbHandler = (requestHandler: RequestHandler) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    Promise.resolve(requestHandler(req, res, next)).catch(next);
   };
+};

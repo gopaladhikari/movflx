@@ -4,12 +4,15 @@ import { ApiResponse } from "../utils/ApiResponse";
 import { dbHandler } from "../utils/dbHandler";
 
 const registerUser = dbHandler(async (req, res) => {
-  const { username, email, password } = req.body;
+  const { firstName, lastName, email, password, phoneNumber } = req.body;
 
-  const existedUser = await User.findOne({ email });
+  const files = req.files;
 
-  if (existedUser)
-    return res.status(400).json(new ApiError(400, "User already exists"));
+  if (!firstName || !lastName || !email || !password || !phoneNumber)
+    throw new ApiError(400, "Server error 456");
+
+  console.log("files: ", files);
+  res.status(200).json(new ApiResponse(200, {}, "User created"));
 });
 
 export { registerUser };

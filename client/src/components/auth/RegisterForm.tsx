@@ -45,6 +45,24 @@ export function RegisterForm() {
         )}
       </div>
       <div>
+        <label htmlFor="coverImage" className="mb-2 block text-sm font-medium ">
+          Cover image
+        </label>
+        <input
+          type="file"
+          id="coverImage"
+          className="block w-full border bg-transparent p-2.5 focus:border-b-primary focus:outline-none"
+          placeholder="John"
+          disabled={isSubmitting}
+          {...register("coverImage")}
+        />
+        {errors.coverImage && (
+          <p className="p-1 text-red-600">
+            {errors.coverImage?.message as string}
+          </p>
+        )}
+      </div>
+      <div>
         <label htmlFor="firstName" className="mb-2 block text-sm font-medium ">
           First Name
         </label>

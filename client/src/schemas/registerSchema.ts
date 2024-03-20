@@ -7,7 +7,12 @@ export const registerSchemas = z.object({
   password: z.string().min(1, { message: "Required" }),
   avatar: z
     .any()
-    .refine((file) => file?.length !== 0, { message: "File is required" }),
+    .refine((file) => file?.length !== 0, { message: "Avatar is required" }),
+  coverImage: z
+    .any()
+    .refine((file) => file?.length !== 0, {
+      message: "Cover image is required",
+    }),
   phoneNumber: z
     .string()
     .min(8, { message: "Phone number must be at least 8 characters" })
