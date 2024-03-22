@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to mFlix!</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      p {
+        color: #666;
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+      .button {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+      .button:hover {
+        background-color: #0056b3;
+      }
+      .link {
+        color: #007bff;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+      .link:hover {
+        color: #0056b3;
+      }
+      .footer {
+        margin-top: 30px;
+        text-align: center;
+        color: #999;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome to mFlix!</h1>
+      <p>Hi <%= username %>,</p>
+      <p>
+        Thank you for registering with mFlix! We're thrilled to have you as a
+        part of our community dedicated to movies, TV shows, and theater.
+      </p>
+      <p>
+        To get started, please verify your email address by clicking the button
+        below:
+      </p>
+      <a href="<%= domain %>/verify?token=<%=  hasedToken  %>" class="button"
+        >Verify Email</a
+      >
+
+      <p>
+        If the button above doesn't work, you can also copy and paste the
+        following link into your browser's address bar:
+      </p>
+      <p>
+        <a href="<%= domain %>/verify?token=<%=  hasedToken  %>" class="link"
+          ><%= domain %>/verify?token=<%= hasedToken %></a
+        >
+      </p>
+      <p>
+        Once your email is verified, you'll have full access to all the exciting
+        content on mFlix!
+      </p>
+      <p>
+        Enjoy exploring, and if you have any questions or feedback, feel free to
+        <a href="<%=domain%>/contact-us" class="link">Contact us</a>.
+      </p>
+      <p class="footer">Best regards,<br />The mFlix Team</p>
+    </div>
+  </body>
+</html>

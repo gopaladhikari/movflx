@@ -8,23 +8,35 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:node/recommended",
   ],
+
   overrides: [
     {
       env: {
         node: true,
       },
+
       files: [".eslintrc.{js,cjs}"],
+      rules: {
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+      },
+
       parserOptions: {
         sourceType: "script",
       },
     },
   ],
+
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: "latest",
     sourceType: "module",
   },
+
   plugins: ["@typescript-eslint"],
+
+  ignorePatterns: ["*.ejs"],
+
   rules: {
     "node/no-unsupported-features/es-syntax": 0,
     "node/no-missing-import": 0,
