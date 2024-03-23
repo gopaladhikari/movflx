@@ -22,6 +22,10 @@ import { userRouter } from "./routes/user.route";
 
 // routes declaration
 
+app.get("/", (req, res) => {
+  res.json({ message: "Hello from gopaladhikari!" });
+});
+
 app.use("/api/v1/users", userRouter);
 
 export { app };

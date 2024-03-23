@@ -20,10 +20,7 @@ export function LoginForm() {
 
   return (
     <section>
-      <form
-        className="mx-auto mt-8  max-w-md"
-        onSubmit={handleSubmit(onSubmit)}
-      >
+      <form className="mx-auto mt-8  max-w-md space-y-6" onSubmit={handleSubmit(onSubmit)}>
         <h1 className="text-center text-3xl font-bold">Sign in</h1>
         <div>
           <Input
@@ -34,9 +31,7 @@ export function LoginForm() {
             description="Your email"
             {...register("email")}
           />
-          {errors.email && (
-            <p className="px-2 text-red-600"> {errors.email.message} </p>
-          )}
+          {errors.email && <p className="px-2 text-red-600"> {errors.email.message} </p>}
         </div>
         <div>
           <Input
@@ -47,21 +42,12 @@ export function LoginForm() {
             description="Your password"
             {...register("password")}
           />
-          {errors.password && (
-            <p className="px-2 text-red-600"> {errors.password.message} </p>
-          )}
+          {errors.password && <p className="px-2 text-red-600"> {errors.password.message} </p>}
         </div>
 
-        <div>
-          <Button
-            type="submit"
-            color="primary"
-            className="mt-8 w-full"
-            isLoading={isLoading}
-          >
-            {isLoading ? "Loading..." : "Login"}
-          </Button>
-        </div>
+        <Button type="submit" color="primary" fullWidth isLoading={isLoading}>
+          {isLoading ? "Loading..." : "Login"}
+        </Button>
       </form>
     </section>
   );

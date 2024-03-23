@@ -15,15 +15,7 @@ const registerUser = dbHandler(async (req, res) => {
   const avatarLocalPath = files["avatar"]?.[0]?.path;
   const coverImageLocalPath = files["coverImage"]?.[0]?.path;
 
-  if (
-    !firstName ||
-    !lastName ||
-    !email ||
-    !password ||
-    !phoneNumber ||
-    !avatarLocalPath ||
-    !coverImageLocalPath
-  )
+  if (!firstName || !lastName || !email || !password || !phoneNumber || !avatarLocalPath || !coverImageLocalPath)
     return res.status(400).json(new ApiError(400, "All fields are required."));
 
   const existedUser = await User.findOne({ email });
@@ -37,8 +29,7 @@ const registerUser = dbHandler(async (req, res) => {
   const avatar = await uploadOnCloudinary(avatarLocalPath);
   const coverImage = await uploadOnCloudinary(coverImageLocalPath);
 
-  if (!avatar || !coverImage)
-    return res.status(500).json(new ApiError(500, "File upload failed."));
+  if (!avatar || !coverImage) return res.status(500).json(new ApiError(500, "File upload failed."));
 
   const createdUser = await User.create({
     firstName,
@@ -54,8 +45,7 @@ const registerUser = dbHandler(async (req, res) => {
 
   const user = await User.findById(createdUser?._id).select("-password");
 
-  if (!user)
-    return res.status(400).json(new ApiError(400, "User creation failed."));
+  if (!user) return res.status(400).json(new ApiError(400, "User creation failed."));
 
   await sendMail(user.email, "verify", user._id);
 
