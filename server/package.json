@@ -7,7 +7,8 @@
     "dev": "nodemon -r dotenv/config src/index.ts",
     "start": "node -r dotenv/config dist/index.js",
     "prestart": "npm run build",
-    "build": "npx tsc"
+    "build": "npx tsc",
+    "prebuild": "npm install"
   },
   "keywords": [],
   "author": "",
