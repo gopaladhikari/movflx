@@ -1,14 +1,26 @@
 "use server";
 
 import { instance } from "@/config/axios";
+import { AxiosError } from "axios";
 
-export const registerUser = async (data: any) => {
+interface CustomError extends AxiosError {
+  response: {
+    data: {
+      message: string;
+    };
+    status: number;
+    statusText: string;
+    headers: any;
+    config: any;
+  };
+}
+
+export const registerUser = async (formData: FormData) => {
   try {
-    const res = await instance.post("/users/register", data);
-    console.log("res: ", res);
-
-    return res;
+    const res = await instance.post("/users/register", formData);
+    return { data: res.data, ok: true };
   } catch (error) {
-    return error.response.data;
+    const message = (error as CustomError).response?.data?.message || "Something went wrong";
+    return { error: message, ok: false };
   }
 };

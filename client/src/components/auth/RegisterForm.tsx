@@ -11,7 +11,6 @@ import { useState } from "react";
 import { Button } from "@nextui-org/react";
 import "react-phone-input-2/lib/style.css";
 import "@/styles/react-phone-input.css";
-import { instance } from "@/config/axios";
 import { registerUser } from "@/lib/users";
 
 export function RegisterForm() {
@@ -37,8 +36,16 @@ export function RegisterForm() {
     });
 
     const res = await registerUser(formData);
-    console.log("res: ", res);
+
+    if (!res.ok) {
+      setError("root", { message: res.error });
+      setSuccess(false);
+    } else {
+      reset();
+      setSuccess(true);
+    }
   };
+
   return (
     <form className="mx-auto max-w-md space-y-5 py-16" onSubmit={handleSubmit(onSubmit)}>
       <div>
