@@ -1,7 +1,9 @@
+import { jwtLocalStrategy } from "./strategy/jwtLocal";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { env } from "./conf/env";
+import passport from "passport";
 
 const app = express();
 
@@ -15,6 +17,9 @@ app.use(
     credentials: true,
   })
 );
+app.use(passport.initialize());
+
+app.use(jwtLocalStrategy);
 
 // routes imports
 

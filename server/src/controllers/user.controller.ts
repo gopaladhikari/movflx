@@ -52,4 +52,8 @@ const registerUser = dbHandler(async (req, res) => {
   res.status(201).json(new ApiResponse(201, { user }, "User created"));
 });
 
-export { registerUser };
+const loginUser = dbHandler(async (req, res) => {});
+
+const getMe = dbHandler(async (req, res) => {});
+
+export { registerUser, loginUser, getMe };

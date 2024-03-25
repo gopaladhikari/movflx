@@ -40,7 +40,6 @@ export const userSchema = new Schema(
 
     phoneNumber: {
       type: String,
-      required: true,
     },
 
     emailVerificationToken: {
@@ -112,6 +111,9 @@ userSchema.methods.comparePassword = async function (password: string) {
 
 interface TUser extends InferSchemaType<typeof userSchema> {
   _id: ObjectId;
+  generateAccessToken(): string;
+  generateRefreshToken(): string;
+  comparePassword(password: string): Promise<boolean>;
 }
 
 export const User = model<TUser>("User", userSchema);
