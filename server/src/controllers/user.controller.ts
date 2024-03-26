@@ -5,12 +5,15 @@ import { ApiResponse } from "../utils/ApiResponse";
 import { uploadOnCloudinary } from "../utils/cloudinary";
 import { dbHandler } from "../utils/dbHandler";
 import { sendMail } from "../utils/sendMail";
+import { jwtLocalStrategy } from "../strategy/jwtLocal";
 
 type Files = { [fieldName: string]: Express.Multer.File[] };
 
 const registerUser = dbHandler(async (req, res) => {
   const { firstName, lastName, email, password, phoneNumber } = req.body;
   const files = req.files as Files;
+
+  console.log("Hello world");
 
   const avatarLocalPath = files["avatar"]?.[0]?.path;
   const coverImageLocalPath = files["coverImage"]?.[0]?.path;
@@ -52,7 +55,9 @@ const registerUser = dbHandler(async (req, res) => {
   res.status(201).json(new ApiResponse(201, { user }, "User created"));
 });
 
-const loginUser = dbHandler(async (req, res) => {});
+const loginUser = dbHandler(async (req, res) => {
+  console.log("Hello  login");
+});
 
 const getMe = dbHandler(async (req, res) => {});
 

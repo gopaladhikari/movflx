@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { getMe, registerUser } from "../controllers/user.controller";
+import { getMe, loginUser, registerUser } from "../controllers/user.controller";
 import { upload } from "../middlewares/multer.middleware";
 import passport from "passport";
+import { jwtLocalStrategy } from "../strategy/jwtLocal";
 
 export const registerFieldConfig = [
   { name: "coverImage", maxCount: 1 },
@@ -14,9 +15,7 @@ const userRouter = Router();
 
 userRouter.route("/register").post(upload.fields(registerFieldConfig), registerUser);
 
-userRouter.route("/login").post(passport.authenticate("local", { session: false }), (req, res) => {
-  res.status(200).json({ success: true, user: req.user });
-});
+userRouter.route("/login").post(loginUser);
 
 // protected routes
 

@@ -1,9 +1,7 @@
-import { config } from "dotenv";
+import "dotenv/config";
 import { app } from "./app";
 import { env } from "./conf/env";
 import { connectDB } from "./db";
-
-config();
 
 connectDB()
   .then(() => {
