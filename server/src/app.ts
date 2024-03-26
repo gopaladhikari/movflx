@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { env } from "./conf/env";
+import passport from "passport";
+import session from "express-session";
 
 const app = express();
 
@@ -16,6 +18,8 @@ app.use(
   })
 );
 
+app.use(session({}));
+d;
 // routes imports
 
 import { userRouter } from "./routes/user.route";

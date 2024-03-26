@@ -5,7 +5,7 @@ import { ApiResponse } from "../utils/ApiResponse";
 import { uploadOnCloudinary } from "../utils/cloudinary";
 import { dbHandler } from "../utils/dbHandler";
 import { sendMail } from "../utils/sendMail";
-import { jwtLocalStrategy } from "../strategy/jwtLocal";
+import { jwtLocalStrategy } from "../strategy/localStrategy";
 
 type Files = { [fieldName: string]: Express.Multer.File[] };
 
@@ -18,7 +18,15 @@ const registerUser = dbHandler(async (req, res) => {
   const avatarLocalPath = files["avatar"]?.[0]?.path;
   const coverImageLocalPath = files["coverImage"]?.[0]?.path;
 
-  if (!firstName || !lastName || !email || !password || !phoneNumber || !avatarLocalPath || !coverImageLocalPath)
+  if (
+    !firstName ||
+    !lastName ||
+    !email ||
+    !password ||
+    !phoneNumber ||
+    !avatarLocalPath ||
+    !coverImageLocalPath
+  )
     return res.status(400).json(new ApiError(400, "All fields are required."));
 
   const existedUser = await User.findOne({ email });
@@ -32,7 +40,8 @@ const registerUser = dbHandler(async (req, res) => {
   const avatar = await uploadOnCloudinary(avatarLocalPath);
   const coverImage = await uploadOnCloudinary(coverImageLocalPath);
 
-  if (!avatar || !coverImage) return res.status(500).json(new ApiError(500, "File upload failed."));
+  if (!avatar || !coverImage)
+    return res.status(500).json(new ApiError(500, "File upload failed."));
 
   const createdUser = await User.create({
     firstName,

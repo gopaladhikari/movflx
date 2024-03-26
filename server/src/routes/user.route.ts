@@ -2,7 +2,7 @@ import { Router } from "express";
 import { getMe, loginUser, registerUser } from "../controllers/user.controller";
 import { upload } from "../middlewares/multer.middleware";
 import passport from "passport";
-import { jwtLocalStrategy } from "../strategy/jwtLocal";
+import { jwtLocalStrategy } from "../strategy/localStrategy";
 
 export const registerFieldConfig = [
   { name: "coverImage", maxCount: 1 },

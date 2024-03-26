@@ -1,7 +1,5 @@
-import { Schema, model, InferSchemaType, ObjectId } from "mongoose";
+import { Schema, model, InferSchemaType } from "mongoose";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import { env } from "../conf/env";
 
 export const userSchema = new Schema(
   {
@@ -62,10 +60,6 @@ export const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
-
-    refreshToken: {
-      type: String,
-    },
   },
   {
     timestamps: true,
@@ -77,40 +71,11 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.methods.generateAccessToken = function () {
-  const token = jwt.sign(
-    {
-      _id: this._id,
-      email: this.email,
-      username: this.username,
-    },
-    env.accessTokenSecret,
-    {
-      expiresIn: env.accessTokenExpiry,
-    }
-  );
-  return token;
-};
-
-userSchema.methods.generateRefreshToken = function () {
-  const token = jwt.sign(
-    {
-      _id: this._id,
-    },
-    env.accessTokenSecret,
-    {
-      expiresIn: env.accessTokenExpiry,
-    }
-  );
-  return token;
-};
-
 userSchema.methods.comparePassword = async function (password: string) {
   return await bcrypt.compare(password, this.password);
 };
 
-interface TUser extends InferSchemaType<typeof userSchema> {
-  _id: ObjectId;
+interface TUser extends InferSchemaType<typeof userSchema>, Document {
   generateAccessToken(): string;
   generateRefreshToken(): string;
   comparePassword(password: string): Promise<boolean>;
