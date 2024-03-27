@@ -63,15 +63,43 @@ const registerUser = dbHandler(async (req, res) => {
 });
 
 const loginUser = dbHandler(async (req, res) => {
-  // @ts-expect-error user id is available
+  // @ts-expect-error user _id is available
   const id = req.user._id;
-  console.log({ req });
 
   const user = await User.findById(id).select("-password");
-  console.log({ user });
+
+  if (!user) return res.status(404).json(new ApiError(404, "User not found."));
+
   res
     .status(200)
     .json(new ApiResponse(200, { user: user }, "Login sucessfull"));
 });
 
-export { registerUser, loginUser };
+const getMe = dbHandler(async (req, res) => {
+  // @ts-expect-error user _id is available
+  const id = req.user._id;
+
+  const user = await User.findById(id).select("-password");
+
+  if (!user) return res.status(404).json(new ApiError(404, "User not found."));
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, { user }, "User fetched sucessfully"));
+});
+
+const logoutUser = dbHandler(async (req, res) => {
+  req.logOut((error) => {
+    if (error)
+      return res
+        .status(500)
+        .json(new ApiError(500, "Logout failed", (error as Error).message));
+
+    res
+      .status(200)
+      .clearCookie("connect.sid")
+      .json(new ApiResponse(200, null, "Logout sucessfull"));
+  });
+});
+
+export { registerUser, loginUser, getMe, logoutUser };

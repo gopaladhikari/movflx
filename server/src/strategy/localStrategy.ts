@@ -21,7 +21,6 @@ export const initialzeLocalStrategy = () => {
 
           return done(null, user);
         } catch (error) {
-          console.log(error);
           return done(error, false);
         }
       }

@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { loginUser, registerUser } from "../controllers/user.controller";
+import {
+  getMe,
+  loginUser,
+  logoutUser,
+  registerUser,
+} from "../controllers/user.controller";
 import { upload } from "../middlewares/multer.middleware";
 import passport from "passport";
 import { isAuthenticated } from "../middlewares/auth.middleware";
@@ -21,8 +26,8 @@ userRouter.route("/login").post(passport.authenticate("local"), loginUser);
 
 // protected routes
 
-userRouter.route("/me").get(isAuthenticated, (req, res) => {
-  res.status(200).json({ user: req.user });
-});
+userRouter.route("/logout").post(isAuthenticated, logoutUser);
+
+userRouter.route("/me").get(isAuthenticated, getMe);
 
 export { userRouter };
