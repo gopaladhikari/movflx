@@ -1,4 +1,4 @@
-import { Schema, model, InferSchemaType } from "mongoose";
+import { Schema, model, InferSchemaType, ObjectId } from "mongoose";
 import bcrypt from "bcrypt";
 
 export const userSchema = new Schema(
@@ -67,7 +67,8 @@ export const userSchema = new Schema(
 );
 
 userSchema.pre("save", async function (next) {
-  if (this.isModified("password")) this.password = await bcrypt.hash(this.password, 10);
+  if (this.isModified("password"))
+    this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
@@ -75,7 +76,8 @@ userSchema.methods.comparePassword = async function (password: string) {
   return await bcrypt.compare(password, this.password);
 };
 
-interface TUser extends InferSchemaType<typeof userSchema>, Document {
+interface TUser extends InferSchemaType<typeof userSchema> {
+  _id: ObjectId;
   generateAccessToken(): string;
   generateRefreshToken(): string;
   comparePassword(password: string): Promise<boolean>;

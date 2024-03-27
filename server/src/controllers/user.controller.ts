@@ -5,7 +5,6 @@ import { ApiResponse } from "../utils/ApiResponse";
 import { uploadOnCloudinary } from "../utils/cloudinary";
 import { dbHandler } from "../utils/dbHandler";
 import { sendMail } from "../utils/sendMail";
-import { jwtLocalStrategy } from "../strategy/localStrategy";
 
 type Files = { [fieldName: string]: Express.Multer.File[] };
 
@@ -57,17 +56,12 @@ const registerUser = dbHandler(async (req, res) => {
 
   const user = await User.findById(createdUser?._id).select("-password");
 
-  if (!user) return res.status(400).json(new ApiError(400, "User creation failed."));
+  if (!user)
+    return res.status(400).json(new ApiError(400, "User creation failed."));
 
   await sendMail(user.email, "verify", user._id);
 
   res.status(201).json(new ApiResponse(201, { user }, "User created"));
 });
 
-const loginUser = dbHandler(async (req, res) => {
-  console.log("Hello  login");
-});
-
-const getMe = dbHandler(async (req, res) => {});
-
-export { registerUser, loginUser, getMe };
+export { registerUser };
