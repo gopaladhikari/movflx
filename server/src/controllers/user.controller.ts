@@ -12,8 +12,6 @@ const registerUser = dbHandler(async (req, res) => {
   const { firstName, lastName, email, password, phoneNumber } = req.body;
   const files = req.files as Files;
 
-  console.log("Hello world");
-
   const avatarLocalPath = files["avatar"]?.[0]?.path;
   const coverImageLocalPath = files["coverImage"]?.[0]?.path;
 
@@ -64,4 +62,16 @@ const registerUser = dbHandler(async (req, res) => {
   res.status(201).json(new ApiResponse(201, { user }, "User created"));
 });
 
-export { registerUser };
+const loginUser = dbHandler(async (req, res) => {
+  // @ts-expect-error user id is available
+  const id = req.user._id;
+  console.log({ req });
+
+  const user = await User.findById(id).select("-password");
+  console.log({ user });
+  res
+    .status(200)
+    .json(new ApiResponse(200, { user: user }, "Login sucessfull"));
+});
+
+export { registerUser, loginUser };
