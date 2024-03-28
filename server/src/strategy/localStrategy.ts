@@ -12,12 +12,11 @@ export const initialzeLocalStrategy = () => {
         try {
           const user = await User.findOne({ email });
 
-          if (!user) return done(null, "User not found");
+          if (!user) return done(null, false);
 
           const isPasswordCorrect = await user.comparePassword(password);
 
-          if (!isPasswordCorrect)
-            return done(null, "Invalid email or password");
+          if (!isPasswordCorrect) return done(null, false);
 
           return done(null, user);
         } catch (error) {
@@ -28,7 +27,6 @@ export const initialzeLocalStrategy = () => {
   );
 
   passport.serializeUser((user, done) => {
-    // @ts-expect-error id is available
     done(null, user._id);
   });
 

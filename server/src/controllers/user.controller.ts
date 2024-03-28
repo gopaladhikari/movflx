@@ -37,8 +37,11 @@ const registerUser = dbHandler(async (req, res) => {
   const avatar = await uploadOnCloudinary(avatarLocalPath);
   const coverImage = await uploadOnCloudinary(coverImageLocalPath);
 
-  if (!avatar || !coverImage)
+  if (!avatar || !coverImage) {
+    fs.unlinkSync(avatarLocalPath);
+    fs.unlinkSync(coverImageLocalPath);
     return res.status(500).json(new ApiError(500, "File upload failed."));
+  }
 
   const createdUser = await User.create({
     firstName,
@@ -52,27 +55,25 @@ const registerUser = dbHandler(async (req, res) => {
 
   await createdUser.save({ validateBeforeSave: false });
   const user = await User.findById(createdUser?._id).select("-password");
+
   if (!user)
     return res.status(400).json(new ApiError(400, "User creation failed."));
+
   await sendMail(user.email, "verify", user._id);
 
   res.status(201).json(new ApiResponse(201, { user }, "User created"));
 });
 
 const loginUser = dbHandler(async (req, res) => {
-  // @ts-expect-error user _id is available
-  const id = req.user._id;
+  const id = req.user?._id;
   const user = await User.findById(id).select("-password");
   if (!user) return res.status(404).json(new ApiError(404, "User not found."));
 
-  res
-    .status(200)
-    .json(new ApiResponse(200, { user: user }, "Login sucessfull"));
+  res.status(200).json(new ApiResponse(200, { user }, "Login sucessfull"));
 });
 
 const getMe = dbHandler(async (req, res) => {
-  // @ts-expect-error user _id is available
-  const id = req.user._id;
+  const id = req.user?._id;
   const user = await User.findById(id).select("-password");
   if (!user) return res.status(404).json(new ApiError(404, "User not found."));
 
