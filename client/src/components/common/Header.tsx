@@ -20,16 +20,16 @@ export function Header() {
         </NavbarBrand>
         <NavbarContent className="hidden sm:flex sm:gap-6" justify="center">
           {site.mainNav.map(({ id, title, href }) => (
-            <NavbarItem key={id}>
+            <NavbarItem key={id} isActive>
               <Link href={href}>{title}</Link>
             </NavbarItem>
           ))}
         </NavbarContent>
         <NavbarContent justify="end">
-          <NavbarItem>
+          <NavbarItem isActive>
             <Link href="/auth/login">Login</Link>
           </NavbarItem>
-          <NavbarItem>
+          <NavbarItem isActive>
             <Button
               as={Link}
               color="primary"

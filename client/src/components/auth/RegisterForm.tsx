@@ -8,13 +8,21 @@ import PhoneInput from "react-phone-input-2";
 import { IoIosSend } from "react-icons/io";
 import { ImCross } from "react-icons/im";
 import { useState } from "react";
-import { Button } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 import "react-phone-input-2/lib/style.css";
 import "@/styles/react-phone-input.css";
 import { registerUser } from "@/lib/users";
+import { useRouter } from "next/navigation";
+import { EyeFilledIcon } from "../icons/EyeFilledIcon";
+import { EyeSlashFilledIcon } from "../icons/EyeSlashFilledIcon";
 
 export function RegisterForm() {
   const [success, setSuccess] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const toggleVisibility = () => setIsVisible(!isVisible);
+
+  const router = useRouter();
 
   const {
     register,
@@ -43,88 +51,113 @@ export function RegisterForm() {
     } else {
       reset();
       setSuccess(true);
+      setTimeout(() => router.push("/"), 3000);
     }
   };
 
   return (
-    <form className="mx-auto max-w-md space-y-5 py-16" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="mx-auto max-w-md space-y-5 py-16"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <div>
         <label htmlFor="avatar" className="mb-2 block text-sm font-medium ">
           Avatar
         </label>
-        <input
+        <Input
           type="file"
+          variant="underlined"
+          max={1}
           id="avatar"
-          className="block w-full border bg-transparent p-2.5 focus:border-b-primary focus:outline-none"
-          placeholder="John"
           disabled={isSubmitting}
           {...register("avatar")}
         />
-        {errors.avatar && <p className="p-1 text-red-600">{errors.avatar?.message as string}</p>}
+        {errors.avatar && (
+          <p className="p-1 text-red-600">{errors.avatar?.message as string}</p>
+        )}
       </div>
       <div>
         <label htmlFor="coverImage" className="mb-2 block text-sm font-medium ">
           Cover image
         </label>
-        <input
-          type="file"
+        <Input
           id="coverImage"
-          className="block w-full border bg-transparent p-2.5 focus:border-b-primary focus:outline-none"
-          placeholder="John"
+          type="file"
+          variant="underlined"
+          max={1}
           disabled={isSubmitting}
           {...register("coverImage")}
         />
-        {errors.coverImage && <p className="p-1 text-red-600">{errors.coverImage?.message as string}</p>}
+        {errors.coverImage && (
+          <p className="p-1 text-red-600">
+            {errors.coverImage?.message as string}
+          </p>
+        )}
       </div>
       <div>
         <label htmlFor="firstName" className="mb-2 block text-sm font-medium ">
           First Name
         </label>
-        <input
+        <Input
           type="text"
+          variant="underlined"
           id="firstName"
-          className="block w-full border bg-transparent p-2.5 focus:border-b-primary focus:outline-none"
           placeholder="John"
           disabled={isSubmitting}
           {...register("firstName")}
         />
-        {errors.firstName && <p className="p-1 text-red-600">{errors.firstName?.message}</p>}
+        {errors.firstName && (
+          <p className="p-1 text-red-600">{errors.firstName?.message}</p>
+        )}
       </div>
       <div>
-        <label htmlFor="lastName" className="mb-2 block text-sm font-medium  focus:border-b-primary ">
+        <label
+          htmlFor="lastName"
+          className="mb-2 block text-sm font-medium  focus:border-b-primary "
+        >
           Last Name
         </label>
-        <input
+        <Input
           type="text"
+          variant="underlined"
           id="lastName"
           placeholder="Doe"
           disabled={isSubmitting}
-          className="block w-full border bg-transparent p-2.5 focus:border-b-primary focus:outline-none"
           {...register("lastName")}
         />
-        {errors.lastName && <p className="p-1 text-red-600">{errors.lastName?.message}</p>}
+        {errors.lastName && (
+          <p className="p-1 text-red-600">{errors.lastName?.message}</p>
+        )}
       </div>
       <div>
-        <label htmlFor="email" className="mb-2 block text-sm font-medium  focus:border-b-primary ">
+        <label
+          htmlFor="email"
+          className="mb-2 block text-sm font-medium  focus:border-b-primary "
+        >
           Email
         </label>
-        <input
+        <Input
           type="email"
+          variant="underlined"
           id="email"
           placeholder="example@example.com"
           disabled={isSubmitting}
-          className="block w-full border bg-transparent p-2.5 focus:border-b-primary focus:outline-none"
           {...register("email")}
         />
 
-        {errors.email && <p className="p-1 text-red-600">{errors.email?.message}</p>}
+        {errors.email && (
+          <p className="p-1 text-red-600">{errors.email?.message}</p>
+        )}
       </div>
       <div>
-        <label htmlFor="phoneNumber" className="mb-2 block text-sm font-medium  focus:border-b-primary">
+        <label
+          htmlFor="phoneNumber"
+          className="mb-2 block text-sm font-medium  focus:border-b-primary"
+        >
           Phone Number
         </label>
         <PhoneInput
-          inputClass="!w-full !bg-transparent !text-white"
+          inputClass="!w-full !bg-transparent !text-white "
           dropdownClass="!bg-gray-700"
           countryCodeEditable={false}
           autoFormat
@@ -132,21 +165,42 @@ export function RegisterForm() {
           onChange={(value: string) => setValue("phoneNumber", value)}
         />
 
-        {errors.phoneNumber && <p className="p-1 text-red-600">{errors.phoneNumber?.message}</p>}
+        {errors.phoneNumber && (
+          <p className="p-1 text-red-600">{errors.phoneNumber?.message}</p>
+        )}
       </div>
       <div>
-        <label htmlFor="password" className="mb-2 block text-sm font-medium  focus:border-b-primary ">
+        <label
+          htmlFor="password"
+          className="mb-2 block text-sm font-medium  focus:border-b-primary "
+        >
           Password
         </label>
-        <input
-          type="password"
+
+        <Input
+          variant="underlined"
           id="password"
           placeholder="********"
           disabled={isSubmitting}
-          className="block w-full border bg-transparent p-2.5 focus:border-b-primary focus:outline-none"
+          endContent={
+            <button
+              className="focus:outline-none"
+              type="button"
+              onClick={toggleVisibility}
+            >
+              {isVisible ? (
+                <EyeSlashFilledIcon className="pointer-events-none text-2xl text-default-400" />
+              ) : (
+                <EyeFilledIcon className="pointer-events-none text-2xl text-default-400" />
+              )}
+            </button>
+          }
+          type={isVisible ? "text" : "password"}
           {...register("password")}
         />
-        {errors.password && <p className="p-1 text-red-600">{errors.password?.message}</p>}
+        {errors.password && (
+          <p className="p-1 text-red-600">{errors.password?.message}</p>
+        )}
       </div>
 
       {success && (
@@ -167,7 +221,13 @@ export function RegisterForm() {
           <span className="text-blue-700 underline">Login here</span>
         </Link>
       </p>
-      <Button color="primary" fullWidth type="submit" isLoading={isSubmitting} disabled={isSubmitting}>
+      <Button
+        color="primary"
+        fullWidth
+        type="submit"
+        isLoading={isSubmitting}
+        disabled={isSubmitting}
+      >
         {isSubmitting ? "Loading" : "Sign up"}
       </Button>
     </form>

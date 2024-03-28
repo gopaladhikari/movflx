@@ -7,14 +7,22 @@ import { loginSchema, TLoginSchema } from "@/schemas/loginSchema";
 import { ImCross } from "react-icons/im";
 import { loginUser } from "@/lib/users";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { EyeFilledIcon } from "../icons/EyeFilledIcon";
+import { EyeSlashFilledIcon } from "../icons/EyeSlashFilledIcon";
 
 export function LoginForm() {
   const router = useRouter();
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  const toggleVisibility = () => setIsVisible(!isVisible);
+
   const {
     handleSubmit,
     register,
     setError,
-    formState: { errors, isLoading },
+    formState: { errors, isSubmitting },
   } = useForm<TLoginSchema>({
     resolver: zodResolver(loginSchema),
   });
@@ -34,29 +42,56 @@ export function LoginForm() {
       >
         <h1 className="text-center text-3xl font-bold">Sign in</h1>
         <div>
+          <label
+            htmlFor="email"
+            className="mb-2 block text-sm font-medium  focus:border-b-primary "
+          >
+            Email
+          </label>
           <Input
-            id="email"
             type="email"
-            label="Email"
-            labelPlacement="outside"
-            description="Your email"
+            variant="underlined"
+            id="email"
+            placeholder="example@example.com"
+            disabled={isSubmitting}
             {...register("email")}
           />
+
           {errors.email && (
-            <p className="px-2 text-red-600"> {errors.email.message} </p>
+            <p className="p-1 text-red-600">{errors.email?.message}</p>
           )}
         </div>
         <div>
+          <label
+            htmlFor="password"
+            className="mb-2 block text-sm font-medium  focus:border-b-primary "
+          >
+            Password
+          </label>
+
           <Input
+            variant="underlined"
             id="password"
-            type="password"
-            label="Password"
-            labelPlacement="outside"
-            description="Your password"
+            placeholder="********"
+            disabled={isSubmitting}
+            endContent={
+              <button
+                className="focus:outline-none"
+                type="button"
+                onClick={toggleVisibility}
+              >
+                {isVisible ? (
+                  <EyeSlashFilledIcon className="pointer-events-none text-2xl text-default-400" />
+                ) : (
+                  <EyeFilledIcon className="pointer-events-none text-2xl text-default-400" />
+                )}
+              </button>
+            }
+            type={isVisible ? "text" : "password"}
             {...register("password")}
           />
           {errors.password && (
-            <p className="px-2 text-red-600"> {errors.password.message} </p>
+            <p className="p-1 text-red-600">{errors.password?.message}</p>
           )}
         </div>
 
@@ -66,8 +101,13 @@ export function LoginForm() {
           </div>
         )}
 
-        <Button type="submit" color="primary" fullWidth isLoading={isLoading}>
-          {isLoading ? "Loading..." : "Login"}
+        <Button
+          type="submit"
+          color="primary"
+          fullWidth
+          isLoading={isSubmitting}
+        >
+          {isSubmitting ? "Loading..." : "Login"}
         </Button>
       </form>
     </section>
