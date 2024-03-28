@@ -18,6 +18,8 @@ export const initialzeLocalStrategy = () => {
 
           if (!isPasswordCorrect) return done(null, false);
 
+          if (!user.isEmailVerified) return done(null, false);
+
           return done(null, user);
         } catch (error) {
           return done(error, false);

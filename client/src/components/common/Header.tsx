@@ -1,3 +1,4 @@
+import { site } from "@/config/site";
 import {
   Navbar,
   NavbarBrand,
@@ -5,6 +6,7 @@ import {
   NavbarItem,
   Button,
 } from "@nextui-org/react";
+import Image from "next/image";
 import Link from "next/link";
 
 export function Header() {
@@ -12,20 +14,16 @@ export function Header() {
     <div className="container">
       <Navbar shouldHideOnScroll maxWidth="full">
         <NavbarBrand>
-          <Link href="/" className="font-bold text-inherit">
-            mFlix
+          <Link href="/">
+            <Image src="/logo.png" alt="logo" width={120} height={120} />
           </Link>
         </NavbarBrand>
-        <NavbarContent className="hidden gap-4 sm:flex" justify="center">
-          <NavbarItem>
-            <Link href="/">Features</Link>
-          </NavbarItem>
-          <NavbarItem isActive>
-            <Link href="/">Customers</Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Link href="/">Integrations</Link>
-          </NavbarItem>
+        <NavbarContent className="hidden sm:flex sm:gap-6" justify="center">
+          {site.mainNav.map(({ id, title, href }) => (
+            <NavbarItem key={id}>
+              <Link href={href}>{title}</Link>
+            </NavbarItem>
+          ))}
         </NavbarContent>
         <NavbarContent justify="end">
           <NavbarItem>
