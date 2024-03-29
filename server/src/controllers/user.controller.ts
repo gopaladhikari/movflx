@@ -96,4 +96,24 @@ const logoutUser = dbHandler(async (req, res) => {
   });
 });
 
-export { registerUser, loginUser, getMe, logoutUser };
+const verifyUsersEmail = dbHandler(async (req, res) => {
+  const { token } = req.query;
+
+  const user = await User.findOne({
+    emailVerificationToken: token,
+    emailVerificationTokenExpiry: { $gt: Date.now() },
+  });
+
+  if (!user) return res.status(404).json(new ApiError(404, "User not found."));
+
+  user.isEmailVerified = true;
+  user.emailVerificationToken = undefined;
+  user.emailVerificationTokenExpiry = undefined;
+  await user.save({ validateBeforeSave: false });
+
+  res
+    .status(200)
+    .json(new ApiResponse(200, null, "Email verified successfully"));
+});
+
+export { registerUser, loginUser, getMe, logoutUser, verifyUsersEmail };

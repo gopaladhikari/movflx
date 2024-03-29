@@ -47,3 +47,14 @@ export const loginUser = async (formData: TLoginSchema) => {
     return { error: message, ok: false };
   }
 };
+export const verifyUserEmail = async (token: string) => {
+  try {
+    const res = await instance.post(`/users/verify-users-email?token=${token}`);
+
+    return { data: res.data, ok: true };
+  } catch (error) {
+    const message =
+      (error as CustomError).response?.data?.message || "Something went wrong";
+    return { error: message, ok: false };
+  }
+};
