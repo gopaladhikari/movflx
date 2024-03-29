@@ -33,6 +33,7 @@ app.use(
     cookie: {
       maxAge: env.sessionCookieExpiry,
       httpOnly: true,
+      sameSite: "none",
     },
   })
 );

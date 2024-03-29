@@ -1,4 +1,5 @@
 import { site } from "@/config/site";
+import { getMe } from "@/lib/users";
 import {
   Navbar,
   NavbarBrand,
@@ -9,7 +10,10 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
-export function Header() {
+export async function Header() {
+  const res = await getMe();
+
+  console.log({ res });
   return (
     <div className="container">
       <Navbar shouldHideOnScroll maxWidth="full">

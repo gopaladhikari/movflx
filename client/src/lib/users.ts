@@ -22,6 +22,7 @@ interface CustomError extends AxiosError {
 export const registerUser = async (formData: FormData) => {
   try {
     const res = await instance.post("/users/register", formData);
+
     return { data: res.data, ok: true };
   } catch (error) {
     const message =
@@ -37,7 +38,12 @@ export const loginUser = async (formData: TLoginSchema) => {
       ?.split(";")[0]
       .split("=")[1];
 
-    if (connectSid) cookieStore.set("connect.sid", connectSid);
+    if (connectSid)
+      cookieStore.set("connect.sid", connectSid, {
+        httpOnly: true,
+        sameSite: "strict",
+        expires: new Date(Date.now() + 86400000),
+      });
 
     return { data: res.data, ok: true };
   } catch (error) {
@@ -50,6 +56,18 @@ export const loginUser = async (formData: TLoginSchema) => {
 export const verifyUserEmail = async (token: string) => {
   try {
     const res = await instance.post(`/users/verify-users-email?token=${token}`);
+
+    return { data: res.data, ok: true };
+  } catch (error) {
+    const message =
+      (error as CustomError).response?.data?.message || "Something went wrong";
+    return { error: message, ok: false };
+  }
+};
+
+export const getMe = async () => {
+  try {
+    const res = await instance.get("/users/me");
 
     return { data: res.data, ok: true };
   } catch (error) {
