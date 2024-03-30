@@ -8,8 +8,6 @@ import { sendMail } from "../utils/sendMail";
 
 type Files = { [fieldName: string]: Express.Multer.File[] };
 
-type User = Express.User;
-
 const registerUser = dbHandler(async (req, res) => {
   const { firstName, lastName, email, password, phoneNumber } = req.body;
   const files = req.files as Files;
@@ -67,6 +65,7 @@ const registerUser = dbHandler(async (req, res) => {
 });
 
 const loginUser = dbHandler(async (req, res) => {
+  // @ts-expect-error _id is available
   const id = req.user?._id;
   const user = await User.findById(id).select("-password");
 
@@ -76,6 +75,7 @@ const loginUser = dbHandler(async (req, res) => {
 });
 
 const getMe = dbHandler(async (req, res) => {
+  // @ts-expect-error _id is available
   const id = req.user?._id;
   const user = await User.findById(id).select("-password");
   if (!user) return res.status(404).json(new ApiError(404, "User not found."));

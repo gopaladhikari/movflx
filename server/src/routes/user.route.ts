@@ -23,7 +23,10 @@ userRouter
   .route("/register")
   .post(upload.fields(registerFieldConfig), registerUser);
 
-userRouter.route("/login").post(passport.authenticate("local"), loginUser);
+userRouter
+  .route("/login")
+  .post(passport.authenticate("jwt", { session: false }), loginUser);
+
 userRouter.route("/verify-users-email").post(verifyUsersEmail);
 
 // protected routes

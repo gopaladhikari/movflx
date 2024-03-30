@@ -6,8 +6,6 @@ export const isAuthenticated = (
   res: Response,
   next: NextFunction
 ) => {
-  const cookies = req.cookies;
-  console.log(cookies);
   if (req.isAuthenticated()) return next();
 
   res.status(401).json(new ApiError(401, "Unauthorized request"));
