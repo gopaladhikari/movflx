@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "nodemon -r dotenv/config src/index.ts",
     "start": "node -r dotenv/config dist/index.js",
-    "prestart": "npm run build",
-    "build": "npm i && npx tsc"
+    "prestart": "yarn build",
+    "build": "yarn && npx tsc"
   },
   "keywords": [],
   "author": "",
