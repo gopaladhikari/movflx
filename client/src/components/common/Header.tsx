@@ -12,7 +12,6 @@ import Link from "next/link";
 
 export async function Header() {
   const res = await getMe();
-
   console.log({ res });
   return (
     <div className="container">

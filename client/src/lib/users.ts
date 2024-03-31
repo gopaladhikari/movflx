@@ -5,13 +5,12 @@ import { TLoginSchema } from "@/schemas/loginSchema";
 import { AxiosError } from "axios";
 import { cookies } from "next/headers";
 
-const cookieStore = cookies();
-
 interface CustomError extends AxiosError {
   response: {
     data: {
       message: string;
     };
+    message: string;
     status: number;
     statusText: string;
     headers: any;
@@ -23,33 +22,30 @@ export const registerUser = async (formData: FormData) => {
   try {
     const res = await instance.post("/users/register", formData);
 
-    return { data: res.data, ok: true };
+    return { data: res.data.data, ok: true };
   } catch (error) {
     const message =
-      (error as CustomError).response?.data?.message || "Something went wrong";
+      (error as CustomError).response?.data.message || "Something went wrong";
     return { error: message, ok: false };
   }
 };
 
 export const loginUser = async (formData: TLoginSchema) => {
+  const cookieStore = cookies();
   try {
     const res = await instance.post("/users/login", formData);
-    const connectSid = res.headers["set-cookie"]?.[0]
-      ?.split(";")[0]
-      .split("=")[1];
+    const { token } = res.data.data;
 
-    if (connectSid)
-      cookieStore.set("connect.sid", connectSid, {
-        httpOnly: true,
-        sameSite: "strict",
-        expires: new Date(Date.now() + 86400000),
-      });
+    cookieStore.set("token", token, {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: true,
+    });
 
     return { data: res.data, ok: true };
   } catch (error) {
     const message =
-      (error as CustomError).response?.data?.message ||
-      "Invalid email or password";
+      (error as CustomError).response?.data?.message || "Something went wrong";
     return { error: message, ok: false };
   }
 };
@@ -60,7 +56,7 @@ export const verifyUserEmail = async (token: string) => {
     return { data: res.data, ok: true };
   } catch (error) {
     const message =
-      (error as CustomError).response?.data?.message || "Something went wrong";
+      (error as CustomError).response?.data.message || "Something went wrong";
     return { error: message, ok: false };
   }
 };
@@ -68,11 +64,25 @@ export const verifyUserEmail = async (token: string) => {
 export const getMe = async () => {
   try {
     const res = await instance.get("/users/me");
+    return { data: res.data.data, ok: true };
+  } catch (error) {
+    const message =
+      (error as CustomError).response?.data || "Something went wrong";
+    return { error: message, ok: false };
+  }
+};
+export const logoutUser = async () => {
+  const cookieStore = cookies();
+
+  try {
+    const res = await instance.get("/users/logout");
+
+    cookieStore.delete("token");
 
     return { data: res.data, ok: true };
   } catch (error) {
     const message =
-      (error as CustomError).response?.data?.message || "Something went wrong";
+      (error as CustomError).response?.data || "Something went wrong";
     return { error: message, ok: false };
   }
 };
