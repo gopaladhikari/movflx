@@ -3,7 +3,6 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { env } from "./conf/env";
 import passport from "passport";
-import { initializeJwtStrategy } from "./strategy/jwtStrategy";
 
 const app = express();
 
@@ -19,8 +18,10 @@ app.use(
   })
 );
 
+// passport middleware
 app.use(passport.initialize());
-initializeJwtStrategy();
+import "./strategy/jwtStrategy";
+import "./strategy/localStrategy";
 
 // routes imports
 

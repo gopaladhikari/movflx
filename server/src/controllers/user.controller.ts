@@ -5,8 +5,17 @@ import { ApiResponse } from "../utils/ApiResponse";
 import { uploadOnCloudinary } from "../utils/cloudinary";
 import { dbHandler } from "../utils/dbHandler";
 import { sendMail } from "../utils/sendMail";
+import { sign } from "jsonwebtoken";
+import { env } from "../conf/env";
+import { CookieOptions } from "express";
 
 type Files = { [fieldName: string]: Express.Multer.File[] };
+
+const cookieOptions: CookieOptions = {
+  httpOnly: true,
+  secure: true,
+  maxAge: 86400000,
+};
 
 const registerUser = dbHandler(async (req, res) => {
   const { firstName, lastName, email, password, phoneNumber } = req.body;
@@ -65,24 +74,27 @@ const registerUser = dbHandler(async (req, res) => {
 });
 
 const loginUser = dbHandler(async (req, res) => {
-  // @ts-expect-error _id is available
-  const id = req.user?._id;
-  const user = await User.findById(id).select("-password");
+  const user = req.user;
+
+  if (!user) return res.status(404).json(new ApiError(404, "User not found."));
+
+  // @ts-expect-error _id is  present in user model
+  const token = sign({ _id: user?._id }, env.jwtSecret, {
+    expiresIn: env.jwtSecretExpiry,
+  });
+
+  return res
+    .status(200)
+    .cookie("token", token, cookieOptions)
+    .json(new ApiResponse(200, { user, token }, "Login sucessfull"));
+});
+
+const getMe = dbHandler(async (req, res) => {
+  const user = req.user;
 
   if (!user) return res.status(404).json(new ApiError(404, "User not found."));
 
   res.status(200).json(new ApiResponse(200, { user }, "Login sucessfull"));
-});
-
-const getMe = dbHandler(async (req, res) => {
-  // @ts-expect-error _id is available
-  const id = req.user?._id;
-  const user = await User.findById(id).select("-password");
-  if (!user) return res.status(404).json(new ApiError(404, "User not found."));
-
-  res
-    .status(200)
-    .json(new ApiResponse(200, { user }, "User fetched successfully"));
 });
 
 const logoutUser = dbHandler(async (req, res) => {

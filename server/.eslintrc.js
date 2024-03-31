@@ -41,5 +41,6 @@ module.exports = {
     "node/no-unsupported-features/es-syntax": 0,
     "node/no-missing-import": 0,
     "node/file-extension-in-import": 0,
+    "@typescript-eslint/no-non-null-asserted-optional-chain": 0,
   },
 };
