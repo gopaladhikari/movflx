@@ -36,6 +36,8 @@ export const loginUser = async (formData: TLoginSchema) => {
     const res = await instance.post("/users/login", formData);
     const { token } = res.data.data;
 
+    instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+
     cookieStore.set("token", token, {
       httpOnly: true,
       sameSite: "strict",
