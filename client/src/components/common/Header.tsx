@@ -9,10 +9,13 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
+import { UserDropDown } from "../auth/UserDropDown";
 
 export async function Header() {
   const res = await getMe();
-  console.log({ res });
+
+  console.log("getMe", { res });
+
   return (
     <div className="container">
       <Navbar shouldHideOnScroll maxWidth="full">
@@ -29,19 +32,25 @@ export async function Header() {
           ))}
         </NavbarContent>
         <NavbarContent justify="end">
-          <NavbarItem isActive>
-            <Link href="/auth/login">Login</Link>
-          </NavbarItem>
-          <NavbarItem isActive>
-            <Button
-              as={Link}
-              color="primary"
-              href="/auth/register"
-              variant="flat"
-            >
-              Sign Up
-            </Button>
-          </NavbarItem>
+          {res.ok ? (
+            <UserDropDown />
+          ) : (
+            <>
+              <NavbarItem isActive>
+                <Link href="/auth/login">Login</Link>
+              </NavbarItem>
+              <NavbarItem isActive>
+                <Button
+                  as={Link}
+                  color="primary"
+                  href="/auth/register"
+                  variant="flat"
+                >
+                  Sign Up
+                </Button>
+              </NavbarItem>
+            </>
+          )}
         </NavbarContent>
       </Navbar>
     </div>

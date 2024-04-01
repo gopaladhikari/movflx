@@ -2,6 +2,7 @@
 
 import { instance } from "@/config/axios";
 import { TLoginSchema } from "@/schemas/loginSchema";
+import { TUser } from "@/types/user.types";
 import { AxiosError } from "axios";
 import { cookies } from "next/headers";
 
@@ -42,6 +43,7 @@ export const loginUser = async (formData: TLoginSchema) => {
       httpOnly: true,
       sameSite: "strict",
       secure: true,
+      maxAge: 60 * 60 * 24,
     });
 
     return { data: res.data, ok: true };
@@ -63,16 +65,32 @@ export const verifyUserEmail = async (token: string) => {
   }
 };
 
-export const getMe = async () => {
+const refreshJWTSecret = async () => {
   try {
-    const res = await instance.get("/users/me");
-    return { data: res.data.data, ok: true };
+    const res = await instance.get("/users/refresh-jwt-secret");
+    return res.data;
   } catch (error) {
     const message =
-      (error as CustomError).response?.data || "Something went wrong";
+      (error as CustomError).response?.data.message || "Something went wrong";
     return { error: message, ok: false };
   }
 };
+
+export const getMe = async () => {
+  try {
+    const res = await instance.get<TUser>("/users/me");
+
+    return { data: res.data.data.user, ok: true };
+  } catch (error) {
+    const message =
+      (error as CustomError).response?.data.message || "Something went wrong";
+
+    if (message === "Token expired") console.log("Time to refresh token");
+
+    return { error: message, ok: false };
+  }
+};
+
 export const logoutUser = async () => {
   const cookieStore = cookies();
 
