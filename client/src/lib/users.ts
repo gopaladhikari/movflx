@@ -2,7 +2,7 @@
 
 import { instance } from "@/config/axios";
 import { TLoginSchema } from "@/schemas/loginSchema";
-import { TUser } from "@/types/user.types";
+import { TUserResponse } from "@/types/user.types";
 import { AxiosError } from "axios";
 import { cookies } from "next/headers";
 
@@ -67,8 +67,7 @@ export const verifyUserEmail = async (token: string) => {
 
 export const getMe = async () => {
   try {
-    const res = await instance.get<TUser>("/users/me");
-
+    const res = await instance.get<TUserResponse>("/users/me");
     return { data: res.data.data.user, ok: true };
   } catch (error) {
     const message =
@@ -82,10 +81,11 @@ export const logoutUser = async () => {
   const cookieStore = cookies();
 
   try {
-    const res = await instance.get("/users/logout");
+    const res = await instance.post("/users/logout");
 
     cookieStore.delete("token");
 
+    instance.defaults.headers.common.Authorization = "";
     return { data: res.data, ok: true };
   } catch (error) {
     const message =

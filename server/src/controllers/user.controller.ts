@@ -94,18 +94,18 @@ const getMe = dbHandler(async (req, res) => {
 
   if (!user) return res.status(404).json(new ApiError(404, "User not found."));
 
-  res.status(200).json(new ApiResponse(200, { user }, "Login sucessfull"));
+  res
+    .status(200)
+    .json(new ApiResponse(200, { user }, "User fetched sucessfully"));
 });
 
 const logoutUser = dbHandler(async (req, res) => {
-  req.logOut((error) => {
-    if (error)
-      return res
-        .status(500)
-        .json(new ApiError(500, "Logout failed", (error as Error).message));
+  delete req.user;
 
-    res.status(200).json(new ApiResponse(200, null, "Logout successful"));
-  });
+  res
+    .status(200)
+    .clearCookie("token", cookieOptions)
+    .json(new ApiResponse(200, null, "Logout successful"));
 });
 
 const verifyUsersEmail = dbHandler(async (req, res) => {

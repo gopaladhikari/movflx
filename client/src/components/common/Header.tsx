@@ -14,7 +14,6 @@ import SessionExpiredModal from "../auth/SessionExpiredModal";
 
 export async function Header() {
   const res = await getMe();
-  console.log({ res });
   return (
     <div className="container">
       {res.error === "Token expired" && <SessionExpiredModal />}
@@ -33,7 +32,7 @@ export async function Header() {
         </NavbarContent>
         <NavbarContent justify="end">
           {res.ok ? (
-            <UserDropDown />
+            <UserDropDown user={res?.data} />
           ) : (
             <>
               <NavbarItem isActive>
