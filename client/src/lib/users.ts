@@ -43,7 +43,7 @@ export const loginUser = async (formData: TLoginSchema) => {
       httpOnly: true,
       sameSite: "strict",
       secure: true,
-      maxAge: 60 * 60 * 24,
+      maxAge: 60 * 60 * 24 * 30,
     });
 
     return { data: res.data, ok: true };
@@ -65,17 +65,6 @@ export const verifyUserEmail = async (token: string) => {
   }
 };
 
-const refreshJWTSecret = async () => {
-  try {
-    const res = await instance.get("/users/refresh-jwt-secret");
-    return res.data;
-  } catch (error) {
-    const message =
-      (error as CustomError).response?.data.message || "Something went wrong";
-    return { error: message, ok: false };
-  }
-};
-
 export const getMe = async () => {
   try {
     const res = await instance.get<TUser>("/users/me");
@@ -84,8 +73,6 @@ export const getMe = async () => {
   } catch (error) {
     const message =
       (error as CustomError).response?.data.message || "Something went wrong";
-
-    if (message === "Token expired") console.log("Time to refresh token");
 
     return { error: message, ok: false };
   }
