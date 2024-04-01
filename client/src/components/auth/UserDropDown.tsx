@@ -17,8 +17,7 @@ type Props = {
 
 export function UserDropDown({ user }: Props) {
   const handleLogout = async () => {
-    const res = await logoutUser();
-    console.log({ res });
+    await logoutUser();
   };
 
   return (
