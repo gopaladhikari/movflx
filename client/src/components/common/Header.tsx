@@ -10,13 +10,11 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { UserDropDown } from "../auth/UserDropDown";
-import SessionExpiredModal from "../auth/SessionExpiredModal";
 
 export async function Header() {
   const res = await getMe();
   return (
     <div className="container">
-      {res.error === "Token expired" && <SessionExpiredModal />}
       <Navbar shouldHideOnScroll maxWidth="full">
         <NavbarBrand>
           <Link href="/">

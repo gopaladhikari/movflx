@@ -14,7 +14,7 @@ type Files = { [fieldName: string]: Express.Multer.File[] };
 const cookieOptions: CookieOptions = {
   httpOnly: true,
   secure: true,
-  maxAge: 86400000,
+  maxAge: 60 * 60 * 24 * 30,
 };
 
 const registerUser = dbHandler(async (req, res) => {
