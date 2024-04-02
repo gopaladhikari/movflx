@@ -35,6 +35,7 @@ export const loginUser = async (formData: TLoginSchema) => {
   const cookieStore = cookies();
   try {
     const res = await instance.post("/users/login", formData);
+
     const { token } = res.data.data;
 
     instance.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -68,6 +69,7 @@ export const verifyUserEmail = async (token: string) => {
 export const getMe = async () => {
   try {
     const res = await instance.get<TUserResponse>("/users/me");
+    console.log({ res });
     return { data: res.data.data.user, ok: true };
   } catch (error) {
     const message =

@@ -13,6 +13,7 @@ import { UserDropDown } from "../auth/UserDropDown";
 
 export async function Header() {
   const res = await getMe();
+
   return (
     <div className="container">
       <Navbar shouldHideOnScroll maxWidth="full">
