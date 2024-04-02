@@ -6,7 +6,6 @@ export const connectDB = async () => {
     const conn = await mongoose.connect(`${env.mongoUri}/sample_mflix`);
     console.log(conn.connection.host);
   } catch (error) {
-    console.log(`MongoDB connection error: ${error}`);
-    throw new Error((error as Error).message);
+    throw new Error(`MongoDB connection error: ${error}`);
   }
 };

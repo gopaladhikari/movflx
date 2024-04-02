@@ -6,10 +6,14 @@ const envSchema = z.object({
   backendUrl: z.string().min(1, { message: "Backend URL is required" }),
 });
 
-const envValidation = envSchema.safeParse({
+const validatedEnv = envSchema.safeParse({
   backendUrl: BACKEND_URL,
 });
 
-if (!envValidation.success) process.exit(1);
+if (!validatedEnv.success) {
+  console.error("Validation errors:", validatedEnv.error.format());
+  process.exit(1);
+}
 
-export const env = envValidation.data;
+// * Ensure `env` doesn't get modified by mistakely
+export const env: Readonly<typeof validatedEnv.data> = validatedEnv.data;

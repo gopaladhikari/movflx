@@ -1,3 +1,5 @@
+import z from "zod";
+
 const {
   PORT,
   MONGO_URI,
@@ -13,17 +15,48 @@ const {
   DOMAIN,
 } = process.env;
 
-export const env = {
-  port: Number(PORT) || 8000,
-  mongoUri: String(MONGO_URI),
-  corsOrigin: String(CORS_ORIGIN),
-  jwtSecret: String(JWT_SECRET),
-  jwtSecretExpiry: String(JWT_SECRET_EXPIRY),
-  cloudinaryName: String(CLOUDINARY_CLOUD_NAME),
-  cloudinaryApiKey: String(CLOUDINARY_API_KEY),
-  cloudinarySecret: String(CLOUDINARY_SECRET_KEY),
-  user: String(USER),
-  pass: String(PASS),
-  from: String(FROM),
-  domain: String(DOMAIN),
-};
+const envSchema = z.object({
+  port: z.number().min(1, { message: "Port number is required" }).default(8000),
+  mongoUri: z.string().min(1, { message: "Mongo URI is required" }),
+  corsOrigin: z.string().min(1, { message: "CORS origin is required" }),
+  jwtSecret: z.string().min(1, { message: "JWT secret is required" }),
+  jwtSecretExpiry: z
+    .string()
+    .min(1, { message: "JWT secret expiry is required" }),
+  cloudinaryName: z
+    .string()
+    .min(1, { message: "Cloudinary cloud name is required" }),
+  cloudinaryApiKey: z
+    .string()
+    .min(1, { message: "Cloudinary API key is required" }),
+  cloudinarySecret: z
+    .string()
+    .min(1, { message: "Cloudinary secret key is required" }),
+  user: z.string().min(1, { message: "User is required" }),
+  pass: z.string().min(1, { message: "Password is required" }),
+  from: z.string().min(1, { message: "From email is required" }),
+  domain: z.string().min(1, { message: "Domain is required" }),
+});
+
+const validatedEnv = envSchema.safeParse({
+  port: PORT,
+  mongoUri: MONGO_URI,
+  corsOrigin: CORS_ORIGIN,
+  jwtSecret: JWT_SECRET,
+  jwtSecretExpiry: JWT_SECRET_EXPIRY,
+  cloudinaryName: CLOUDINARY_CLOUD_NAME,
+  cloudinaryApiKey: CLOUDINARY_API_KEY,
+  cloudinarySecret: CLOUDINARY_SECRET_KEY,
+  user: USER,
+  pass: PASS,
+  from: FROM,
+  domain: DOMAIN,
+});
+
+if (!validatedEnv.success) {
+  console.error("Validation errors:", validatedEnv.error.format());
+  process.exit(1);
+}
+
+// * Ensure `env` doesn't get modified by mistakely
+export const env: Readonly<typeof validatedEnv.data> = validatedEnv.data;

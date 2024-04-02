@@ -42,5 +42,6 @@ module.exports = {
     "node/no-missing-import": 0,
     "node/file-extension-in-import": 0,
     "@typescript-eslint/no-non-null-asserted-optional-chain": 0,
+    "no-process-exit": 0,
   },
 };
