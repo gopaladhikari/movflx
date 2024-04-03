@@ -16,7 +16,10 @@ const {
 } = process.env;
 
 const envSchema = z.object({
-  port: z.number().min(1, { message: "Port number is required" }).default(8000),
+  port: z
+    .string()
+    .min(1, { message: "Port number is required" })
+    .default("8000"),
   mongoUri: z.string().min(1, { message: "Mongo URI is required" }),
   corsOrigin: z.string().min(1, { message: "CORS origin is required" }),
   jwtSecret: z.string().min(1, { message: "JWT secret is required" }),
