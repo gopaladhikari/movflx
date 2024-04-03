@@ -69,7 +69,6 @@ export const verifyUserEmail = async (token: string) => {
 export const getMe = async () => {
   try {
     const res = await instance.get<TUserResponse>("/users/me");
-    console.log({ res });
     return { data: res.data.data.user, ok: true };
   } catch (error) {
     const message =

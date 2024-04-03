@@ -39,3 +39,4 @@ userRouter
   .get(passport.authenticate("jwt", { session: false }), getMe);
 
 export { userRouter };
+  
