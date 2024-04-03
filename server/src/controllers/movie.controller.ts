@@ -26,7 +26,7 @@ const getAllMovies = dbHandler(async (req, res) => {
     },
   ]);
 
-  if (movies?.length)
+  if (!movies?.length)
     return res.status(404).json(new ApiError(404, "Movies not found"));
 
   res.status(200).json(new ApiResponse(200, { movies }, "Movies fetched"));
