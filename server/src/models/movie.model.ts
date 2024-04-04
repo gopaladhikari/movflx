@@ -1,5 +1,4 @@
 import { Schema, model, InferSchemaType } from "mongoose";
-// import aggregate from "mongoose-aggregate-paginate-v2";
 
 const awardSchema = new Schema({
   win: {
@@ -156,8 +155,6 @@ const movieSchema = new Schema(
   },
   { timestamps: true }
 );
-
-// movieSchema.plugin(aggregate);
 
 interface IMovie extends InferSchemaType<typeof movieSchema> {}
 

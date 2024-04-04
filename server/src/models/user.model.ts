@@ -76,10 +76,10 @@ userSchema.methods.comparePassword = async function (password: string) {
   return await bcrypt.compare(password, this.password);
 };
 
-interface IUser extends InferSchemaType<typeof userSchema> {
+type TUser = InferSchemaType<typeof userSchema> & {
   _id: ObjectId;
   generateJwtToken(): string;
   comparePassword(password: string): Promise<boolean>;
-}
+};
 
-export const User = model<IUser>("User", userSchema);
+export const User = model<TUser>("User", userSchema);

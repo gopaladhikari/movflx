@@ -25,8 +25,9 @@ import "./strategy/localStrategy";
 
 // routes imports
 
-import { userRouter } from "./routes/user.route";
-import { movieRouter } from "./routes/movie.route";
+import { userRouter } from "./routes/user.routes";
+import { movieRouter } from "./routes/movie.routes";
+import { commentRouter } from "./routes/comment.routes";
 
 // routes declaration
 
@@ -36,5 +37,6 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/movies", movieRouter);
+app.use("/api/v1/comments", commentRouter);
 
 export { app };

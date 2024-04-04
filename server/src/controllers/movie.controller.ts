@@ -34,10 +34,10 @@ const getAllMovies = dbHandler(async (req, res) => {
 });
 
 const getMovieById = dbHandler(async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.params; // Movie ID
 
   if (!isValidObjectId(id))
-    return res.status(400).json(new ApiError(400, "Invalid params"));
+    return res.status(400).json(new ApiError(400, "Invalid movie ID"));
 
   const movie = await Movie.findById(id);
 
