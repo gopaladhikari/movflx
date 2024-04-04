@@ -2,7 +2,7 @@ export const site = {
   name: "Movflix - Online Movies & Tv Shows",
   description:
     "mFlix: Your ultimate destination for movie discovery, reviews, and trailers.",
-
+  url: "https://sample-mflix-gopuadks.vercel.app",
   mainNav: [
     {
       id: 1,
