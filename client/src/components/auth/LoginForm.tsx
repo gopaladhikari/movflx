@@ -103,9 +103,10 @@ export function LoginForm() {
 
         <Button
           type="submit"
-          color="primary"
+          radius="full"
           fullWidth
           isLoading={isSubmitting}
+          className="bg-yellow text-lg font-semibold text-black"
         >
           {isSubmitting ? "Loading..." : "Login"}
         </Button>

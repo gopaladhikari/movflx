@@ -10,18 +10,19 @@ export function HeroSection() {
         objectFit: "contain",
       }}
     >
-      <h1 className="pt-[25%] text-2xl font-bold text-primary md:pt-[17%]">
+      <h1 className="pt-[25%] text-2xl font-bold text-yellow md:pt-[17%]">
         Movflx
       </h1>
       <h2 className="text-4xl font-bold md:text-5xl">
-        Unlimited <span className="text-primary">Movie</span>, TVs
+        Unlimited <span className="text-yellow">Movie</span>, TVs
       </h2>
       <h2 className="text-4xl font-bold md:text-5xl">Shows, & More.</h2>
 
       <Button
-        className="border-3 border-primary px-8 py-5"
-        variant="bordered"
+        className="border-3 border-yellow bg-black/40 px-8 py-5 
+        data-[focus-visible=true]:outline-0"
         radius="full"
+        variant="bordered"
       >
         <FaPlay size={12} /> WATCH NOW
       </Button>

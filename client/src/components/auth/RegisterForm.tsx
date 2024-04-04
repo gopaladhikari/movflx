@@ -222,9 +222,10 @@ export function RegisterForm() {
         </Link>
       </p>
       <Button
-        color="primary"
+        radius="full"
         fullWidth
         type="submit"
+        className="bg-yellow text-lg font-semibold text-black"
         isLoading={isSubmitting}
         disabled={isSubmitting}
       >
