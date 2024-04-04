@@ -1,9 +1,10 @@
-import MaxwidthWrapper from "@/components/common/MaxwidthWrapper";
+import { HeroSection } from "@/components/Home/HeroSection";
+// import MaxwidthWrapper from "@/components/common/MaxwidthWrapper";
 
 export default function page() {
   return (
     <main>
-      <MaxwidthWrapper>hello</MaxwidthWrapper>
+      <HeroSection />
     </main>
   );
 }

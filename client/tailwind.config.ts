@@ -8,7 +8,11 @@ const config: Config = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#e4d804",
+      },
+    },
   },
   darkMode: ["class"],
   plugins: [nextui()],
