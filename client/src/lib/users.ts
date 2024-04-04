@@ -72,7 +72,7 @@ export const getMe = async () => {
     return { data: res.data.data.user, ok: true };
   } catch (error) {
     const message =
-      (error as CustomError).response?.data.message || "Something went wrong";
+      (error as CustomError).response?.data || "Something went wrong";
 
     return { error: message, ok: false };
   }

@@ -128,4 +128,7 @@ const verifyUsersEmail = dbHandler(async (req, res) => {
     .json(new ApiResponse(200, null, "Email verified successfully"));
 });
 
+// TODO: Add forgot password, reset password and update user details
+// TODO: Add login with gmail
+
 export { registerUser, loginUser, getMe, logoutUser, verifyUsersEmail };
