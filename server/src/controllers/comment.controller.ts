@@ -25,13 +25,12 @@ const addCommentOnMovie = dbHandler(async (req, res) => {
 
 const updatedCommentById = dbHandler(async (req, res) => {
   const { id } = req.params; // comment ID
-
-  if (!isValidObjectId(id))
-    return res.status(400).json(new ApiError(400, "Invalid comment ID"));
-
   const { text } = req.body;
 
-  if (!text) return res.status(400).json(new ApiError(400, "Text is required"));
+  if (!isValidObjectId(id) || !text)
+    return res
+      .status(400)
+      .json(new ApiError(400, "Invalid comment ID or missing fields"));
 
   const comment = await Comment.findByIdAndUpdate(id, { text }, { new: true });
 

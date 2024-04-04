@@ -1,4 +1,5 @@
 import { Router } from "express";
+import passport from "passport";
 import {
   addCommentOnMovie,
   deleteCommentById,
@@ -8,9 +9,20 @@ import {
 
 const commentRouter = Router();
 
-commentRouter.route("/add-comment-on-movie/:id").post(addCommentOnMovie);
+// public routes
 commentRouter.route("/get-comment-by-movie-id/:id").get(getCommentsByMovieId);
-commentRouter.route("/update-comment-by-id/:id").post(updatedCommentById);
-commentRouter.route("/delete-comment-by-id/:id").delete(deleteCommentById);
+
+// protected routes
+commentRouter
+  .route("/add-comment-on-movie/:id")
+  .post(passport.authenticate("jwt", { session: false }), addCommentOnMovie);
+
+commentRouter
+  .route("/update-comment-by-id/:id")
+  .post(passport.authenticate("jwt", { session: false }), updatedCommentById);
+
+commentRouter
+  .route("/delete-comment-by-id/:id")
+  .delete(passport.authenticate("jwt", { session: false }), deleteCommentById);
 
 export { commentRouter };

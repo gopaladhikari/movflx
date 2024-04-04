@@ -16,7 +16,7 @@ export const registerFieldConfig = [
 
 const userRouter = Router();
 
-// routes
+// public routes
 
 userRouter
   .route("/register")
@@ -39,4 +39,3 @@ userRouter
   .get(passport.authenticate("jwt", { session: false }), getMe);
 
 export { userRouter };
-  
