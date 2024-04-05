@@ -1,5 +1,11 @@
 {
-  "extends": ["airbnb", "airbnb-typescript", "next/core-web-vitals", "prettier", "plugin:tailwindcss/recommended"],
+  "extends": [
+    "airbnb",
+    "airbnb-typescript",
+    "next/core-web-vitals",
+    "prettier",
+    "plugin:tailwindcss/recommended"
+  ],
 
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
@@ -13,6 +19,7 @@
     "tailwindcss/no-custom-classname": 0,
     "jsx-a11y/label-has-associated-control": 0,
     "react/jsx-props-no-spreading": 0,
-    "class-methods-use-this": 0
+    "class-methods-use-this": 0,
+    "no-underscore-dangle": 0
   }
 }

@@ -5,7 +5,7 @@ import { ApiResponse } from "../utils/ApiResponse";
 import { dbHandler } from "../utils/dbHandler";
 
 const getAllMovies = dbHandler(async (req, res) => {
-  const { skip = 0, limit = 10 } = req.query;
+  const { skip = 0, limit = 8 } = req.query;
 
   if (isNaN(+skip) || isNaN(+limit))
     return res.status(400).json(new ApiError(400, "Invalid query"));
@@ -23,6 +23,7 @@ const getAllMovies = dbHandler(async (req, res) => {
         title: 1,
         year: 1,
         runtime: 1,
+        poster: 1,
       },
     },
   ]);

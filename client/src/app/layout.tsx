@@ -1,12 +1,12 @@
 import "../styles/globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import { site } from "@/config/site";
 import { Providers } from "@/context/providers";
 import { Header } from "@/components/common/Header";
 import { cn } from "@/utils/cn";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({ subsets: ["latin"], weight: ["400"] });
 
 export const metadata: Metadata = {
   title: {
@@ -40,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={cn("bg-black/80", inter.className)}
+        className={cn("bg-black/80", poppins.className)}
         suppressHydrationWarning
       >
         <Providers>
