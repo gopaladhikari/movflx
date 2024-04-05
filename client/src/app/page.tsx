@@ -42,7 +42,7 @@ export default async function page() {
                     </p>
                     <p className="flex items-center gap-2">
                       <FaComment color="yellow" />
-                      12
+                      {movie?.movie_comments?.length || 0}
                     </p>
                   </CardFooter>
                 </Card>
