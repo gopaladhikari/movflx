@@ -5,6 +5,7 @@ import { site } from "@/config/site";
 import { Providers } from "@/context/providers";
 import { Header } from "@/components/common/Header";
 import { cn } from "@/utils/cn";
+import { Footer } from "@/components/common/Footer";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400"] });
 
@@ -46,6 +47,7 @@ export default function RootLayout({
         <Providers>
           <Header />
           {children}
+          <Footer />
         </Providers>
       </body>
     </html>

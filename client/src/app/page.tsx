@@ -12,7 +12,7 @@ export default async function page() {
     <main>
       <HeroSection />
 
-      <MaxwidthWrapper>
+      <MaxwidthWrapper className="min-h-[5vh]">
         <section className="my-8 space-y-4 md:my-16">
           <p className="text-sm font-bold text-yellow">ONLINE STREAMING</p>
           <h3 className="text-xl font-bold md:text-3xl">Upcoming Movies</h3>
