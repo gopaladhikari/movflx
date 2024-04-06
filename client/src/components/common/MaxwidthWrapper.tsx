@@ -6,7 +6,7 @@ type Props = {
   className?: string;
 };
 
-export default function MaxwidthWrapper({ className, children }: Props) {
+export function MaxwidthWrapper({ className, children }: Props) {
   return (
     <div
       className={cn(

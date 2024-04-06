@@ -1,7 +1,8 @@
 import { instance } from "@/config/axios";
 import { IMovieResponse } from "@/types/movie.types";
+import { cache } from "react";
 
-export const getMovies = async () => {
+export const getMovies = cache(async () => {
   try {
     const res = await instance.get<IMovieResponse>("/movies/get-all-movies");
 
@@ -9,4 +10,4 @@ export const getMovies = async () => {
   } catch (error) {
     return null;
   }
-};
+});
