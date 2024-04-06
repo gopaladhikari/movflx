@@ -41,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={cn("bg-black/80", poppins.className)}
+        className={cn("bg-[#0F0E16]", poppins.className)}
         suppressHydrationWarning
       >
         <Providers>
