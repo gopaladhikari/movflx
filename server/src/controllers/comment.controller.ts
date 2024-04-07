@@ -3,6 +3,7 @@ import { Comment } from "../models/comment.model";
 import { isValidObjectId } from "mongoose";
 import { ApiResponse } from "../utils/ApiResponse";
 import { ApiError } from "../utils/ApiError";
+import { Movie } from "../models/movie.model";
 
 const addCommentOnMovie = dbHandler(async (req, res) => {
   const { id } = req.params; // movie ID
@@ -16,7 +17,19 @@ const addCommentOnMovie = dbHandler(async (req, res) => {
   const comment = await Comment.create({ text, email, movie_id: id });
 
   if (!comment)
-    return res.status(500).json(new ApiError(500, "Failed to add comment"));
+    return res.status(500).json(new ApiError(500, "Failed to create comment"));
+
+  const movie = await Movie.findByIdAndUpdate(id, {
+    $inc: { num_mflix_comments: 1 },
+  });
+
+  if (!movie) {
+    await Comment.findByIdAndDelete(comment._id);
+
+    return res
+      .status(500)
+      .json(new ApiError(500, "Failed to update movie comments"));
+  }
 
   res
     .status(201)
@@ -69,6 +82,15 @@ const deleteCommentById = dbHandler(async (req, res) => {
 
   if (!comment)
     return res.status(500).json(new ApiError(500, "Failed to delete comment"));
+
+  const movie = await Movie.findByIdAndUpdate(comment.movie_id, {
+    $inc: { num_mflix_comments: -1 },
+  });
+
+  if (!movie)
+    return res
+      .status(500)
+      .json(new ApiError(500, "Failed to update movie comments"));
 
   res.status(200).json(new ApiResponse(200, {}, "Comment deleted sucessfully"));
 });

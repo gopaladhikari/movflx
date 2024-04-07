@@ -1,3 +1,7 @@
+export const metadata = {
+  title: "Movies",
+};
+
 export default function page() {
-  return <div>page</div>;
+  return <main>page</main>;
 }

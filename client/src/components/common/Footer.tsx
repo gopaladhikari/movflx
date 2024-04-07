@@ -6,30 +6,6 @@ export function Footer() {
   return (
     <footer>
       <MaxwidthWrapper className="py-6 md:py-10">
-        <div className="mx-auto max-w-md">
-          <strong className="block text-center text-xl font-bold sm:text-3xl">
-            Want us to email you with the latest blockbuster news?
-          </strong>
-          <form className="mt-6">
-            <div className="relative max-w-lg">
-              <label className="sr-only" htmlFor="email">
-                Email
-              </label>
-              <input
-                className="w-full rounded-full p-4 pe-32 text-sm font-medium"
-                id="email"
-                type="email"
-                placeholder="john@doe.com"
-              />
-              <button
-                type="button"
-                className="absolute end-1 top-1/2 -translate-y-1/2 rounded-full bg-blue-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-blue-700"
-              >
-                Subscribe
-              </button>
-            </div>
-          </form>
-        </div>
         <div className="mt-16 grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-32">
           <div className="max-w-sm items-start lg:max-w-none">
             <Image src="/logo.png" alt="logo" width={200} height={200} />

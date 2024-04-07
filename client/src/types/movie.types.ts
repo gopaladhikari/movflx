@@ -1,11 +1,9 @@
-import { IComment } from "./comments.type";
-
 interface IMovie {
   _id: string;
   runtime: number;
   title: string;
   year: number;
-  movie_comments: IComment[];
+  num_mflix_comments: number;
   poster: string;
 }
 

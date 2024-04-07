@@ -18,21 +18,12 @@ const getAllMovies = dbHandler(async (req, res) => {
       $limit: Number(limit),
     },
     {
-      $lookup: {
-        from: "comments",
-        localField: "_id",
-        foreignField: "movie_id",
-        as: "movie_comments",
-      },
-    },
-    {
       $project: {
-        _id: 1,
         title: 1,
-        movie_comments: 1,
         year: 1,
         runtime: 1,
         poster: 1,
+        num_mflix_comments: 1,
       },
     },
   ]);

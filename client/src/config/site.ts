@@ -16,8 +16,8 @@ export const site = {
     },
     {
       id: 3,
-      title: "Tv Shows",
-      href: "/tv-shows",
+      title: "Embedded Movies",
+      href: "/embedded-movies",
     },
     {
       id: 4,

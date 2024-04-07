@@ -5,6 +5,10 @@ type Props = {
   searchParams: { token: string };
 };
 
+export const metadata = {
+  title: "Verify Email",
+};
+
 export default function page({ searchParams: { token } }: Props) {
   return (
     <main>
