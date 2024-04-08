@@ -1,7 +1,7 @@
 import { Button } from "@nextui-org/react";
 import { FaPlay } from "react-icons/fa";
 
-export function HeroSection() {
+export function HomepageHeroSection() {
   return (
     <section
       className="min-h-screen space-y-4 px-4 md:pl-[8%]"

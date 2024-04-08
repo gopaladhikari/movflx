@@ -12,7 +12,7 @@ export const site = {
     {
       id: 2,
       title: "Movies",
-      href: "/movies",
+      href: "/movies?page=1",
     },
     {
       id: 3,

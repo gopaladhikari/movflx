@@ -1,4 +1,4 @@
-interface IMovie {
+export interface IMovie {
   _id: string;
   runtime: number;
   title: string;
@@ -9,7 +9,10 @@ interface IMovie {
 
 export interface IMovieResponse {
   statusCode: number;
-  data: IMovie[];
+  data: {
+    movies: IMovie[];
+    totalMovies: number;
+  };
   message: string;
   sucess: boolean;
 }

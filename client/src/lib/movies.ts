@@ -8,7 +8,10 @@ export const getMovies = cache(async (skip = 0, limit = 8) => {
       `/movies/get-all-movies?skip=${skip}&limit=${limit}`
     );
 
-    return res.data.data;
+    const { movies } = res.data.data;
+    const { totalMovies } = res.data.data;
+
+    return { movies, totalMovies };
   } catch (error) {
     return null;
   }

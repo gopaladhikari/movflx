@@ -1,25 +1,18 @@
-import { HeroSection } from "@/components/Home/HeroSection";
+import { HomepageHeroSection } from "@/components/Home/HeroSection";
+import MovieCard from "@/components/MovieCard";
 import { MaxwidthWrapper } from "@/components/common/MaxwidthWrapper";
 import { getMovies } from "@/lib/movies";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  Divider,
-  Input,
-  Button,
-} from "@nextui-org/react";
+import { Divider, Button } from "@nextui-org/react";
 import Image from "next/image";
-import Link from "next/link";
-import { FaClock, FaComment, FaPlay } from "react-icons/fa";
+import { FaPlay } from "react-icons/fa";
 import { PiTelevisionFill, PiVideoCameraFill } from "react-icons/pi";
 
 export default async function page() {
-  const movies = await getMovies(0, 16);
+  const res = await getMovies(0, 16);
 
   return (
     <main>
-      <HeroSection />
+      <HomepageHeroSection />
 
       {/* Upcoming movie section */}
 
@@ -28,37 +21,8 @@ export default async function page() {
           <p className="text-sm font-bold text-yellow">ONLINE STREAMING</p>
           <h3 className="text-xl font-bold md:text-3xl">Upcoming Movies</h3>
           <div className="grid gap-6 sm:grid-cols-2 md:gap-12 lg:grid-cols-3 xl:grid-cols-4">
-            {movies?.slice(0, 8).map((movie) => (
-              <Card shadow="md" isPressable fullWidth key={movie?._id} as="div">
-                <CardBody className="overflow-visible p-0">
-                  <Link href={`/movies/${movie?._id}`}>
-                    <Image
-                      width={350}
-                      height={350}
-                      alt={`Movie poster for movie ${movie?.title}`}
-                      className="h-[350px] w-full object-cover"
-                      src={movie?.poster}
-                    />
-                  </Link>
-                </CardBody>
-                <CardFooter className="justify-between text-small">
-                  <Link href={`/movies/${movie?._id}`}>
-                    <strong className="line-clamp-1 pr-8 text-medium">
-                      {movie?.title}
-                    </strong>
-                  </Link>
-                  <p className="font-semibold text-yellow">{movie.year}</p>
-                </CardFooter>
-                <CardFooter className="justify-end gap-3 text-small">
-                  <p className="flex items-center gap-2">
-                    <FaClock color="yellow" /> {movie?.runtime} min
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <FaComment color="yellow" />
-                    {movie?.num_mflix_comments || 0}
-                  </p>
-                </CardFooter>
-              </Card>
+            {res?.movies?.slice(0, 8).map((movie) => (
+              <MovieCard key={movie?._id} movie={movie} />
             ))}
           </div>
         </MaxwidthWrapper>
@@ -122,37 +86,8 @@ export default async function page() {
             Top Rated Movies
           </h3>
           <div className="grid gap-6 sm:grid-cols-2 md:gap-12 lg:grid-cols-3 xl:grid-cols-4">
-            {movies?.slice(8).map((movie) => (
-              <Card shadow="md" isPressable fullWidth key={movie?._id} as="div">
-                <CardBody className="overflow-visible p-0">
-                  <Link href={`/movies/${movie?._id}`}>
-                    <Image
-                      width={350}
-                      height={350}
-                      alt={`Movie poster for movie ${movie?.title}`}
-                      className="h-[350px] w-full object-cover"
-                      src={movie?.poster}
-                    />
-                  </Link>
-                </CardBody>
-                <CardFooter className="justify-between text-small">
-                  <Link href={`/movies/${movie?._id}`}>
-                    <strong className="line-clamp-1 pr-8 text-medium">
-                      {movie?.title}
-                    </strong>
-                  </Link>
-                  <p className="font-semibold text-yellow">{movie.year}</p>
-                </CardFooter>
-                <CardFooter className="justify-end gap-3 text-small">
-                  <p className="flex items-center gap-2">
-                    <FaClock color="yellow" /> {movie?.runtime} min
-                  </p>
-                  <p className="flex items-center gap-2">
-                    <FaComment color="yellow" />
-                    {movie?.num_mflix_comments || 0}
-                  </p>
-                </CardFooter>
-              </Card>
+            {res?.movies?.slice(8).map((movie) => (
+              <MovieCard key={movie?._id} movie={movie} />
             ))}
           </div>
         </MaxwidthWrapper>
@@ -186,28 +121,6 @@ export default async function page() {
             className="h-[580px] basis-1/2 object-contain"
             alt="services image "
           />
-        </MaxwidthWrapper>
-      </section>
-
-      {/* Trial Start First 30 Days. */}
-
-      <section className="bg-yellow">
-        <MaxwidthWrapper className="grid-cols-2 space-y-3 p-6 lg:grid">
-          <div className="text-black">
-            <strong className="text-xl font-bold">
-              Trial Start First 30 Days.
-            </strong>
-            <p>Enter your email to create or restart your membership.</p>
-          </div>
-          <form className="flex items-center">
-            <Input size="lg" />
-            <Button
-              className="text-md bg-black font-semibold text-yellow"
-              size="lg"
-            >
-              Get Started
-            </Button>
-          </form>
         </MaxwidthWrapper>
       </section>
     </main>

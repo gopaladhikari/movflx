@@ -22,7 +22,7 @@ export async function Header() {
 
   return (
     <div className="container mx-auto">
-      <Navbar shouldHideOnScroll maxWidth="full" className="bg-transparent">
+      <Navbar shouldHideOnScroll maxWidth="full" className="bg-black">
         <NavbarBrand>
           <Link href="/">
             <Image src="/logo.png" alt="logo" width={120} height={120} />

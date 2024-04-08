@@ -12,18 +12,35 @@ const getAllMovies = dbHandler(async (req, res) => {
 
   const movies = await Movie.aggregate([
     {
-      $skip: Number(skip),
-    },
-    {
-      $limit: Number(limit),
+      $facet: {
+        movies: [
+          {
+            $skip: Number(skip),
+          },
+          {
+            $limit: Number(limit),
+          },
+          {
+            $project: {
+              title: 1,
+              year: 1,
+              runtime: 1,
+              poster: 1,
+              num_mflix_comments: 1,
+            },
+          },
+        ],
+        count: [
+          {
+            $count: "totalMovies",
+          },
+        ],
+      },
     },
     {
       $project: {
-        title: 1,
-        year: 1,
-        runtime: 1,
-        poster: 1,
-        num_mflix_comments: 1,
+        movies: 1,
+        totalMovies: { $arrayElemAt: ["$count.totalMovies", 0] },
       },
     },
   ]);
@@ -31,7 +48,7 @@ const getAllMovies = dbHandler(async (req, res) => {
   if (!movies?.length)
     return res.status(404).json(new ApiError(404, "Movies not found"));
 
-  res.status(200).json(new ApiResponse(200, movies, "Movies fetched"));
+  res.status(200).json(new ApiResponse(200, movies[0], "Movies fetched"));
 });
 
 const getMovieById = dbHandler(async (req, res) => {
