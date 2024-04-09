@@ -7,12 +7,19 @@ export interface IMovie {
   poster: string;
 }
 
-export interface IMovieResponse {
+export interface IMoviesResponse {
   statusCode: number;
   data: {
     movies: IMovie[];
     totalMovies: number;
   };
+  message: string;
+  sucess: boolean;
+}
+
+export interface IMovieResponse {
+  statusCode: number;
+  data: IMovie;
   message: string;
   sucess: boolean;
 }
