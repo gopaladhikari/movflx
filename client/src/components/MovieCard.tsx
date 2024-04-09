@@ -32,10 +32,10 @@ export default function MovieCard({ movie }: IMovieCardProps) {
       </CardFooter>
       <CardFooter className="justify-end gap-3 text-small">
         <p className="flex items-center gap-2">
-          <FaClock color="yellow" /> {movie?.runtime} min
+          <FaClock className="text-yellow" /> {movie?.runtime} min
         </p>
         <p className="flex items-center gap-2">
-          <FaComment color="yellow" />
+          <FaComment className="text-yellow" />
           {movie?.num_mflix_comments || 0}
         </p>
       </CardFooter>
