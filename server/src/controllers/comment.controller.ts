@@ -7,14 +7,14 @@ import { Movie } from "../models/movie.model";
 
 const addCommentOnMovie = dbHandler(async (req, res) => {
   const { id } = req.params; // movie ID
-  const { text, email } = req.body;
+  const { text, email, name } = req.body;
 
-  if (!isValidObjectId(id) || !text || !email)
+  if (!isValidObjectId(id) || !text || !email || !name)
     return res
       .status(400)
       .json(new ApiError(400, "Invalid movie ID or missing fields"));
 
-  const comment = await Comment.create({ text, email, movie_id: id });
+  const comment = await Comment.create({ text, email, movie_id: id, name });
 
   if (!comment)
     return res.status(500).json(new ApiError(500, "Failed to create comment"));
@@ -60,7 +60,9 @@ const getCommentsByMovieId = dbHandler(async (req, res) => {
   if (!isValidObjectId(id))
     return res.status(400).json(new ApiError(400, "Invalid movie ID"));
 
-  const comments = await Comment.find({ movie_id: id });
+  const comments = await Comment.find({ movie_id: id }).sort({
+    date: -1,
+  });
 
   if (!comments)
     return res.status(500).json(new ApiError(500, "Failed to fetch comments"));

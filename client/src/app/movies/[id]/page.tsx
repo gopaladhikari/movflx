@@ -12,6 +12,10 @@ import {
 } from "react-icons/fa";
 import { SlCalender } from "react-icons/sl";
 import { Button } from "@nextui-org/react";
+import { getCommentsByMovieId } from "@/lib/comments";
+import { CommentCard } from "@/components/movie/CommentCard";
+import { AddComment } from "@/components/movie/AddComment";
+import { getMe } from "@/lib/users";
 
 type Params = {
   params?: { id: string };
@@ -29,16 +33,29 @@ export async function generateMetadata(
   return {
     title: movie?.title || "Movflx - Online Movies & Tv Shows",
     openGraph: {
-      images: [movie?.poster, ...previousImages],
+      images: [
+        {
+          url: movie?.poster,
+          height: 350,
+          width: 350,
+        },
+        ...previousImages,
+      ],
     },
   };
 }
 
 export default async function page({ params }: Params) {
-  const res = await getMovies(24, 4);
   const movie = await getMovieById(params?.id);
 
   if (!movie) return notFound();
+
+  const res = await getMovies(24, 4);
+
+  const comments = await getCommentsByMovieId(movie._id);
+
+  const me = await getMe();
+  const { data: user } = me;
 
   return (
     <main>
@@ -117,6 +134,8 @@ export default async function page({ params }: Params) {
         </MaxwidthWrapper>
       </section>
 
+      {/* Movie info and strory line section */}
+
       <section>
         <MaxwidthWrapper className="my-8 space-y-4">
           <h3 className="text-xl font-bold text-yellow">Movie Info:</h3>
@@ -124,28 +143,20 @@ export default async function page({ params }: Params) {
             <li>Full Name : {movie?.title}</li>
             <li>Duration : {movie?.runtime} min</li>
             {movie?.languages.length !== 0 && (
-              <li>
-                Languages :{" "}
-                {movie.languages.map((language) => language).join(", ")}
-              </li>
+              <li>Languages : {movie.languages?.join(", ")}</li>
             )}
-            {movie?.writers.length !== 0 && (
-              <li>
-                Writers : {movie.writers.map((writer) => writer).join(", ")}
-              </li>
+            {movie?.writers?.length > 0 && (
+              <li>Writers : {movie?.writers.join(", ")}</li>
             )}
-            <li>
-              Directors :{" "}
-              {movie?.directors.map((director) => director).join(", ")} min
-            </li>
+            <li>Directors : {movie?.directors?.join(", ")} min</li>
             <li>
               Imdb : {movie?.imdb?.rating} ({movie?.imdb?.votes} votes)
             </li>
             <li>
               Tomatoes : {movie?.tomatoes?.viewer.rating} (
-              {movie?.tomatoes?.viewer.numReviews || "N/A"} votes)
+              {movie?.tomatoes?.viewer.numReviews ?? "N/A"} votes)
             </li>
-            <li>Actors : {movie?.cast.map((cast) => cast).join(", ")}</li>
+            <li>Actors : {movie?.cast?.join(", ")}</li>
           </ul>
           <h3 className="text-xl font-bold text-yellow">Movie Storyline</h3>
           <p className="text-white/80">{movie?.fullplot || movie?.plot} </p>
@@ -153,18 +164,40 @@ export default async function page({ params }: Params) {
       </section>
 
       <section>
-        <MaxwidthWrapper className="my-8 space-y-4 py-12 md:my-16">
-          <p className="text-center text-sm font-bold text-yellow">
-            ONLINE STREAMING
-          </p>
-          <h3 className="text-center text-xl font-bold md:text-3xl">
-            Upcoming Movies
-          </h3>
-          <div className="grid gap-6 sm:grid-cols-2 md:gap-12 lg:grid-cols-3 xl:grid-cols-4">
-            {res?.movies?.map((upComingMovie) => (
-              <MovieCard key={upComingMovie?._id} movie={upComingMovie} />
-            ))}
+        <MaxwidthWrapper className="my-8 grid-cols-6 gap-12 space-y-4 py-12 md:my-16 md:grid">
+          <div className="col-span-4 space-y-4">
+            <AddComment
+              avatar={user?.avatar}
+              movieId={movie?._id}
+              name={`${user?.firstName} ${user?.lastName}`}
+              email={user?.email}
+            />
+            <strong className="text-xl font-bold">
+              {movie?.num_mflix_comments || 0} Comments
+            </strong>
+
+            <div className="space-y-6 overflow-scroll max-md:max-h-96">
+              {comments?.map((comment) => (
+                <CommentCard key={comment._id} comment={comment} />
+              )) ?? "Be the first to add comment"}
+            </div>
           </div>
+
+          {/* Upcoming movie section */}
+
+          <aside className="col-span-2 my-8 space-y-4 py-12 md:my-16">
+            <p className="text-center text-sm font-bold text-yellow">
+              ONLINE STREAMING
+            </p>
+            <h3 className="text-center text-xl font-bold md:text-3xl">
+              Upcoming Movies
+            </h3>
+            <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-none">
+              {res?.movies?.map((upComingMovie) => (
+                <MovieCard key={upComingMovie?._id} movie={upComingMovie} />
+              ))}
+            </div>
+          </aside>
         </MaxwidthWrapper>
       </section>
     </main>

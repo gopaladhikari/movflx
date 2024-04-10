@@ -1,29 +1,39 @@
 import { Schema, model, InferSchemaType } from "mongoose";
 
-const commentSchema = new Schema({
-  email: {
-    type: String,
-    required: true,
-    lowercase: true,
-    index: true,
-  },
+const commentSchema = new Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      lowercase: true,
+      index: true,
+    },
 
-  movie_id: {
-    type: Schema.Types.ObjectId,
-    ref: "Movie",
-    required: true,
-  },
+    movie_id: {
+      type: Schema.Types.ObjectId,
+      ref: "Movie",
+      required: true,
+    },
 
-  text: {
-    type: String,
-    required: true,
-  },
+    name: {
+      type: String,
+      required: true,
+    },
 
-  date: {
-    type: Date,
-    default: Date.now(),
+    text: {
+      type: String,
+      required: true,
+    },
+
+    date: {
+      type: Date,
+      default: Date.now(),
+    },
   },
-});
+  {
+    timestamps: true,
+  }
+);
 
 type TComment = InferSchemaType<typeof commentSchema>;
 
