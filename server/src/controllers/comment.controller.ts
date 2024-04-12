@@ -94,7 +94,9 @@ const deleteCommentById = dbHandler(async (req, res) => {
       .status(500)
       .json(new ApiError(500, "Failed to update movie comments"));
 
-  res.status(200).json(new ApiResponse(200, {}, "Comment deleted sucessfully"));
+  res
+    .status(200)
+    .json(new ApiResponse(200, comment, "Comment deleted sucessfully"));
 });
 
 export {

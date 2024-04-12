@@ -31,7 +31,7 @@ export function LoginForm() {
     const res = await loginUser(formData);
 
     if (!res.ok) setError("root", { message: res.error });
-    else router.push("/");
+    else router.back();
   };
 
   return (

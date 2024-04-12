@@ -1,21 +1,22 @@
 import { IComment } from "@/types/comments.type";
 import { User } from "@nextui-org/react";
+import { UpdateAndDeleteComment } from "./UpdateAndDeleteComment";
 
 type Props = {
   comment: IComment;
+  currentUserEmail?: string;
 };
-
 function timeAgo(dateString: string): string {
   const currentDate = new Date();
   const previousDate = new Date(dateString);
+
+  const elapsed = currentDate.getTime() - previousDate.getTime();
 
   const millisecondsPerMinute = 60 * 1000;
   const millisecondsPerHour = millisecondsPerMinute * 60;
   const millisecondsPerDay = millisecondsPerHour * 24;
   const millisecondsPerMonth = millisecondsPerDay * 30;
   const millisecondsPerYear = millisecondsPerDay * 365;
-
-  const elapsed = currentDate.getTime() - previousDate.getTime();
 
   if (elapsed < millisecondsPerMinute)
     return `${Math.round(elapsed / 1000)} seconds ago`;
@@ -35,17 +36,22 @@ function timeAgo(dateString: string): string {
   return `${Math.round(elapsed / millisecondsPerYear)} years ago`;
 }
 
-export function CommentCard({ comment }: Props) {
+export function CommentCard({ comment, currentUserEmail }: Props) {
   return (
-    <div className="space-y-2 rounded-xl bg-black px-3 py-4">
-      <User
-        name={comment?.name}
-        description={timeAgo(comment?.date)}
-        avatarProps={{
-          name: comment?.name,
-        }}
-      />
-      <p className="pl-3 text-medium">{comment?.text}</p>
+    <div className="flex w-full justify-between gap-3 rounded-xl bg-black px-3 py-4">
+      <UpdateAndDeleteComment
+        text={comment.text}
+        id={comment._id}
+        isCommenter={currentUserEmail === comment?.email}
+      >
+        <User
+          name={comment?.name}
+          description={timeAgo(comment?.date)}
+          avatarProps={{
+            name: comment?.name,
+          }}
+        />
+      </UpdateAndDeleteComment>
     </div>
   );
 }

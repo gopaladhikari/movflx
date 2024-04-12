@@ -30,3 +30,34 @@ export interface AddCommentResponse {
   message: string;
   success: boolean;
 }
+
+export interface DeleteCommentByIdResponse {
+  statusCode: number;
+  data: {
+    _id: string;
+    name: string;
+    email: string;
+    movie_id: string;
+    text: string;
+    date: string;
+  };
+  message: string;
+  sucess: boolean;
+}
+
+export interface UpdateCommentByIdResponse {
+  statusCode: number;
+  data: {
+    _id: string;
+    email: string;
+    movie_id: string;
+    name: string;
+    text: string;
+    date: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: null;
+  };
+  message: string;
+  sucess: boolean;
+}

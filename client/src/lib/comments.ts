@@ -1,7 +1,13 @@
 "use server";
 
 import { instance } from "@/config/axios";
-import { AddCommentResponse, IResponseComments } from "@/types/comments.type";
+import {
+  AddCommentResponse,
+  DeleteCommentByIdResponse,
+  IResponseComments,
+  UpdateCommentByIdResponse,
+} from "@/types/comments.type";
+import { AxiosError } from "axios";
 import { revalidatePath } from "next/cache";
 
 const getCommentsByMovieId = async (movieId: string) => {
@@ -37,13 +43,37 @@ const addCommentOnMovie = async (
   }
 };
 
-const updatedCommentById = async () => {};
+const updateCommentById = async (id: string, text: string) => {
+  try {
+    const res = await instance.patch<UpdateCommentByIdResponse>(
+      `/comments/update-comment-by-id/${id}`,
+      { text }
+    );
+    const movieId = res.data.data.movie_id;
+    revalidatePath(`/movies/${movieId}`);
+    return res.data.sucess;
+  } catch (error) {
+    console.log("error", (error as AxiosError).response?.data);
+    return null;
+  }
+};
 
-const deleteCommentById = async () => {};
+const deleteCommentById = async (id: string) => {
+  try {
+    const res = await instance.delete<DeleteCommentByIdResponse>(
+      `/comments/delete-comment-by-id/${id}`
+    );
+    const movieId = res.data.data.movie_id;
+    revalidatePath(`/movies/${movieId}`);
+    return res.data.sucess;
+  } catch (error) {
+    return null;
+  }
+};
 
 export {
   addCommentOnMovie,
   getCommentsByMovieId,
-  updatedCommentById,
+  updateCommentById,
   deleteCommentById,
 };

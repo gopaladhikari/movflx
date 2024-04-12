@@ -1,7 +1,7 @@
 "use client";
 
 import { addCommentOnMovie } from "@/lib/comments";
-import { TTextSchema, textSchema } from "@/schemas/addCommentSchema";
+import { TTextSchema, textSchema } from "@/schemas/updateCommentSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Avatar, Button, Input } from "@nextui-org/react";
 import { SubmitHandler, useForm } from "react-hook-form";

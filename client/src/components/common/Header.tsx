@@ -21,8 +21,8 @@ export async function Header() {
   const res = await getMe();
 
   return (
-    <div className="container mx-auto">
-      <Navbar shouldHideOnScroll maxWidth="full" className="bg-black">
+    <div className="container mx-auto bg-black">
+      <Navbar shouldHideOnScroll maxWidth="full">
         <NavbarBrand>
           <Link href="/">
             <Image src="/logo.png" alt="logo" width={120} height={120} />

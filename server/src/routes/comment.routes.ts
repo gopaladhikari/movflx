@@ -19,7 +19,7 @@ commentRouter
 
 commentRouter
   .route("/update-comment-by-id/:id")
-  .post(passport.authenticate("jwt", { session: false }), updatedCommentById);
+  .patch(passport.authenticate("jwt", { session: false }), updatedCommentById);
 
 commentRouter
   .route("/delete-comment-by-id/:id")

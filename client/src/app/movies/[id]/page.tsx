@@ -178,7 +178,11 @@ export default async function page({ params }: Params) {
 
             <div className="space-y-6 overflow-scroll max-md:max-h-96">
               {comments?.map((comment) => (
-                <CommentCard key={comment._id} comment={comment} />
+                <CommentCard
+                  key={comment._id}
+                  comment={comment}
+                  currentUserEmail={user?.email}
+                />
               )) ?? "Be the first to add comment"}
             </div>
           </div>
