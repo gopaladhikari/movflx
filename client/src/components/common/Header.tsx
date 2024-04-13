@@ -9,13 +9,9 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
-import { instance } from "@/config/axios";
-import { cookies } from "next/headers";
 import { UserDropDown } from "../auth/UserDropDown";
 
 export async function Header() {
-  const token = cookies().get("token")?.value;
-  if (token) instance.defaults.headers.common.Authorization = `Bearer ${token}`;
   const res = await getMe();
 
   if (res.ok)

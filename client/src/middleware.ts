@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { instance } from "./config/axios";
 
 export function middleware(request: NextRequest) {
   const currentPathname = request.nextUrl.pathname;
 
   const token = request.cookies.get("token")?.value;
+  if (token) instance.defaults.headers.common.Authorization = `Bearer ${token}`;
 
   const isAuthPage =
     currentPathname === "/auth/login" || currentPathname === "/auth/register";
@@ -21,5 +23,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/auth/login", "/auth/register"],
+  matcher: ["/", "/auth/login", "/auth/register"],
 };
