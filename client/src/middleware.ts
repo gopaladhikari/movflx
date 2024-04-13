@@ -6,8 +6,7 @@ export function middleware(request: NextRequest) {
   const currentPathname = request.nextUrl.pathname;
 
   const token = request.cookies.get("token")?.value;
-
-  instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+  if (token) instance.defaults.headers.common.Authorization = `Bearer ${token}`;
 
   const isAuthPage =
     currentPathname === "/auth/login" || currentPathname === "/auth/register";
