@@ -20,6 +20,29 @@ export async function Header() {
 
   const res = await getMe();
 
+  if (res.ok)
+    return (
+      <div className="container mx-auto bg-black">
+        <Navbar shouldHideOnScroll maxWidth="full">
+          <NavbarBrand>
+            <Link href="/">
+              <Image src="/logo.png" alt="logo" width={120} height={120} />
+            </Link>
+          </NavbarBrand>
+          <NavbarContent className="hidden sm:flex sm:gap-6" justify="center">
+            {site.mainNav.map(({ id, title, href }) => (
+              <NavbarItem key={id} isActive>
+                <Link href={href}>{title}</Link>
+              </NavbarItem>
+            ))}
+          </NavbarContent>
+          <NavbarContent justify="end">
+            <UserDropDown user={res?.data} />
+          </NavbarContent>
+        </Navbar>
+      </div>
+    );
+
   return (
     <div className="container mx-auto bg-black">
       <Navbar shouldHideOnScroll maxWidth="full">
@@ -36,25 +59,19 @@ export async function Header() {
           ))}
         </NavbarContent>
         <NavbarContent justify="end">
-          {res.ok ? (
-            <UserDropDown user={res?.data} />
-          ) : (
-            <>
-              <NavbarItem isActive>
-                <Link href="/auth/login">Login</Link>
-              </NavbarItem>
-              <NavbarItem isActive>
-                <Button
-                  as={Link}
-                  color="primary"
-                  href="/auth/register"
-                  variant="flat"
-                >
-                  Sign Up
-                </Button>
-              </NavbarItem>
-            </>
-          )}
+          <NavbarItem isActive>
+            <Link href="/auth/login">Login</Link>
+          </NavbarItem>
+          <NavbarItem isActive>
+            <Button
+              as={Link}
+              color="primary"
+              href="/auth/register"
+              variant="flat"
+            >
+              Sign Up
+            </Button>
+          </NavbarItem>
         </NavbarContent>
       </Navbar>
     </div>

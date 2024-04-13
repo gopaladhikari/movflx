@@ -37,6 +37,7 @@ export function AddComment({ avatar, movieId, name, email }: Props) {
         onSubmit={handleSubmit(onSubmit)}
       >
         <Input
+          isDisabled={!email}
           type="text"
           variant="underlined"
           fullWidth
@@ -50,6 +51,7 @@ export function AddComment({ avatar, movieId, name, email }: Props) {
         )}
 
         <Button
+          isDisabled={!email}
           type="submit"
           isLoading={isSubmitting}
           variant="faded"
