@@ -10,10 +10,7 @@ const validatedEnv = envSchema.safeParse({
   backendUrl: BACKEND_URL,
 });
 
-if (!validatedEnv.success) {
-  console.error("Validation errors:", validatedEnv.error.format());
-  process.exit(1);
-}
+if (!validatedEnv.success) process.exit(1);
 
 // * Ensure `env` doesn't get modified by mistakely
 export const env: Readonly<typeof validatedEnv.data> = validatedEnv.data;

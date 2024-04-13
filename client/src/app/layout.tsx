@@ -1,6 +1,5 @@
 import "../styles/globals.css";
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
 import { site } from "@/config/site";
 import { Providers } from "@/context/providers";
 import { Header } from "@/components/common/Header";
@@ -8,8 +7,9 @@ import { cn } from "@/utils/cn";
 import { Footer } from "@/components/common/Footer";
 import { cookies } from "next/headers";
 import { instance } from "@/config/axios";
+import { Inter } from "next/font/google";
 
-const poppins = Poppins({ subsets: ["latin"], weight: ["400"] });
+const inter = Inter({ subsets: ["latin"], weight: ["400"] });
 
 export const metadata: Metadata = {
   title: {
@@ -45,7 +45,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={cn("bg-black-bg", poppins.className)}
+        className={cn("bg-[#0F0E16]", inter.className)}
         suppressHydrationWarning
       >
         <Providers>

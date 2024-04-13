@@ -7,7 +7,6 @@ import {
   IResponseComments,
   UpdateCommentByIdResponse,
 } from "@/types/comments.type";
-import { AxiosError } from "axios";
 import { revalidatePath } from "next/cache";
 
 const getCommentsByMovieId = async (movieId: string) => {
@@ -53,7 +52,6 @@ const updateCommentById = async (id: string, text: string) => {
     revalidatePath(`/movies/${movieId}`);
     return res.data.sucess;
   } catch (error) {
-    console.log("error", (error as AxiosError).response?.data);
     return null;
   }
 };
