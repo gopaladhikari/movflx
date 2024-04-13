@@ -6,6 +6,8 @@ import { Providers } from "@/context/providers";
 import { Header } from "@/components/common/Header";
 import { cn } from "@/utils/cn";
 import { Footer } from "@/components/common/Footer";
+import { cookies } from "next/headers";
+import { instance } from "@/config/axios";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400"] });
 
@@ -33,11 +35,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const token = cookies().get("token")?.value;
+  if (token) instance.defaults.headers.common.Authorization = `Bearer ${token}`;
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
