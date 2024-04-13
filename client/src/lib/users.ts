@@ -75,6 +75,7 @@ export const getMe = async () => {
     const message =
       (error as CustomError).response?.data || "Something went wrong";
 
+    cookies().delete("token");
     return { error: message, ok: false };
   }
 };
