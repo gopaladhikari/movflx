@@ -12,16 +12,17 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 app.use(
-  cors({
-    origin: env.corsOrigin,
-    credentials: true,
-  })
+	cors({
+		origin: env.corsOrigin,
+		credentials: true,
+	})
 );
 
 // passport middleware
 app.use(passport.initialize());
 import "./strategy/jwtStrategy";
 import "./strategy/localStrategy";
+import "./strategy/googleStrategy";
 
 // routes imports
 
@@ -32,7 +33,7 @@ import { commentRouter } from "./routes/comment.routes";
 // routes declaration
 
 app.get("/", (req, res) => {
-  res.json({ message: "Hello from gopaladhikari!" });
+	res.json({ message: "Hello from gopaladhikari!" });
 });
 
 app.use("/api/v1/users", userRouter);

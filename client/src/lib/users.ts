@@ -84,6 +84,17 @@ export const getMe = async () => {
 	}
 };
 
+export const getMeFromToken = async (token: string) => {
+	try {
+		instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+		const res = await instance.get<TUserResponse>("/users/me");
+
+		return res.data.data;
+	} catch (error) {
+		return null;
+	}
+};
+
 export const logoutUser = async () => {
 	const cookieStore = cookies();
 
