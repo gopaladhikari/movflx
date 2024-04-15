@@ -48,7 +48,7 @@ Movflx is a MERN stack website that allows users to explore and interact with a 
 -  Google OAuth
 -  Email/password authentication
 
-### To run this application locally
+## To run this application locally
 
 Follow these instructions to get the project up and running on your local machine for development and testing purposes.
 
