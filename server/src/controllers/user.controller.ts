@@ -130,7 +130,6 @@ const verifyUsersEmail = dbHandler(async (req, res) => {
 });
 
 // TODO: Add forgot password, reset password and update user details
-// TODO: Add login with gmail
 
 export {
 	registerUser,
