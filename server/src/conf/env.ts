@@ -66,10 +66,7 @@ const validatedEnv = envSchema.safeParse({
 	googleClientSecret: GOOGLE_CLIENT_SECRET,
 });
 
-if (!validatedEnv.success) {
-	console.error("Validation errors:", validatedEnv.error.format());
-	process.exit(1);
-}
+if (!validatedEnv.success) throw new Error(validatedEnv.error.message);
 
 // * Ensure `env` doesn't get modified by mistakely
 export const env: Readonly<typeof validatedEnv.data> = validatedEnv.data;
