@@ -2117,16 +2117,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-oauth/google@npm:^0.12.1":
-  version: 0.12.1
-  resolution: "@react-oauth/google@npm:0.12.1"
-  peerDependencies:
-    react: ">=16.8.0"
-    react-dom: ">=16.8.0"
-  checksum: 10c0/fe23e3c0a4d0b9999fcd7b932b1a42bf94fdab526473931d780d08742455b8861fc647857b3b491e258ecef4a407dbf7321440c0d00890e23059d487795f92fb
-  languageName: node
-  linkType: hard
-
 "@react-stately/checkbox@npm:^3.5.1, @react-stately/checkbox@npm:^3.6.3":
   version: 3.6.3
   resolution: "@react-stately/checkbox@npm:3.6.3"
@@ -3427,7 +3417,6 @@ __metadata:
   dependencies:
     "@hookform/resolvers": "npm:^3.3.4"
     "@nextui-org/react": "npm:^2.2.10"
-    "@react-oauth/google": "npm:^0.12.1"
     "@types/node": "npm:^20"
     "@types/react": "npm:^18"
     "@types/react-dom": "npm:^18"
@@ -3451,6 +3440,7 @@ __metadata:
     postcss: "npm:^8"
     react: "npm:^18"
     react-dom: "npm:^18"
+    react-google-button: "npm:^0.7.2"
     react-hook-form: "npm:^7.51.1"
     react-icons: "npm:^5.0.1"
     react-phone-input-2: "npm:^2.15.1"
@@ -6132,6 +6122,17 @@ __metadata:
   peerDependencies:
     react: ^18.2.0
   checksum: 10c0/66dfc5f93e13d0674e78ef41f92ed21dfb80f9c4ac4ac25a4b51046d41d4d2186abc915b897f69d3d0ebbffe6184e7c5876f2af26bfa956f179225d921be713a
+  languageName: node
+  linkType: hard
+
+"react-google-button@npm:^0.7.2":
+  version: 0.7.2
+  resolution: "react-google-button@npm:0.7.2"
+  dependencies:
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    react: "*"
+  checksum: 10c0/c880dc9a3f6281821d4650cfd66e62ffc4f79a0038e0ad0c1d1abc7f86be01ec84c93b92cfdac4064307959b4af1a46b2c4d4ca824d02d9dbb2fa4575f367fc3
   languageName: node
   linkType: hard
 

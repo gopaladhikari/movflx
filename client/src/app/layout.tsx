@@ -6,7 +6,6 @@ import { Header } from "@/components/common/Header";
 import { cn } from "@/utils/cn";
 import { Footer } from "@/components/common/Footer";
 import { Inter } from "next/font/google";
-import GoogleOAuthProviderWrapper from "@/context/GoogleOAuthProvider";
 
 const inter = Inter({ subsets: ["latin"], weight: ["400"] });
 
@@ -47,12 +46,9 @@ export default function RootLayout({
 			>
 				{/* Nextui Theme provider */}
 				<Providers>
-					{/* Google OAuth provider */}
-					<GoogleOAuthProviderWrapper>
-						<Header />
-						{children}
-						<Footer />
-					</GoogleOAuthProviderWrapper>
+					<Header />
+					{children}
+					<Footer />
 				</Providers>
 			</body>
 		</html>

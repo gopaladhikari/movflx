@@ -1,5 +1,6 @@
 "use client";
 
+import GoogleButton from "react-google-button";
 import { Input, Button } from "@nextui-org/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,9 +12,7 @@ import { useState } from "react";
 import { EyeFilledIcon } from "../icons/EyeFilledIcon";
 import { EyeSlashFilledIcon } from "../icons/EyeSlashFilledIcon";
 
-const backendUri = process.env.NEXT_PUBLIC_BACKEND_URL;
-
-export function LoginForm() {
+export function LoginForm({ backendUri }: { backendUri: string }) {
 	const router = useRouter();
 
 	const [isVisible, setIsVisible] = useState(false);
@@ -98,9 +97,9 @@ export function LoginForm() {
 				</div>
 
 				{errors.root && (
-					<div className="flex items-center gap-4 bg-red-100 p-2 text-red-800">
+					<p className="flex items-center gap-4 bg-red-100 p-2 text-red-800">
 						<ImCross size={18} /> {errors.root.message}
-					</div>
+					</p>
 				)}
 
 				<Button
@@ -112,15 +111,13 @@ export function LoginForm() {
 				>
 					{isSubmitting ? "Loading..." : "Login"}
 				</Button>
+				<GoogleButton
+					className="!w-full"
+					onClick={() =>
+						router.replace(`${backendUri}/api/v1/users/auth/google`)
+					}
+				/>
 			</form>
-			<Button
-				type="button"
-				onClick={() =>
-					router.replace(`${backendUri}/api/v1/users/auth/google`)
-				}
-			>
-				Login with google
-			</Button>
 		</section>
 	);
 }
