@@ -112,3 +112,17 @@ export const logoutUser = async () => {
 		return { error: message, ok: false };
 	}
 };
+
+export const requestResetPassword = async (email: string) => {
+	try {
+		const res = await instance.post("/users/request-forgot-password", {
+			email,
+		});
+		return { data: res.data, ok: true };
+	} catch (error) {
+		const message =
+			(error as CustomError).response?.data.message ||
+			"Something went wrong";
+		return { error: message, ok: false };
+	}
+};

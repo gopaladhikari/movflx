@@ -5,6 +5,7 @@ import {
 	loginWithGoogle,
 	logoutUser,
 	registerUser,
+	requestForgotPassword,
 	verifyUsersEmail,
 } from "../controllers/user.controller";
 import { upload } from "../middlewares/multer.middleware";
@@ -39,6 +40,8 @@ userRouter.get(
 );
 
 userRouter.route("/verify-users-email").post(verifyUsersEmail);
+
+userRouter.route("/request-forgot-password").post(requestForgotPassword);
 
 // protected routes
 

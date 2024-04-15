@@ -9,6 +9,7 @@ import { ImCross } from "react-icons/im";
 import { loginUser } from "@/lib/users";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Link from "next/link";
 import { EyeFilledIcon } from "../icons/EyeFilledIcon";
 import { EyeSlashFilledIcon } from "../icons/EyeSlashFilledIcon";
 
@@ -101,6 +102,22 @@ export function LoginForm({ backendUri }: { backendUri: string }) {
 						<ImCross size={18} /> {errors.root.message}
 					</p>
 				)}
+
+				<div className="flex items-start">
+					<Link
+						href="/auth/request-forgot-password"
+						className="text-[13px] italic underline"
+					>
+						Forgot Password
+					</Link>
+				</div>
+
+				<p className="text-center text-base font-medium">
+					Don&rsquo;t have an account?&nbsp;
+					<Link className="text-blue-700 underline" href="/auth/register">
+						Sign up
+					</Link>
+				</p>
 
 				<Button
 					type="submit"

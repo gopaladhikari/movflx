@@ -129,6 +129,25 @@ const verifyUsersEmail = dbHandler(async (req, res) => {
 	);
 });
 
+const requestForgotPassword = dbHandler(async (req, res) => {
+	const { email } = req.body;
+
+	try {
+		const user = await User.findOne({ email });
+
+		if (!user) throw new ApiError(400, "User not found");
+
+		const info = await sendMail(user.email, "reset", user._id);
+		console.log("info: ", info);
+
+		res.status(200).json(
+			new ApiResponse(200, null, "Password reset email sent")
+		);
+	} catch (error) {
+		throw new ApiError(500, `Internal Server Error ${error}`);
+	}
+});
+
 // TODO: Add forgot password, reset password and update user details
 
 export {
@@ -138,4 +157,5 @@ export {
 	logoutUser,
 	verifyUsersEmail,
 	loginWithGoogle,
+	requestForgotPassword,
 };

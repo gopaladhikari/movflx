@@ -10,7 +10,7 @@ const validatedEnv = envSchema.safeParse({
 	backendUrl: BACKEND_URL,
 });
 
-if (!validatedEnv.success) throw new Error("Invalid environment variables");
+if (!validatedEnv.success) throw new Error(validatedEnv.error.message);
 
 // * Ensure `env` doesn't get modified by mistakely
 export const env: Readonly<typeof validatedEnv.data> = validatedEnv.data;
