@@ -1,4 +1,3 @@
-import { GoogleRedirect } from "@/components/auth/GoogleRedirect";
 import { getMeFromToken } from "@/lib/users";
 
 import { redirect } from "next/navigation";
@@ -18,9 +17,5 @@ export default async function page({ searchParams }: SearchParams) {
 
 	if (!me) redirect("/auth/login");
 
-	return (
-		<main>
-			<GoogleRedirect />
-		</main>
-	);
+	redirect("/me");
 }

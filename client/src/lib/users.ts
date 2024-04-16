@@ -126,3 +126,25 @@ export const requestResetPassword = async (email: string) => {
 		return { error: message, ok: false };
 	}
 };
+
+export const resetForgotPassword = async (
+	token: string,
+	password: string,
+	confirmPassword: string
+) => {
+	try {
+		const res = await instance.post(
+			`/users/reset-forgot-password?token=${token}`,
+			{
+				password,
+				confirmPassword,
+			}
+		);
+		return { data: res.data, ok: true };
+	} catch (error) {
+		const message =
+			(error as CustomError).response?.data.message ||
+			"Something went wrong";
+		return { error: message, ok: false };
+	}
+};

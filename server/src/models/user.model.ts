@@ -42,11 +42,11 @@ export const userSchema = new Schema(
 			type: Date,
 		},
 
-		passwordResetToken: {
+		forgotPasswordToken: {
 			type: String,
 		},
 
-		passwordResetTokenExpiry: {
+		forgotPasswordTokenExpiry: {
 			type: Date,
 		},
 

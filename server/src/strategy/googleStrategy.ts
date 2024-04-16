@@ -8,7 +8,7 @@ passport.use(
 		{
 			clientID: env.googleClientId,
 			clientSecret: env.googleClientSecret,
-			callbackURL: `/api/v1/users/auth/google/callback`,
+			callbackURL: `${env.bakendUri}/api/v1/users/auth/google/callback`,
 		},
 		async function (accessToken, refreshToken, profile, done) {
 			try {

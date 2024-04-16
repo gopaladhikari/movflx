@@ -14,7 +14,10 @@ export const sendMail = async (
 		type === "verify" ? "Verify your account" : "Reset your password";
 
 	const mailOptions: SendMailOptions = {
-		from: env.from,
+		from: {
+			name: "Movflx",
+			address: env.from,
+		},
 		to: email,
 		subject,
 	};
@@ -34,27 +37,29 @@ export const sendMail = async (
 
 		if (type === "reset") {
 			const user = await User.findByIdAndUpdate(id, {
-				passwordResetToken: hasedToken,
-				passwordResetTokenExpiry: Date.now() + 3600000,
+				forgotPasswordToken: hasedToken,
+				forgotPasswordTokenExpiry: Date.now() + 3600000,
 			});
 
 			const username = `${user?.firstName} ${user?.lastName}`;
 
-			mailOptions.html = getForgotPasswordTemplate(username);
+			mailOptions.html = getForgotPasswordTemplate(username, hasedToken);
 		}
 
 		const transporter = nodemailer.createTransport({
-			service: "google",
-			host: "smtp.gmail.com",
+			host: "smtp.ethereal.email",
+			port: 587,
+			secure: false,
 			auth: {
-				user: env.user,
-				pass: env.pass,
+				user: "maddison53@ethereal.email",
+				pass: "jn7jnAPss4f63QBp6D",
 			},
 		});
 
 		const res = await transporter.sendMail(mailOptions);
 		return res;
 	} catch (error) {
+		console.log(error);
 		throw new Error((error as Error).message);
 	}
 };

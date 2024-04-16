@@ -122,7 +122,7 @@ const forgotPasswordTemplate = `<!DOCTYPE html>
 														<tr>
 															<td class="pad" style="padding-bottom:10px;width:100%;padding-right:0px;padding-left:0px;">
 																<div class="alignment" align="center" style="line-height:10px">
-																	<div style="max-width: 111px;"><img src="https://84a8c72995.imgdist.com/pub/bfra/7fuwjpw3/d5c/0zq/mfs/logo.png" style="display: block; height: auto; border: 0; width: 100%;" width="111" alt="your-logo" title="your-logo" height="auto"></div>
+																	<div style="max-width: 111px;"><img src="https://84a8c72995.imgdist.com/pub/bfra/7fuwjpw3/d5c/0zq/mfs/logo.png" style="display: block; height: auto; border: 0; width: 100%; margin-top:2rem; width="111" alt="your-logo" title="your-logo" height="auto"></div>
 																</div>
 															</td>
 														</tr>
@@ -183,7 +183,7 @@ const forgotPasswordTemplate = `<!DOCTYPE html>
 <w:anchorlock/>
 <v:textbox inset="0px,0px,0px,0px">
 <center style="color:#393d47; font-family:Tahoma, Verdana, sans-serif; font-size:18px">
-<![endif]--><a href="${env.domain}/auth/reset" target="_blank" style="text-decoration:none;display:inline-block;color:#393d47;background-color:#ffc727;border-radius:20px;width:auto;border-top:1px solid #FFC727;font-weight:undefined;border-right:1px solid #FFC727;border-bottom:1px solid #FFC727;border-left:1px solid #FFC727;padding-top:10px;padding-bottom:10px;font-family:Tahoma, Verdana, Segoe, sans-serif;font-size:18px;text-align:center;mso-border-alt:none;word-break:keep-all;"><span style="padding-left:50px;padding-right:50px;font-size:18px;display:inline-block;letter-spacing:normal;"><span style="word-break:break-word;"><span style="line-height: 36px;" data-mce-style><strong>RESET PASSWORD</strong></span></span></span></a><!--[if mso]></center></v:textbox></v:roundrect><![endif]--></div>
+<![endif]--><a href="${env.domain}/auth/reset-forgot-password?token={{token}}" target="_new" style="text-decoration:none;display:inline-block;color:#393d47;background-color:#ffc727;border-radius:20px;width:auto;border-top:1px solid #FFC727;font-weight:undefined;border-right:1px solid #FFC727;border-bottom:1px solid #FFC727;border-left:1px solid #FFC727;padding-top:10px;padding-bottom:10px;font-family:Tahoma, Verdana, Segoe, sans-serif;font-size:18px;text-align:center;mso-border-alt:none;word-break:keep-all;"><span style="padding-left:50px;padding-right:50px;font-size:18px;display:inline-block;letter-spacing:normal;"><span style="word-break:break-word;"><span style="line-height: 36px;" data-mce-style><strong>RESET PASSWORD</strong></span></span></span></a><!--[if mso]></center></v:textbox></v:roundrect><![endif]--></div>
 															</td>
 														</tr>
 													</table>
@@ -336,10 +336,11 @@ const forgotPasswordTemplate = `<!DOCTYPE html>
 
 </html>`;
 
-export const getForgotPasswordTemplate = (username: string) => {
+export const getForgotPasswordTemplate = (username: string, token: string) => {
 	const template = Handlebars.compile(forgotPasswordTemplate);
 	const html = template({
 		username,
+		token,
 	});
 	return html;
 };

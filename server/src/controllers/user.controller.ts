@@ -135,13 +135,49 @@ const requestForgotPassword = dbHandler(async (req, res) => {
 	try {
 		const user = await User.findOne({ email });
 
-		if (!user) throw new ApiError(400, "User not found");
+		if (!user)
+			return res.status(400).json(new ApiError(400, "User not found"));
 
 		const info = await sendMail(user.email, "reset", user._id);
 		console.log("info: ", info);
 
 		res.status(200).json(
 			new ApiResponse(200, null, "Password reset email sent")
+		);
+	} catch (error) {
+		throw new ApiError(500, `Internal Server Error ${error}`);
+	}
+});
+
+const resetForgotPassword = dbHandler(async (req, res) => {
+	const { token } = req.query;
+	const { password, confirmPassword } = req.body;
+
+	if (password !== confirmPassword)
+		return res.status(400).json(new ApiError(400, "Passwords do not match"));
+
+	if (!token)
+		return res.status(400).json(new ApiError(400, "Token is required"));
+
+	try {
+		const user = await User.findOne({
+			forgotPasswordToken: token,
+			forgotPasswordTokenExpiry: { $gt: Date.now() },
+		});
+
+		if (!user)
+			return res
+				.status(400)
+				.json(new ApiError(400, "Invalid token or token expired"));
+
+		user.password = password;
+		user.forgotPasswordToken = undefined;
+		user.forgotPasswordTokenExpiry = undefined;
+
+		await user.save();
+
+		res.status(200).json(
+			new ApiResponse(200, null, "Password reset successfully")
 		);
 	} catch (error) {
 		throw new ApiError(500, `Internal Server Error ${error}`);
@@ -158,4 +194,5 @@ export {
 	verifyUsersEmail,
 	loginWithGoogle,
 	requestForgotPassword,
+	resetForgotPassword,
 };

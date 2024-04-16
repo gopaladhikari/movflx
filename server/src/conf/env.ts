@@ -9,6 +9,7 @@ const {
 	CLOUDINARY_CLOUD_NAME,
 	CLOUDINARY_API_KEY,
 	CLOUDINARY_SECRET_KEY,
+	BACKEND_URI,
 	USER,
 	PASS,
 	FROM,
@@ -47,6 +48,7 @@ const envSchema = z.object({
 	googleClientSecret: z
 		.string()
 		.min(1, { message: "Google client secret is required" }),
+	bakendUri: z.string().min(1, { message: "Backend URL is required" }),
 });
 
 const validatedEnv = envSchema.safeParse({
@@ -64,6 +66,7 @@ const validatedEnv = envSchema.safeParse({
 	domain: DOMAIN,
 	googleClientId: GOOGLE_CLIENT_ID,
 	googleClientSecret: GOOGLE_CLIENT_SECRET,
+	bakendUri: BACKEND_URI,
 });
 
 if (!validatedEnv.success) throw new Error(validatedEnv.error.message);
