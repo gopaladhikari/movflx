@@ -184,7 +184,7 @@ const resetForgotPassword = dbHandler(async (req, res) => {
 	}
 });
 
-// TODO: Add forgot password, reset password and update user details
+// TODO: Add update user details
 
 export {
 	registerUser,
