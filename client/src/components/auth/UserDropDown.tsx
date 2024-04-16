@@ -1,8 +1,5 @@
 "use client";
 
-import { logoutUser } from "@/lib/users";
-import { usePathname, useRouter } from "next/navigation";
-import { TUser } from "@/types/user.types";
 import {
 	Dropdown,
 	DropdownTrigger,
@@ -11,18 +8,22 @@ import {
 	DropdownItem,
 } from "@nextui-org/react";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 type Props = {
-	user: TUser | undefined;
+	user: {
+		_id?: string;
+		firstName?: string;
+		lastName?: string;
+		email?: string;
+		image?: string;
+		phoneNumber?: string;
+	};
 };
 
 export function UserDropDown({ user }: Props) {
-	const router = useRouter();
-	const pathname = usePathname();
-
 	const handleLogout = async () => {
-		const res = await logoutUser();
-		if (res.ok && pathname === "/me") router.push("/");
+		await signOut();
 	};
 
 	return (
@@ -33,7 +34,7 @@ export function UserDropDown({ user }: Props) {
 						isBordered
 						as="button"
 						className="transition-transform"
-						src={user?.avatar || ""}
+						src={user?.image || ""}
 					/>
 				</DropdownTrigger>
 				<DropdownMenu aria-label="Profile Actions" variant="flat">

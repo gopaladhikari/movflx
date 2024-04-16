@@ -1,25 +1,23 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
-	const currentPathname = request.nextUrl.pathname;
+// eslint-disable-next-line no-restricted-exports
+export { default } from "next-auth/middleware";
+
+export async function middleware(request: NextRequest) {
+	const url = request.nextUrl.pathname;
 
 	const token = request.cookies.get("token")?.value;
 
-	const isAuthPage =
-		currentPathname === "/auth/login" || currentPathname === "/auth/register";
-
-	const isProtectedRoute = currentPathname === "/me";
-
-	if (token && isAuthPage)
+	if (url.startsWith("/auth") && token)
 		return NextResponse.redirect(new URL("/", request.url));
 
-	if (isProtectedRoute && !token)
+	if (url.startsWith("/me") && !token)
 		return NextResponse.redirect(new URL("/auth/login", request.url));
 
 	return NextResponse.next();
 }
 
 export const config = {
-	matcher: ["/auth/login", "/auth/register", "/me"],
+	matcher: ["/auth/:path*", "/me"],
 };

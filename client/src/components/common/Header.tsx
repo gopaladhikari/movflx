@@ -1,5 +1,4 @@
 import { site } from "@/config/site";
-import { getMe } from "@/lib/users";
 import {
 	Navbar,
 	NavbarBrand,
@@ -9,20 +8,13 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
-import { cookies } from "next/headers";
-import { instance } from "@/config/axios";
+import { getCurrentUser } from "@/utils/session";
 import { UserDropDown } from "../auth/UserDropDown";
 import { MaxwidthWrapper } from "./MaxwidthWrapper";
 
 export async function Header() {
-	const token = cookies().get("token")?.value;
-
-	if (token)
-		instance.defaults.headers.common.Authorization = `Bearer ${token}`;
-
-	const res = await getMe();
-
-	if (res.ok)
+	const session = await getCurrentUser();
+	if (session?.user)
 		return (
 			<MaxwidthWrapper>
 				<Navbar
@@ -51,7 +43,7 @@ export async function Header() {
 						))}
 					</NavbarContent>
 					<NavbarContent justify="end">
-						<UserDropDown user={res?.data} />
+						<UserDropDown user={session.user} />
 					</NavbarContent>
 				</Navbar>
 			</MaxwidthWrapper>

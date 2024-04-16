@@ -6,10 +6,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, TLoginSchema } from "@/schemas/loginSchema";
 import { ImCross } from "react-icons/im";
-import { loginUser } from "@/lib/users";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 import { EyeFilledIcon } from "../icons/EyeFilledIcon";
 import { EyeSlashFilledIcon } from "../icons/EyeSlashFilledIcon";
 
@@ -29,11 +29,17 @@ export function LoginForm({ backendUri }: { backendUri: string }) {
 		resolver: zodResolver(loginSchema),
 	});
 
-	const onSubmit: SubmitHandler<TLoginSchema> = async (formData) => {
-		const res = await loginUser(formData);
+	const onSubmit: SubmitHandler<TLoginSchema> = async ({
+		email,
+		password,
+	}) => {
+		const res = await signIn("credentials", {
+			email,
+			password,
+			callbackUrl: "/",
+		});
 
-		if (!res.ok) setError("root", { message: res.error });
-		else router.back();
+		if (res?.error) setError("root", { message: res.error });
 	};
 
 	return (

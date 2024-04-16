@@ -131,3 +131,5 @@ bower_components
 psd
 thumb
 sketch
+client/.env.local
+client/.env.local
