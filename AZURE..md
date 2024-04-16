@@ -6,4 +6,6 @@ yarn install
 pm2 start backend
 // if env changes garechau vani
 pm2 start backend --update-env
+
+pm2 log // for logs
 ```
