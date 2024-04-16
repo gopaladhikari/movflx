@@ -10,8 +10,6 @@ const {
 	CLOUDINARY_API_KEY,
 	CLOUDINARY_SECRET_KEY,
 	BACKEND_URI,
-	USER,
-	PASS,
 	FROM,
 	DOMAIN,
 	GOOGLE_CLIENT_ID,
@@ -38,8 +36,7 @@ const envSchema = z.object({
 	cloudinarySecret: z
 		.string()
 		.min(1, { message: "Cloudinary secret key is required" }),
-	user: z.string().min(1, { message: "User is required" }),
-	pass: z.string().min(1, { message: "Password is required" }),
+
 	from: z.string().min(1, { message: "From email is required" }),
 	domain: z.string().min(1, { message: "Domain is required" }),
 	googleClientId: z
@@ -60,8 +57,6 @@ const validatedEnv = envSchema.safeParse({
 	cloudinaryName: CLOUDINARY_CLOUD_NAME,
 	cloudinaryApiKey: CLOUDINARY_API_KEY,
 	cloudinarySecret: CLOUDINARY_SECRET_KEY,
-	user: USER,
-	pass: PASS,
 	from: FROM,
 	domain: DOMAIN,
 	googleClientId: GOOGLE_CLIENT_ID,
