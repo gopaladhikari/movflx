@@ -6,10 +6,14 @@ export function middleware(request: NextRequest) {
 
 	const token = request.cookies.get("token")?.value;
 
-	if (url.startsWith("/auth") && token)
+	const sessionToken = request.cookies.get("next-auth.session-token")?.value;
+
+	console.log(sessionToken);
+
+	if (url.startsWith("/auth") && token && sessionToken)
 		return NextResponse.redirect(new URL("/", request.url));
 
-	if (url.startsWith("/me") && !token)
+	if (url.startsWith("/me") && !token && !sessionToken)
 		return NextResponse.redirect(new URL("/auth/login", request.url));
 
 	return NextResponse.next();
