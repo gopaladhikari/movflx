@@ -17,6 +17,11 @@ export const userSchema = new Schema(
 			type: String,
 		},
 
+		acceptTermsAndCondition: {
+			type: Boolean,
+			default: true,
+		},
+
 		email: {
 			type: String,
 			required: true,

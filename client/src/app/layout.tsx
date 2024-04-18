@@ -1,13 +1,12 @@
 import "../styles/globals.css";
 import type { Metadata } from "next";
 import { site } from "@/config/site";
-import { Providers } from "@/context/providers";
 import { Header } from "@/components/common/Header";
-import { cn } from "@/utils/cn";
 import { Footer } from "@/components/common/Footer";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
+import { cn } from "@/lib/utils";
 
-const inter = Inter({ subsets: ["latin"], weight: ["400"] });
+const poppins = Poppins({ subsets: ["latin"], weight: ["400"] });
 
 export const metadata: Metadata = {
 	title: {
@@ -41,15 +40,12 @@ export default async function RootLayout({
 	return (
 		<html lang="en" className="dark" suppressHydrationWarning>
 			<body
-				className={cn("bg-[#0F0E16]", inter.className)}
+				className={cn("bg-background", poppins.className)}
 				suppressHydrationWarning
 			>
-				{/* Nextui Theme provider */}
-				<Providers>
-					<Header />
-					{children}
-					<Footer />
-				</Providers>
+				<Header />
+				<main className="min-h-screen antialiased">{children}</main>
+				<Footer />
 			</body>
 		</html>
 	);

@@ -12,6 +12,8 @@
 	"parserOptions": {
 		"project": "tsconfig.json"
 	},
+
+	"ignorePatterns": ["src/components/ui/**/*"],
 	"rules": {
 		"import/extensions": 0,
 		"import/prefer-default-export": 0,

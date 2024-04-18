@@ -1,31 +1,28 @@
 "use client";
 
 import GoogleButton from "react-google-button";
-import { Input, Button } from "@nextui-org/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, TLoginSchema } from "@/schemas/loginSchema";
-import { ImCross } from "react-icons/im";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 import Link from "next/link";
+import { Checkbox } from "@/components/ui/checkbox";
 import { signIn } from "next-auth/react";
-import { EyeFilledIcon } from "../icons/EyeFilledIcon";
-import { EyeSlashFilledIcon } from "../icons/EyeSlashFilledIcon";
+import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+	Form,
+	FormControl,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 export function LoginForm({ backendUri }: { backendUri: string }) {
 	const router = useRouter();
-
-	const [isVisible, setIsVisible] = useState(false);
-
-	const toggleVisibility = () => setIsVisible(!isVisible);
-
-	const {
-		handleSubmit,
-		register,
-		setError,
-		formState: { errors, isSubmitting },
-	} = useForm<TLoginSchema>({
+	const form = useForm<TLoginSchema>({
 		resolver: zodResolver(loginSchema),
 	});
 
@@ -39,108 +36,94 @@ export function LoginForm({ backendUri }: { backendUri: string }) {
 			callbackUrl: "/",
 		});
 
-		if (res?.error) setError("root", { message: res.error });
+		console.log(res);
+
+		if (res?.error) form.setError("root", { message: res.error });
 	};
 
 	return (
-		<section>
-			<form
-				className="mx-auto mt-12 max-w-md space-y-6"
-				onSubmit={handleSubmit(onSubmit)}
-			>
-				<h1 className="text-center text-3xl font-bold">Sign in</h1>
-				<div>
-					<label
-						htmlFor="email"
-						className="mb-2 block text-sm font-medium  focus:border-b-primary "
-					>
-						Email
-					</label>
-					<Input
-						type="email"
-						variant="underlined"
-						id="email"
-						placeholder="example@example.com"
-						disabled={isSubmitting}
-						{...register("email")}
+		<section className="max-w-screen-sm space-y-3">
+			<Form {...form}>
+				<h2 className="text-3xl font-bold md:text-4xl">
+					Hey, Welcome Back!
+				</h2>
+				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+					<FormField
+						control={form.control}
+						name="email"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel className="font-semibold">Email</FormLabel>
+								<FormControl>
+									<Input placeholder="example@gmail.com" {...field} />
+								</FormControl>
+								<FormMessage className="text-red-500" />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="password"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel className="font-semibold">
+									Password
+								</FormLabel>
+								<FormControl>
+									<Input
+										type="password"
+										placeholder="********"
+										{...field}
+									/>
+								</FormControl>
+								<FormMessage className="text-red-500" />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="acceptTermsAndCondition"
+						render={({ field }) => (
+							<FormItem className="flex flex-row items-center justify-between gap-4 space-y-0">
+								<div className="flex flex-row items-start space-x-3 space-y-0 rounded-md">
+									<FormControl>
+										<Checkbox
+											checked={field.value}
+											onCheckedChange={field.onChange}
+										/>
+									</FormControl>
+									<FormLabel>Accept terms and conditions</FormLabel>
+								</div>
+
+								<Link
+									href="/auth/request-forgot-password"
+									className="text-sm hover:underline"
+								>
+									<i>Forgot password</i>
+								</Link>
+							</FormItem>
+						)}
 					/>
 
-					{errors.email && (
-						<p className="p-1 text-red-600">{errors.email?.message}</p>
+					{form.formState.isSubmitting ? (
+						<Button disabled variant="yellow" className="w-full">
+							<Loader2 className="mr-2 size-4 animate-spin" />
+							Please wait
+						</Button>
+					) : (
+						<Button variant="yellow" type="submit" className="w-full">
+							Login
+						</Button>
 					)}
-				</div>
-				<div>
-					<label
-						htmlFor="password"
-						className="mb-2 block text-sm font-medium  focus:border-b-primary "
-					>
-						Password
-					</label>
-
-					<Input
-						variant="underlined"
-						id="password"
-						placeholder="********"
-						disabled={isSubmitting}
-						endContent={
-							<button
-								className="focus:outline-none"
-								type="button"
-								onClick={toggleVisibility}
-							>
-								{isVisible ? (
-									<EyeSlashFilledIcon className="pointer-events-none text-2xl text-default-400" />
-								) : (
-									<EyeFilledIcon className="pointer-events-none text-2xl text-default-400" />
-								)}
-							</button>
-						}
-						type={isVisible ? "text" : "password"}
-						{...register("password")}
-					/>
-					{errors.password && (
-						<p className="p-1 text-red-600">{errors.password?.message}</p>
-					)}
-				</div>
-
-				{errors.root && (
-					<p className="flex items-center gap-4 bg-red-100 p-2 text-red-800">
-						<ImCross size={18} /> {errors.root.message}
-					</p>
-				)}
-
-				<div className="flex items-start">
-					<Link
-						href="/auth/request-forgot-password"
-						className="text-[13px] italic underline"
-					>
-						Forgot Password
-					</Link>
-				</div>
-
-				<p className="text-center text-base font-medium">
-					Don&rsquo;t have an account?&nbsp;
-					<Link className="text-blue-700 underline" href="/auth/register">
-						Sign up
-					</Link>
-				</p>
-
-				<Button
-					type="submit"
-					radius="full"
-					fullWidth
-					isLoading={isSubmitting}
-					className="bg-yellow text-lg font-semibold text-black"
-				>
-					{isSubmitting ? "Loading..." : "Login"}
-				</Button>
-				<GoogleButton
-					className="!w-full"
-					onClick={() =>
-						router.replace(`${backendUri}/api/v1/users/auth/google`)
-					}
-				/>
-			</form>
+				</form>
+			</Form>
+			<div className="h-[2px] w-full bg-slate-300" />
+			<GoogleButton
+				className="!w-full"
+				onClick={() => {
+					router.push(`${backendUri}/api/v1/users/auth/google`);
+				}}
+			/>
 		</section>
 	);
 }
