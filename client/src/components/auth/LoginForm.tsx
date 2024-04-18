@@ -36,8 +36,6 @@ export function LoginForm({ backendUri }: { backendUri: string }) {
 			callbackUrl: "/",
 		});
 
-		console.log(res);
-
 		if (res?.error) form.setError("root", { message: res.error });
 	};
 

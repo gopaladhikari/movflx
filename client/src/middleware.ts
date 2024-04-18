@@ -8,8 +8,6 @@ export function middleware(request: NextRequest) {
 
 	const sessionToken = request.cookies.get("next-auth.session-token")?.value;
 
-	console.log(sessionToken);
-
 	if (url.startsWith("/auth") && token && sessionToken)
 		return NextResponse.redirect(new URL("/", request.url));
 

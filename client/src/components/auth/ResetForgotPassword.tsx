@@ -1,141 +1,112 @@
-// "use client";
+"use client";
 
-// import { Button, Input } from "@nextui-org/react";
-// import { ImCross } from "react-icons/im";
-// import {
-// 	TForgotPasswordResetSchema,
-// 	forgotPasswordResetSchema,
-// } from "@/schemas/resetForgotPasswordSchema";
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { useForm, SubmitHandler } from "react-hook-form";
-// import { useState } from "react";
-// import { resetForgotPassword } from "@/lib/users";
-// import { useRouter } from "next/navigation";
-// import { EyeSlashFilledIcon } from "../icons/EyeSlashFilledIcon";
-// import { EyeFilledIcon } from "../icons/EyeFilledIcon";
+import { useRouter } from "next/navigation";
 
-// type Props = {
-// 	token: string;
-// };
+import {
+	TForgotPasswordResetSchema,
+	forgotPasswordResetSchema,
+} from "@/schemas/resetForgotPasswordSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { resetForgotPassword } from "@/lib/users";
+import { Input } from "../ui/input";
+import {
+	Form,
+	FormField,
+	FormItem,
+	FormLabel,
+	FormControl,
+	FormMessage,
+} from "../ui/form";
+import { Button } from "../ui/button";
+import { useToast } from "../ui/use-toast";
 
-// export function ResetForgotPassword({ token }: Props) {
-// 	const router = useRouter();
-// 	const [isVisiblePassowrd, setIsVisiblePassowrd] = useState(false);
-// 	const [isVisibleConfirmPassword, setIsVisibleConfirmPassword] =
-// 		useState(false);
+type Props = {
+	token: string;
+};
 
-// 	const {
-// 		handleSubmit,
-// 		register,
-// 		setError,
-// 		formState: { errors, isSubmitting },
-// 	} = useForm<TForgotPasswordResetSchema>({
-// 		resolver: zodResolver(forgotPasswordResetSchema),
-// 	});
+export function ResetForgotPassword({ token }: Props) {
+	const router = useRouter();
 
-// 	const onSubmit: SubmitHandler<TForgotPasswordResetSchema> = async ({
-// 		confirmPassword,
-// 		password,
-// 	}) => {
-// 		const res = await resetForgotPassword(token, password, confirmPassword);
-// 		if (res?.ok) router.push("/auth/login");
-// 		setError("root", { message: res?.error });
-// 	};
-// 	return (
-// 		<form
-// 			className="mx-auto mt-12 max-w-md space-y-6"
-// 			onSubmit={handleSubmit(onSubmit)}
-// 		>
-// 			<div>
-// 				<label
-// 					htmlFor="password"
-// 					className="mb-2 block text-sm font-medium  focus:border-b-primary "
-// 				>
-// 					Password
-// 				</label>
-// 				<Input
-// 					variant="underlined"
-// 					id="password"
-// 					type={isVisiblePassowrd ? "text" : "password"}
-// 					endContent={
-// 						<button
-// 							className="focus:outline-none"
-// 							type="button"
-// 							onClick={() => setIsVisiblePassowrd(!isVisiblePassowrd)}
-// 						>
-// 							{isVisiblePassowrd ? (
-// 								<EyeSlashFilledIcon className="pointer-events-none text-2xl text-default-400" />
-// 							) : (
-// 								<EyeFilledIcon className="pointer-events-none text-2xl text-default-400" />
-// 							)}
-// 						</button>
-// 					}
-// 					placeholder="example@example.com"
-// 					disabled={isSubmitting}
-// 					{...register("password")}
-// 				/>
+	const { toast } = useToast();
+	const form = useForm<TForgotPasswordResetSchema>({
+		resolver: zodResolver(forgotPasswordResetSchema),
+	});
 
-// 				{errors.password && (
-// 					<p className="p-1 text-red-600">{errors.password?.message}</p>
-// 				)}
-// 			</div>
-// 			<div>
-// 				<label
-// 					htmlFor="confirmPassword"
-// 					className="mb-2 block text-sm font-medium  focus:border-b-primary "
-// 				>
-// 					Confirm Password
-// 				</label>
+	const onSubmit: SubmitHandler<TForgotPasswordResetSchema> = async ({
+		password,
+		confirmPassword,
+	}) => {
+		const res = await resetForgotPassword(token, password, confirmPassword);
 
-// 				<Input
-// 					variant="underlined"
-// 					id="confirmPassword"
-// 					placeholder="********"
-// 					disabled={isSubmitting}
-// 					endContent={
-// 						<button
-// 							className="focus:outline-none"
-// 							type="button"
-// 							onClick={() =>
-// 								setIsVisibleConfirmPassword(!isVisibleConfirmPassword)
-// 							}
-// 						>
-// 							{isVisibleConfirmPassword ? (
-// 								<EyeSlashFilledIcon className="pointer-events-none text-2xl text-default-400" />
-// 							) : (
-// 								<EyeFilledIcon className="pointer-events-none text-2xl text-default-400" />
-// 							)}
-// 						</button>
-// 					}
-// 					type={isVisibleConfirmPassword ? "text" : "password"}
-// 					{...register("confirmPassword")}
-// 				/>
-// 				{errors.confirmPassword && (
-// 					<p className="p-1 text-red-600">
-// 						{errors.confirmPassword?.message}
-// 					</p>
-// 				)}
-// 			</div>
+		if (res.ok) {
+			toast({
+				description: "Password has been reset",
+			});
+			router.push("/auth/login");
+		} else {
+			toast({
+				variant: "destructive",
+				description: res.error,
+			});
+		}
+	};
+	return (
+		<section className="mx-auto max-w-screen-sm space-y-3">
+			<Form {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+					<FormField
+						control={form.control}
+						name="password"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel className="font-semibold">
+									Password
+								</FormLabel>
+								<FormControl>
+									<Input
+										type="password"
+										placeholder="********"
+										{...field}
+									/>
+								</FormControl>
+								<FormMessage className="text-red-500" />
+							</FormItem>
+						)}
+					/>
+					<FormField
+						control={form.control}
+						name="confirmPassword"
+						render={({ field }) => (
+							<FormItem>
+								<FormLabel className="font-semibold">
+									Confirm Password
+								</FormLabel>
+								<FormControl>	
+									<Input
+										type="password"
+										placeholder="********"
+										{...field}
+									/>
+								</FormControl>
+								<FormMessage className="text-red-500" />
+							</FormItem>
+						)}
+					/>
 
-// 			{errors.root && (
-// 				<p className="flex items-center gap-4 bg-red-100 p-2 text-red-800">
-// 					<ImCross size={18} /> {errors.root.message}
-// 				</p>
-// 			)}
-
-// 			<Button
-// 				type="submit"
-// 				radius="full"
-// 				fullWidth
-// 				isLoading={isSubmitting}
-// 				className="bg-yellow text-lg font-semibold text-black"
-// 			>
-// 				{isSubmitting ? "Loading..." : "Submit"}
-// 			</Button>
-// 		</form>
-// 	);
-// }
-
-export function ResetForgotPassword() {
-	return <div>ResetForgotPassword</div>;
+					{form.formState.isSubmitting ? (
+						<Button disabled variant="yellow" className="w-full">
+							<Loader2 className="mr-2 size-4 animate-spin" />
+							Please wait
+						</Button>
+					) : (
+						<Button variant="yellow" type="submit" className="w-full">
+							Submit
+						</Button>
+					)}
+				</form>
+			</Form>
+		</section>
+	);
 }

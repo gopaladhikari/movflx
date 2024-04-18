@@ -5,6 +5,7 @@ import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
 import { Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/toaster";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400"] });
 
@@ -46,6 +47,7 @@ export default async function RootLayout({
 				<Header />
 				<main className="min-h-screen antialiased">{children}</main>
 				<Footer />
+				<Toaster />
 			</body>
 		</html>
 	);
