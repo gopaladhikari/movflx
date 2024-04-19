@@ -1,52 +1,52 @@
-// "use client";
+"use client";
 
-// import { verifyUserEmail } from "@/lib/users";
-// import { Button } from "@nextui-org/react";
-// import { useRouter } from "next/navigation";
-// import { FormEvent, useState } from "react";
-// import { TiTick } from "react-icons/ti";
+import { verifyUserEmail } from "@/lib/users";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
+import { Button } from "../ui/button";
+import { useToast } from "../ui/use-toast";
 
-// export function VerifyEmailButton({ token }: { token: string }) {
-//   const [success, setSuccess] = useState(false);
-//   const [loading, setLoading] = useState(false);
+export async function VerifyEmailButton({ token }: { token: string }) {
+	const { toast } = useToast();
+	const router = useRouter();
+	const {
+		handleSubmit,
+		formState: { isSubmitting },
+	} = useForm();
 
-//   const router = useRouter();
+	const handleClick = async () => {
+		const res = await verifyUserEmail(token);
 
-//   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-
-//     setLoading(true);
-//     const res = await verifyUserEmail(token);
-//     if (res.ok) {
-//       setLoading(false);
-//       setSuccess(true);
-//       setTimeout(() => router.push("/auth/login"), 3000);
-//     } else {
-//       setSuccess(false);
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <Button
-//         variant="ghost"
-//         type="submit"
-//         isLoading={loading}
-//         disabled={loading}
-//       >
-//         {loading ? "Loading" : "Verify email"}
-//       </Button>
-
-//       {success && (
-//         <div className="my-3 flex items-center gap-3 bg-emerald-100 p-3 text-emerald-800">
-//           <TiTick size={24} /> Your email is verified successfully.
-//         </div>
-//       )}
-//     </form>
-//   );
-// }
-
-export function VerifyEmailButton() {
-	return <div>VerifyEmailButton</div>;
+		if (res.ok) {
+			toast({
+				title: "Email Verified",
+				description: "Your email has been verified",
+				duration: 3000,
+			});
+			router.push("/auth/login");
+		} else {
+			toast({
+				variant: "destructive",
+				title: "Error",
+				description: res.error,
+				duration: 3000,
+			});
+			router.push("/auth/register");
+		}
+	};
+	return (
+		<form onSubmit={handleSubmit(handleClick)}>
+			{isSubmitting ? (
+				<Button disabled variant="yellow" className="w-full">
+					<Loader2 className="mr-2 size-4 animate-spin" />
+					Please wait
+				</Button>
+			) : (
+				<Button variant="yellow" className="w-full" type="submit">
+					Verify Email
+				</Button>
+			)}
+		</form>
+	);
 }

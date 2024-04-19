@@ -1,81 +1,144 @@
-// "use client";
+"use client";
 
-// // import { TRegisterSchema, registerSchemas } from "@/schemas/registerSchema";
-// // import { zodResolver } from "@hookform/resolvers/zod";
-// import Link from "next/link";
-// // import { SubmitHandler, useForm } from "react-hook-form";
-// // import PhoneInput from "react-phone-input-2";
-// // import { useState } from "react";
-// import "react-phone-input-2/lib/style.css";
-// import "@/styles/react-phone-input.css";
-// // import { registerUser } from "@/lib/users";
-// // import { useRouter } from "next/navigation";
-// // import { EyeFilledIcon } from "../icons/EyeFilledIcon";
-// // import { EyeSlashFilledIcon } from "../icons/EyeSlashFilledIcon";
-
-// export function RegisterForm() {
-// 	// const [success, setSuccess] = useState(false);
-// 	// const [isVisible, setIsVisible] = useState(false);
-
-// 	// const toggleVisibility = () => setIsVisible(!isVisible);
-
-// 	// const router = useRouter();
-
-// 	// const {
-// 	// 	register,
-// 	// 	handleSubmit,
-// 	// 	setError,
-// 	// 	reset,
-// 	// 	setValue,
-// 	// 	formState: { errors, isSubmitting },
-// 	// } = useForm<TRegisterSchema>({
-// 	// 	resolver: zodResolver(registerSchemas),
-// 	// });
-
-// 	// const onSubmit: SubmitHandler<TRegisterSchema> = async (data) => {
-// 	// 	const formData = new FormData();
-
-// 	// 	Object.entries(data).forEach(([key, value]) => {
-// 	// 		if (value instanceof FileList) formData.append(key, value[0]);
-// 	// 		else formData.append(key, value);
-// 	// 	});
-
-// 	// const res = await registerUser(formData);
-
-// 	// 	if (!res.ok) {
-// 	// 		setError("root", { message: res.error });
-// 	// 		setSuccess(false);
-// 	// 	} else {
-// 	// 		reset();
-// 	// 		setSuccess(true);
-// 	// 		setTimeout(() => router.push("/"), 3000);
-// 	// 	}
-// 	// };
-
-// 	return (
-// 		<form className="mx-auto max-w-md space-y-5 py-16" onSubmit={() => {}}>
-// 			form
-// 			{success && (
-// 				<div className="flex items-center gap-3 bg-emerald-100 p-2 text-emerald-800">
-// 					icon Email verification link sent to your gmail
-// 				</div>
-// 			)}
-// 			{/* {errors.root && (
-// 					<div className="flex items-center gap-4 bg-red-100 p-2 text-red-800">
-// 						icon{errors.root.message}
-// 					</div>
-// 				)} */}
-// 			<p className="font-normal">
-// 				Already have an account?&nbsp;
-// 				<Link href="/login" className="font-medium">
-// 					<span className="text-blue-700 underline">Login here</span>
-// 				</Link>
-// 			</p>
-// 			bnt
-// 		</form>
-// 	);
-// }
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
+import { TRegisterSchema, registerSchemas } from "@/schemas/registerSchema";
+import { registerUser } from "@/lib/users";
+import { Button } from "../ui/button";
+import {
+	Form,
+	FormField,
+	FormItem,
+	FormControl,
+	FormMessage,
+	FormLabel,
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { useToast } from "../ui/use-toast";
 
 export function RegisterForm() {
-	return <div>RegisterForm</div>;
+	const { toast } = useToast();
+	const form = useForm<TRegisterSchema>({
+		resolver: zodResolver(registerSchemas),
+	});
+
+	const onSubmit: SubmitHandler<TRegisterSchema> = async (data) => {
+		const formData = new FormData();
+
+		Object.entries(data).forEach(([key, value]) => {
+			if (value instanceof FileList) formData.append(key, value[0]);
+			else formData.append(key, value);
+		});
+
+		const res = await registerUser(formData);
+
+		if (res.ok)
+			toast({
+				title: "Registration Successful",
+				description: "Verification link sent to you email",
+			});
+		else toast({ title: res.error, variant: "destructive" });
+	};
+
+	return (
+		<Form {...form}>
+			<form
+				onSubmit={form.handleSubmit(onSubmit)}
+				className="mx-auto mt-8 max-w-sm space-y-3"
+			>
+				<FormField
+					control={form.control}
+					name="avatar"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel className="font-semibold">Avatar</FormLabel>
+							<FormControl>
+								<Input type="file" {...field} />
+							</FormControl>
+							<FormMessage className="text-red-500" />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="firstName"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel className="font-semibold">First Name</FormLabel>
+							<FormControl>
+								<Input {...field} />
+							</FormControl>
+							<FormMessage className="text-red-500" />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="lastName"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel className="font-semibold">Last Name</FormLabel>
+							<FormControl>
+								<Input {...field} />
+							</FormControl>
+							<FormMessage className="text-red-500" />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="email"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel className="font-semibold">Email</FormLabel>
+							<FormControl>
+								<Input {...field} />
+							</FormControl>
+							<FormMessage className="text-red-500" />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="password"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel className="font-semibold">Password</FormLabel>
+							<FormControl>
+								<Input type="password" {...field} />
+							</FormControl>
+							<FormMessage className="text-red-500" />
+						</FormItem>
+					)}
+				/>
+				<FormField
+					control={form.control}
+					name="phoneNumber"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel className="font-semibold">
+								Phone Number
+							</FormLabel>
+							<FormControl>
+								<Input {...field} />
+							</FormControl>
+							<FormMessage className="text-red-500" />
+						</FormItem>
+					)}
+				/>
+
+				{form.formState.isSubmitting ? (
+					<Button disabled variant="yellow" className="w-full">
+						<Loader2 className="mr-2 size-4 animate-spin" />
+						Please wait
+					</Button>
+				) : (
+					<Button variant="yellow" className="w-full" type="submit">
+						Register
+					</Button>
+				)}
+			</form>
+		</Form>
+	);
 }
