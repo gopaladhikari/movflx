@@ -75,7 +75,7 @@ export async function Header() {
 									<Avatar>
 										<AvatarImage
 											src={session?.user?.avatar || ""}
-											alt="@shadcn"
+											alt={session?.user?.name || ""}
 										/>
 
 										<AvatarFallback>

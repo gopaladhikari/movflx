@@ -9,7 +9,6 @@ export const metadata = {
 };
 
 export default function page({ searchParams: { token } }: Props) {
-	console.log(token);
 	return (
 		<main>
 			<section className="mx-auto flex max-w-lg flex-col items-center justify-center gap-2 px-6 py-16">

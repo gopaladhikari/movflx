@@ -8,7 +8,6 @@ import { getCommentsByMovieId } from "@/lib/comments";
 import { CommentCard } from "@/components/movie/CommentCard";
 import { AddComment } from "@/components/movie/AddComment";
 import { MovieCard } from "@/components/movie/MovieCard";
-import { getCurrentUser } from "@/utils/session";
 
 type Params = {
 	params?: { id: string };
@@ -46,8 +45,6 @@ export default async function page({ params }: Params) {
 	const res = await getMovies(24, 4);
 
 	const comments = await getCommentsByMovieId(movie._id);
-
-	const session = await getCurrentUser();
 
 	return (
 		<main>
@@ -157,17 +154,11 @@ export default async function page({ params }: Params) {
 			<section>
 				<MaxwidthWrapper className="my-8 grid-cols-6 gap-12 space-y-4 py-12 md:my-16 md:grid">
 					<div className="col-span-4 space-y-4">
-						add comment
-						<strong className="text-xl font-bold">
-							{movie?.num_mflix_comments || 0} Comments
-						</strong>
+						<strong>{movie?.num_mflix_comments || 0} Comments</strong>
+						<AddComment movieId={movie?._id} />
 						<div className="space-y-6 overflow-scroll max-md:max-h-96">
 							{comments?.map((comment) => (
-								<CommentCard
-									key={comment._id}
-									// comment={comment}
-									// currentUserEmail={user?.email}
-								/>
+								<CommentCard key={comment._id} comment={comment} />
 							)) ?? "Be the first to add comment"}
 						</div>
 					</div>

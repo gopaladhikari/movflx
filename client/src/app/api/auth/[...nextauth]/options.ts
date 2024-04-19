@@ -32,7 +32,6 @@ export const nextAuthOptions: NextAuthOptions = {
 
 				try {
 					const res = await instance.post("/users/login", credentials);
-
 					const { token } = res.data.data;
 
 					instance.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -45,14 +44,14 @@ export const nextAuthOptions: NextAuthOptions = {
 					});
 					return res.data.data.user;
 				} catch (error) {
-					const message = (error as AxiosError).response?.data as string;
-					return message || "Something went wrong";
+					throw new Error("Invalid credentials");
 				}
 			},
 		}),
 	],
 	pages: {
 		signIn: "/auth/login",
+		error: "/auth/login",
 	},
 
 	callbacks: {

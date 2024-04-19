@@ -6,6 +6,9 @@ import { Footer } from "@/components/common/Footer";
 import { Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
+import { SessionProvider } from "@/context/sessionProvider";
+import { cookies } from "next/headers";
+import { instance } from "@/config/axios";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400"] });
 
@@ -38,16 +41,22 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const token = cookies().get("token")?.value;
+	if (token)
+		instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+
 	return (
 		<html lang="en" className="dark" suppressHydrationWarning>
 			<body
 				className={cn("bg-background", poppins.className)}
 				suppressHydrationWarning
 			>
-				<Header />
-				<main className="min-h-screen antialiased">{children}</main>
-				<Footer />
-				<Toaster />
+				<SessionProvider>
+					<Header />
+					<main className="min-h-screen antialiased">{children}</main>
+					<Footer />
+					<Toaster />
+				</SessionProvider>
 			</body>
 		</html>
 	);
