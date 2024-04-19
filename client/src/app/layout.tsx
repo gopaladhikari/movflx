@@ -1,13 +1,16 @@
 import "../styles/globals.css";
 import type { Metadata } from "next";
 import { site } from "@/config/site";
-import { Providers } from "@/context/providers";
 import { Header } from "@/components/common/Header";
-import { cn } from "@/utils/cn";
 import { Footer } from "@/components/common/Footer";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
+import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/toaster";
+import { SessionProvider } from "@/context/sessionProvider";
+import { cookies } from "next/headers";
+import { instance } from "@/config/axios";
 
-const inter = Inter({ subsets: ["latin"], weight: ["400"] });
+const poppins = Poppins({ subsets: ["latin"], weight: ["400"] });
 
 export const metadata: Metadata = {
 	title: {
@@ -38,18 +41,22 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const token = cookies().get("token")?.value;
+	if (token)
+		instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+
 	return (
 		<html lang="en" className="dark" suppressHydrationWarning>
 			<body
-				className={cn("bg-[#0F0E16]", inter.className)}
+				className={cn("bg-background", poppins.className)}
 				suppressHydrationWarning
 			>
-				{/* Nextui Theme provider */}
-				<Providers>
+				<SessionProvider>
 					<Header />
-					{children}
+					<main className="min-h-screen antialiased">{children}</main>
 					<Footer />
-				</Providers>
+					<Toaster />
+				</SessionProvider>
 			</body>
 		</html>
 	);

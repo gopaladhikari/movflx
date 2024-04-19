@@ -32,7 +32,6 @@ export const nextAuthOptions: NextAuthOptions = {
 
 				try {
 					const res = await instance.post("/users/login", credentials);
-
 					const { token } = res.data.data;
 
 					instance.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -45,14 +44,14 @@ export const nextAuthOptions: NextAuthOptions = {
 					});
 					return res.data.data.user;
 				} catch (error) {
-					const message = (error as AxiosError).response?.data as string;
-					throw new Error(message || "Something went wrong");
+					throw new Error("Invalid credentials");
 				}
 			},
 		}),
 	],
 	pages: {
 		signIn: "/auth/login",
+		error: "/auth/login",
 	},
 
 	callbacks: {
@@ -62,13 +61,7 @@ export const nextAuthOptions: NextAuthOptions = {
 					...session,
 					user: {
 						...session.user,
-						_id: token?._id,
-						name: `${token?.firstName} ${token?.lastName}`,
-						firstName: token?.firstName,
-						lastName: token?.lastName,
-						email: token?.email,
-						image: token?.picture,
-						phoneNumber: token?.phoneNumber,
+						...token,
 					},
 				};
 
@@ -78,13 +71,8 @@ export const nextAuthOptions: NextAuthOptions = {
 			if (token && user)
 				return {
 					...token,
-					_id: user?._id,
+					...user,
 					name: `${user?.firstName} ${user?.lastName}`,
-					firstName: user?.firstName,
-					lastName: user?.lastName,
-					email: user?.email,
-					picture: user?.avatar,
-					phoneNumber: user?.phoneNumber,
 				};
 
 			return token;

@@ -1,14 +1,11 @@
 import { HomepageHeroSection } from "@/components/Home/HeroSection";
-import MovieCard from "@/components/MovieCard";
 import { MaxwidthWrapper } from "@/components/common/MaxwidthWrapper";
+import { MovieCard } from "@/components/movie/MovieCard";
 import { getMovies } from "@/lib/movies";
-import { Divider, Button } from "@nextui-org/react";
 import Image from "next/image";
-import { FaPlay } from "react-icons/fa";
-import { PiTelevisionFill, PiVideoCameraFill } from "react-icons/pi";
 
 export default async function page() {
-	const res = await getMovies(0, 16);
+	const res = await getMovies(0, 12);
 
 	return (
 		<main>
@@ -22,8 +19,8 @@ export default async function page() {
 					<h3 className="text-xl font-bold md:text-3xl">
 						Upcoming Movies
 					</h3>
-					<div className="grid gap-6 sm:grid-cols-2 md:gap-12 lg:grid-cols-3 xl:grid-cols-4">
-						{res?.movies?.slice(0, 8).map((movie) => (
+					<div className="grid gap-6 sm:grid-cols-2 md:gap-12 lg:grid-cols-3">
+						{res?.movies?.slice(0, 6).map((movie) => (
 							<MovieCard key={movie?._id} movie={movie} />
 						))}
 					</div>
@@ -52,10 +49,9 @@ export default async function page() {
 							Get the latest movies and shows in your phone. Watch
 							offline.
 						</p>
-
 						<div className="flex items-center gap-6">
 							<span className="rounded-full border border-yellow p-4 shadow-lg transition-colors hover:bg-yellow hover:text-black">
-								<PiTelevisionFill size={40} />
+								icon
 							</span>
 							<div className="space-y-2">
 								<h3 className="text-xl font-bold">Enjoy on Your TV.</h3>
@@ -65,10 +61,10 @@ export default async function page() {
 								</p>
 							</div>
 						</div>
-						<Divider className="!my-8" />
+						divider
 						<div className="flex items-center gap-6">
 							<span className="rounded-full border border-yellow p-4 shadow-lg transition-colors hover:bg-yellow hover:text-black">
-								<PiVideoCameraFill size={40} />
+								camera icon
 							</span>
 							<div className="space-y-2">
 								<h3 className="text-xl font-bold">Watch Everywhere.</h3>
@@ -91,8 +87,8 @@ export default async function page() {
 					<h3 className="mb-8 text-center text-xl font-bold md:text-3xl">
 						Top Rated Movies
 					</h3>
-					<div className="grid gap-6 sm:grid-cols-2 md:gap-12 lg:grid-cols-3 xl:grid-cols-4">
-						{res?.movies?.slice(8).map((movie) => (
+					<div className="grid gap-6 sm:grid-cols-2 md:gap-12 lg:grid-cols-3">
+						{res?.movies?.slice(6).map((movie) => (
 							<MovieCard key={movie?._id} movie={movie} />
 						))}
 					</div>
@@ -115,13 +111,7 @@ export default async function page() {
 							Get the latest movies and shows in your phone. Watch
 							offline.
 						</p>
-						<Button
-							className="bg-yellow font-bold text-black shadow-xl data-[focus-visible=true]:outline-0"
-							radius="full"
-							size="lg"
-						>
-							<FaPlay size={10} /> WATCH NOW
-						</Button>
+						button
 					</div>
 
 					<Image

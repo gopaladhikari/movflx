@@ -51,8 +51,8 @@ export const sendMail = async (
 			port: 587,
 			secure: false,
 			auth: {
-				user: "maddison53@ethereal.email",
-				pass: "jn7jnAPss4f63QBp6D",
+				user: "alva.graham@ethereal.email",
+				pass: "RsdYZMUFCmh4btanMS",
 			},
 		});
 

@@ -1,6 +1,3 @@
-import { Button } from "@nextui-org/react";
-import { FaPlay } from "react-icons/fa";
-
 export function HomepageHeroSection() {
 	return (
 		<section
@@ -17,15 +14,7 @@ export function HomepageHeroSection() {
 				Unlimited <span className="text-yellow">Movie</span>, TVs
 			</h2>
 			<h2 className="text-4xl font-bold md:text-5xl">Shows, & More.</h2>
-
-			<Button
-				className="border-3 border-yellow bg-black/40 px-8 py-5 
-        data-[focus-visible=true]:outline-0"
-				radius="full"
-				variant="bordered"
-			>
-				<FaPlay size={12} /> WATCH NOW
-			</Button>
+			watchnow btn
 		</section>
 	);
 }
