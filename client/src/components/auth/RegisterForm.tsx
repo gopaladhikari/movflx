@@ -31,6 +31,8 @@ export function RegisterForm() {
 			else formData.append(key, value);
 		});
 
+		console.log(formData);
+
 		const res = await registerUser(formData);
 
 		if (res.ok)
@@ -50,11 +52,20 @@ export function RegisterForm() {
 				<FormField
 					control={form.control}
 					name="avatar"
-					render={({ field }) => (
+					render={({ field: { value, onChange, ...fieldProps } }) => (
 						<FormItem>
 							<FormLabel className="font-semibold">Avatar</FormLabel>
 							<FormControl>
-								<Input type="file" {...field} />
+								<Input
+									type="file"
+									{...fieldProps}
+									placeholder="Avatar"
+									onChange={(event) =>
+										onChange(
+											event.target.files && event.target.files[0]
+										)
+									}
+								/>
 							</FormControl>
 							<FormMessage className="text-red-500" />
 						</FormItem>
