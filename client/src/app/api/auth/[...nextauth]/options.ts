@@ -4,6 +4,7 @@ import { AxiosError } from "axios";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { cookies } from "next/headers";
+import GoogleProvider from "next-auth/providers/google";
 
 export const nextAuthOptions: NextAuthOptions = {
 	providers: [
@@ -48,10 +49,13 @@ export const nextAuthOptions: NextAuthOptions = {
 				}
 			},
 		}),
+		GoogleProvider({
+			clientId: env.googleClientId,
+			clientSecret: env.googleClientSecret,
+		}),
 	],
 	pages: {
 		signIn: "/auth/login",
-		error: "/auth/login",
 	},
 
 	callbacks: {

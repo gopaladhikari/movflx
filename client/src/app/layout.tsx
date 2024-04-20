@@ -9,6 +9,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { SessionProvider } from "@/context/sessionProvider";
 import { cookies } from "next/headers";
 import { instance } from "@/config/axios";
+import ChatBot from "@/components/common/ChatBot";
+import { Suspense } from "react";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400"] });
 
@@ -56,6 +58,9 @@ export default async function RootLayout({
 					<main className="min-h-screen antialiased">{children}</main>
 					<Footer />
 					<Toaster />
+					<Suspense>
+						<ChatBot />
+					</Suspense>
 				</SessionProvider>
 			</body>
 		</html>
