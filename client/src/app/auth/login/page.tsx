@@ -1,6 +1,5 @@
 import { LoginForm } from "@/components/auth/LoginForm";
 import { MaxwidthWrapper } from "@/components/common/MaxwidthWrapper";
-import { env } from "@/config/env";
 import Image from "next/image";
 
 export const metadata = {
@@ -11,7 +10,7 @@ export default function page() {
 	return (
 		<main>
 			<MaxwidthWrapper className="mt-8 grid gap-8 md:grid-cols-2">
-				<LoginForm backendUri={env.backendUrl} />
+				<LoginForm />
 				<Image
 					src="/login-banner.png"
 					alt="Banner"

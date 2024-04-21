@@ -1,3 +1,5 @@
+// It stays here but this is not being used
+
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import { User } from "../models/user.model";

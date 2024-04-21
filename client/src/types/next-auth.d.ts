@@ -10,6 +10,7 @@ declare module "next-auth" {
 			avatar?: string;
 			phoneNumber?: string;
 			image?: string;
+			fullName?: string;
 		} & DefaultSession["user"];
 	}
 
@@ -20,6 +21,14 @@ declare module "next-auth" {
 		email?: string;
 		avatar?: string;
 		phoneNumber?: string;
+	}
+
+	interface Profile {
+		given_name?: string;
+		family_name?: string;
+		picture?: string;
+		email?: string;
+		email_verified?: boolean;
 	}
 }
 

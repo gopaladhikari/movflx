@@ -5,8 +5,6 @@ import { ApiResponse } from "../utils/ApiResponse";
 import { uploadOnCloudinary } from "../utils/cloudinary";
 import { dbHandler } from "../utils/dbHandler";
 import { sendMail } from "../utils/sendMail";
-import { sign } from "jsonwebtoken";
-import { env } from "../conf/env";
 import { CookieOptions } from "express";
 
 const cookieOptions: CookieOptions = {
@@ -68,10 +66,8 @@ const registerUser = dbHandler(async (req, res) => {
 const loginUser = dbHandler(async (req, res) => {
 	const user = req.user;
 
-	// @ts-expect-error _id is  present in user model
-	const token = sign({ _id: user?._id }, env.jwtSecret, {
-		expiresIn: env.jwtSecretExpiry,
-	});
+	// @ts-expect-error generateJwtToken is available
+	const token = user?.generateJwtToken();
 
 	return res
 		.status(200)
@@ -80,15 +76,40 @@ const loginUser = dbHandler(async (req, res) => {
 });
 
 const loginWithGoogle = dbHandler(async (req, res) => {
-	const user = req.user;
+	const { firstName, lastName, avatar, email, isEmailVerified } = req.body;
 
-	// @ts-expect-error _id is  present in user model
-	const token = sign({ _id: user?._id }, env.jwtSecret, {
-		expiresIn: env.jwtSecretExpiry,
+	if (!firstName || !lastName || !avatar || !email)
+		return res
+			.status(400)
+			.json(new ApiError(400, "All fields are required."));
+
+	const user = await User.findOne({ email }).select("-password");
+
+	if (user) {
+		const token = user.generateJwtToken();
+		res.status(200).json(
+			new ApiResponse(200, { user, token }, "Login successful")
+		);
+	}
+
+	const newUser = await User.create({
+		firstName,
+		lastName,
+		email,
+		avatar,
+		isEmailVerified,
 	});
 
-	res.cookie("token", token, cookieOptions);
-	res.redirect(`${env.domain}/auth/google/success?token=${token}`);
+	if (!newUser)
+		return res.status(400).json(new ApiError(400, "User creation failed."));
+
+	const token = newUser.generateJwtToken();
+
+	await newUser.save({ validateBeforeSave: false });
+
+	return res
+		.status(201)
+		.json(new ApiResponse(201, { user: newUser, token }, "User created"));
 });
 
 const getMe = dbHandler(async (req, res) => {

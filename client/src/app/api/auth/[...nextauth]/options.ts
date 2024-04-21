@@ -59,6 +59,38 @@ export const nextAuthOptions: NextAuthOptions = {
 	},
 
 	callbacks: {
+		async signIn({ account, profile }) {
+			if (account?.provider === "credentials") return true;
+
+			if (account?.provider === "google") {
+				const cookieStore = cookies();
+
+				const userData = {
+					firstName: profile?.given_name,
+					lastName: profile?.family_name,
+					email: profile?.email,
+					avatar: profile?.picture,
+					isEmailVerified: profile?.email_verified,
+				};
+
+				try {
+					const res = await instance.post("/users/auth/google", userData);
+					const token = res?.data.data.token;
+					instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+					cookieStore.set("token", token, {
+						httpOnly: true,
+						sameSite: "strict",
+						secure: true,
+						maxAge: 60 * 60 * 24 * 30,
+					});
+					return true;
+				} catch (error) {
+					return false;
+				}
+			}
+
+			return false;
+		},
 		async session({ session, token }) {
 			if (session?.user)
 				return {
@@ -76,7 +108,7 @@ export const nextAuthOptions: NextAuthOptions = {
 				return {
 					...token,
 					...user,
-					name: `${user?.firstName} ${user?.lastName}`,
+					fullName: `${user?.firstName} ${user?.lastName}`,
 				};
 
 			return token;
@@ -96,8 +128,8 @@ export const nextAuthOptions: NextAuthOptions = {
 				}
 				return res.data;
 			} catch (error) {
-				const msg = (error as AxiosError).response?.data as string;
-				throw new Error(msg || "Something went wrong");
+				console.error((error as AxiosError).response?.data);
+				throw new Error((error as AxiosError).message);
 			}
 		},
 	},

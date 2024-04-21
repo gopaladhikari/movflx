@@ -1,5 +1,7 @@
 import { Schema, model, InferSchemaType, ObjectId } from "mongoose";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { env } from "../conf/env";
 
 export const userSchema = new Schema(
 	{
@@ -15,11 +17,6 @@ export const userSchema = new Schema(
 
 		password: {
 			type: String,
-		},
-
-		acceptTermsAndCondition: {
-			type: Boolean,
-			default: true,
 		},
 
 		email: {
@@ -64,6 +61,13 @@ export const userSchema = new Schema(
 		timestamps: true,
 	}
 );
+
+userSchema.methods.generateJwtToken = function () {
+	const token = jwt.sign({ _id: this._id }, env.jwtSecret, {
+		expiresIn: "30d",
+	});
+	return token;
+};
 
 userSchema.pre("save", async function (next) {
 	if (this.password && this.isModified("password"))

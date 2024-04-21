@@ -29,27 +29,27 @@ export default function ChatBot() {
 
 	if (!show)
 		return (
-			<div className="fixed bottom-8 right-8 cursor-pointer overflow-auto rounded-lg bg-background p-4">
+			<div className="fixed bottom-8 right-8 cursor-pointer overflow-auto rounded-lg bg-slate-800">
 				{/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-				<button type="button" onClick={handleChatBotOpen}>
+				<button type="button" className="p-4" onClick={handleChatBotOpen}>
 					<BotMessageSquare />
 				</button>
 			</div>
 		);
 
 	return (
-		<section className="fixed bottom-8 right-8 h-[60vh] w-96 overflow-auto bg-background">
-			<div className="flex w-full justify-end px-3 pt-2">
+		<section className="fixed bottom-8 right-8 h-[60vh] w-96 overflow-auto bg-slate-800">
+			<div className="flex w-full justify-end">
 				{/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
 				<button
 					type="submit"
 					onClick={() => setShow(!show)}
-					className="mb-auto"
+					className="mr-3 mt-2"
 				>
 					<CircleX size={16} />
 				</button>
 			</div>
-			<h1 className="border-b border-yellow p-4 pb-2 text-center text-xl font-bold">
+			<h1 className="border-b border-yellow pb-2 text-center text-xl font-bold">
 				Chat Bot
 			</h1>
 

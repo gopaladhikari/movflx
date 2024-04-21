@@ -4,7 +4,6 @@ import GoogleButton from "react-google-button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, TLoginSchema } from "@/schemas/loginSchema";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
 import { signIn } from "next-auth/react";
@@ -20,8 +19,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-export function LoginForm({ backendUri }: { backendUri: string }) {
-	const router = useRouter();
+export function LoginForm() {
 	const form = useForm<TLoginSchema>({
 		resolver: zodResolver(loginSchema),
 	});
@@ -118,8 +116,8 @@ export function LoginForm({ backendUri }: { backendUri: string }) {
 			<div className="h-[2px] w-full bg-slate-300" />
 			<GoogleButton
 				className="!w-full"
-				onClick={() => {
-					router.push(`${backendUri}/api/v1/users/auth/google`);
+				onClick={async () => {
+					await signIn("google", { callbackUrl: "/me" });
 				}}
 			/>
 		</section>

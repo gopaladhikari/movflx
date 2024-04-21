@@ -74,8 +74,14 @@ export async function Header() {
 								<DropdownMenuTrigger asChild>
 									<Avatar>
 										<AvatarImage
-											src={session?.user?.avatar || ""}
-											alt={session?.user?.name || ""}
+											src={
+												session?.user?.avatar ||
+												session?.user?.image
+											}
+											alt={
+												session?.user?.name ||
+												session?.user.fullName
+											}
 										/>
 
 										<AvatarFallback>
