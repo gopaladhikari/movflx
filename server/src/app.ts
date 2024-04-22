@@ -22,13 +22,14 @@ app.use(
 app.use(passport.initialize());
 import "./strategy/jwtStrategy";
 import "./strategy/localStrategy";
-import "./strategy/googleStrategy";
+// import "./strategy/googleStrategy";
 
 // routes imports
 
 import { userRouter } from "./routes/user.routes";
 import { movieRouter } from "./routes/movie.routes";
 import { commentRouter } from "./routes/comment.routes";
+import { contactRouter } from "./routes/contact.routes";
 
 // routes declaration
 
@@ -39,5 +40,6 @@ app.get("/", (req, res) => {
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/movies", movieRouter);
 app.use("/api/v1/comments", commentRouter);
+app.use("/api/v1/contacts", contactRouter);
 
 export { app };
