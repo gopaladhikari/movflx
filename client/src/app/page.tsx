@@ -6,7 +6,6 @@ import Image from "next/image";
 
 export default async function page() {
 	const res = await getMovies(0, 12);
-
 	return (
 		<main>
 			<HomepageHeroSection />
