@@ -128,7 +128,6 @@ export const nextAuthOptions: NextAuthOptions = {
 				}
 				return res.data;
 			} catch (error) {
-				console.error((error as AxiosError).response?.data);
 				throw new Error((error as AxiosError).message);
 			}
 		},

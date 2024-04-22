@@ -4,8 +4,6 @@ import GoogleButton from "react-google-button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, TLoginSchema } from "@/schemas/loginSchema";
-import Link from "next/link";
-import { Checkbox } from "@/components/ui/checkbox";
 import { signIn } from "next-auth/react";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -73,30 +71,6 @@ export function LoginForm() {
 									/>
 								</FormControl>
 								<FormMessage className="text-red-500" />
-							</FormItem>
-						)}
-					/>
-					<FormField
-						control={form.control}
-						name="acceptTermsAndCondition"
-						render={({ field }) => (
-							<FormItem className="flex flex-row items-center justify-between gap-4 space-y-0">
-								<div className="flex flex-row items-start space-x-3 space-y-0 rounded-md">
-									<FormControl>
-										<Checkbox
-											checked={field.value}
-											onCheckedChange={field.onChange}
-										/>
-									</FormControl>
-									<FormLabel>Accept terms and conditions</FormLabel>
-								</div>
-
-								<Link
-									href="/auth/request-forgot-password"
-									className="text-sm hover:underline"
-								>
-									<i>Forgot password</i>
-								</Link>
 							</FormItem>
 						)}
 					/>
