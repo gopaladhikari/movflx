@@ -31,8 +31,6 @@ export function RegisterForm() {
 			else formData.append(key, value);
 		});
 
-		console.log(formData);
-
 		const res = await registerUser(formData);
 
 		if (res.ok)
