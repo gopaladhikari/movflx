@@ -1,5 +1,6 @@
 "use client";
 
+import ReCAPTCHA from "react-google-recaptcha";
 import GoogleButton from "react-google-button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,6 +17,8 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+
+const captchaKey = process.env.NEXT_PUBLIC_CAPTCHA_KEY;
 
 export function LoginForm() {
 	const form = useForm<TLoginSchema>({
@@ -74,6 +77,18 @@ export function LoginForm() {
 							</FormItem>
 						)}
 					/>
+					<ReCAPTCHA
+						sitekey={String(captchaKey)}
+						onChange={(value) => {
+							if (value) form.setValue("verifyHuman", value);
+						}}
+					/>
+
+					{form.formState.errors.verifyHuman && (
+						<div className="text-red-500">
+							{form.formState.errors.verifyHuman.message}
+						</div>
+					)}
 
 					{form.formState.isSubmitting ? (
 						<Button disabled variant="yellow" className="w-full">

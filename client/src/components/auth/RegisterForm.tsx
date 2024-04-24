@@ -1,5 +1,6 @@
 "use client";
 
+import ReCAPTCHA from "react-google-recaptcha";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Loader2 } from "lucide-react";
@@ -15,7 +16,10 @@ import {
 	FormLabel,
 } from "../ui/form";
 import { Input } from "../ui/input";
+
 import { useToast } from "../ui/use-toast";
+
+const captchaKey = process.env.NEXT_PUBLIC_CAPTCHA_KEY;
 
 export function RegisterForm() {
 	const { toast } = useToast();
@@ -30,8 +34,6 @@ export function RegisterForm() {
 			if (value instanceof FileList) formData.append(key, value[0]);
 			else formData.append(key, value);
 		});
-
-		console.log(formData);
 
 		const res = await registerUser(formData);
 
@@ -123,6 +125,7 @@ export function RegisterForm() {
 						</FormItem>
 					)}
 				/>
+
 				<FormField
 					control={form.control}
 					name="phoneNumber"
@@ -138,6 +141,19 @@ export function RegisterForm() {
 						</FormItem>
 					)}
 				/>
+
+				<ReCAPTCHA
+					sitekey={String(captchaKey)}
+					onChange={(value) => {
+						if (value) form.setValue("verifyHuman", value);
+					}}
+				/>
+
+				{form.formState.errors.verifyHuman && (
+					<div className="text-red-500">
+						{form.formState.errors.verifyHuman.message}
+					</div>
+				)}
 
 				{form.formState.isSubmitting ? (
 					<Button disabled variant="yellow" className="w-full">

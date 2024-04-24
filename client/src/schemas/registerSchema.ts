@@ -10,6 +10,7 @@ export const registerSchemas = z.object({
 		.refine((file) => file?.length !== 0, { message: "Avatar is required" }),
 
 	phoneNumber: z.string().min(1, { message: "Phone number is required" }),
+	verifyHuman: z.string().min(1, { message: "Required" }),
 });
 
 export type TRegisterSchema = z.infer<typeof registerSchemas>;
