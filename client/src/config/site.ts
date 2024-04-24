@@ -14,13 +14,19 @@ export const site = {
 			title: "Movies",
 			href: "/movies?page=1",
 		},
+
 		{
 			id: 3,
-			title: "Embedded Movies",
-			href: "/embedded-movies",
+			title: "Theaters",
+			href: "/theaters",
 		},
 		{
 			id: 4,
+			title: "Pricing",
+			href: "/pricing",
+		},
+		{
+			id: 5,
 			title: "Contact",
 			href: "/contact",
 		},

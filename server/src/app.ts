@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { env } from "./conf/env";
 import passport from "passport";
+import { ApiResponse } from "./utils/ApiResponse";
 
 const app = express();
 
@@ -30,16 +31,18 @@ import { userRouter } from "./routes/user.routes";
 import { movieRouter } from "./routes/movie.routes";
 import { commentRouter } from "./routes/comment.routes";
 import { contactRouter } from "./routes/contact.routes";
+import { theaterRouter } from "./routes/theater.routes";
 
 // routes declaration
 
 app.get("/", (req, res) => {
-	res.json({ message: "Hello from gopaladhikari!" });
+	res.json(new ApiResponse(200, "Server is up and running", "Welcome"));
 });
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/movies", movieRouter);
 app.use("/api/v1/comments", commentRouter);
 app.use("/api/v1/contacts", contactRouter);
+app.use("/api/v1/theaters", theaterRouter);
 
 export { app };
