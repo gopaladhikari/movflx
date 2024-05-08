@@ -108,7 +108,6 @@ export const nextAuthOptions: NextAuthOptions = {
 				return {
 					...token,
 					...user,
-					fullName: `${user?.firstName} ${user?.lastName}`,
 				};
 
 			return token;

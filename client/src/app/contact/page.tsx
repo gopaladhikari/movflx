@@ -1,7 +1,12 @@
 import { MaxwidthWrapper } from "@/components/common/MaxwidthWrapper";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { MapPin, Phone, MessageCircle } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+	title: "Contact Us",
+};
 
 export default function page() {
 	return (
@@ -27,19 +32,14 @@ export default function page() {
 										<MapPin size={24} />{" "}
 									</span>
 									<span className="font-bold">Address :</span>
-									<span className="text-white/90">
-										W38 Park Road New York
-									</span>
+									<span className="text-white/90">W38 Park Road New York</span>
 								</p>
 								<p className="flex items-center gap-2 border-b-2 border-yellow py-6">
 									<span className="rounded-full bg-yellow p-2 text-black">
 										<Phone size={24} />{" "}
 									</span>
 									<span className="font-bold">Phone :</span>
-									<Link
-										href="tel:(09)123854365"
-										className="text-white/90"
-									>
+									<Link href="tel:(09)123854365" className="text-white/90">
 										(09) 123 854 365
 									</Link>
 								</p>

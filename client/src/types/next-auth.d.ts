@@ -11,6 +11,7 @@ declare module "next-auth" {
 			phoneNumber?: string;
 			image?: string;
 			fullName?: string;
+			picture?: string;
 		} & DefaultSession["user"];
 	}
 

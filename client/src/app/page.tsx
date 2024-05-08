@@ -16,9 +16,7 @@ export default async function page() {
 			<section>
 				<MaxwidthWrapper className="my-8 space-y-4 md:my-16">
 					<p className="text-sm font-bold text-yellow">ONLINE STREAMING</p>
-					<h3 className="text-xl font-bold md:text-3xl">
-						Upcoming Movies
-					</h3>
+					<h3 className="text-xl font-bold md:text-3xl">Upcoming Movies</h3>
 					<div className="grid gap-6 sm:grid-cols-2 md:gap-12 lg:grid-cols-3">
 						{res?.movies?.slice(0, 6).map((movie) => (
 							<MovieCard key={movie?._id} movie={movie} />
@@ -39,16 +37,12 @@ export default async function page() {
 					/>
 					<div className="space-y-3">
 						<strong className="flex items-center gap-2">
-							<p className="h-1 w-12 rounded-xl bg-yellow" /> Our
-							Services
+							<p className="h-1 w-12 rounded-xl bg-yellow" /> Our Services
 						</strong>
 						<h3 className="text-3xl font-bold md:text-4xl">
 							Download Your Shows Watch Offline.
 						</h3>
-						<p>
-							Get the latest movies and shows in your phone. Watch
-							offline.
-						</p>
+						<p>Get the latest movies and shows in your phone. Watch offline.</p>
 						<div className="flex items-center gap-6">
 							<span className="rounded-full border border-yellow p-4 shadow-lg transition-colors hover:bg-yellow hover:text-black">
 								icon
@@ -56,8 +50,8 @@ export default async function page() {
 							<div className="space-y-2">
 								<h3 className="text-xl font-bold">Enjoy on Your TV.</h3>
 								<p className="max-w-sm text-sm">
-									Lorem ipsum dolor sit amet, consecetur adipiscing
-									elit, sed do eiusmod tempor.
+									Lorem ipsum dolor sit amet, consecetur adipiscing elit, sed do
+									eiusmod tempor.
 								</p>
 							</div>
 						</div>
@@ -69,8 +63,8 @@ export default async function page() {
 							<div className="space-y-2">
 								<h3 className="text-xl font-bold">Watch Everywhere.</h3>
 								<p className="max-w-sm text-sm">
-									Lorem ipsum dolor sit amet, consecetur adipiscing
-									elit, sed do eiusmod tempor.
+									Lorem ipsum dolor sit amet, consecetur adipiscing elit, sed do
+									eiusmod tempor.
 								</p>
 							</div>
 						</div>
@@ -101,16 +95,12 @@ export default async function page() {
 				<MaxwidthWrapper className="my-8 items-center gap-16 space-y-4 md:my-16 lg:flex">
 					<div className="space-y-3">
 						<strong className="flex items-center gap-2">
-							<p className="h-1 w-12 rounded-xl bg-yellow" /> Our
-							Services
+							<p className="h-1 w-12 rounded-xl bg-yellow" /> Our Services
 						</strong>
 						<h3 className="text-3xl font-bold md:text-4xl">
 							Live Movie & TV Shows For Friends & Family
 						</h3>
-						<p>
-							Get the latest movies and shows in your phone. Watch
-							offline.
-						</p>
+						<p>Get the latest movies and shows in your phone. Watch offline.</p>
 						button
 					</div>
 
