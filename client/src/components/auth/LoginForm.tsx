@@ -17,33 +17,38 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { toast } from "../ui/use-toast";
 
 const captchaKey = process.env.NEXT_PUBLIC_CAPTCHA_KEY;
 
 export function LoginForm() {
+	const router = useRouter();
+
 	const form = useForm<TLoginSchema>({
 		resolver: zodResolver(loginSchema),
 	});
 
-	const onSubmit: SubmitHandler<TLoginSchema> = async ({
-		email,
-		password,
-	}) => {
+	const onSubmit: SubmitHandler<TLoginSchema> = async ({ email, password }) => {
 		const res = await signIn("credentials", {
 			email,
 			password,
-			callbackUrl: "/",
+			redirect: false,
 		});
 
-		if (res?.error) form.setError("root", { message: res.error });
+		if (res?.ok) router.push("/me");
+		else
+			toast({
+				title: "Login failed",
+				description: res?.error || "Something went wrong",
+				variant: "destructive",
+			});
 	};
 
 	return (
 		<section className="max-w-screen-sm space-y-3">
 			<Form {...form}>
-				<h2 className="text-3xl font-bold md:text-4xl">
-					Hey, Welcome Back!
-				</h2>
+				<h2 className="text-3xl font-bold md:text-4xl">Hey, Welcome Back!</h2>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 					<FormField
 						control={form.control}
@@ -63,15 +68,9 @@ export function LoginForm() {
 						name="password"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel className="font-semibold">
-									Password
-								</FormLabel>
+								<FormLabel className="font-semibold">Password</FormLabel>
 								<FormControl>
-									<Input
-										type="password"
-										placeholder="********"
-										{...field}
-									/>
+									<Input type="password" placeholder="********" {...field} />
 								</FormControl>
 								<FormMessage className="text-red-500" />
 							</FormItem>
@@ -106,7 +105,10 @@ export function LoginForm() {
 			<GoogleButton
 				className="!w-full"
 				onClick={async () => {
-					await signIn("google", { callbackUrl: "/me" });
+					await signIn("google", {
+						redirect: false,
+						callbackUrl: "/me",
+					});
 				}}
 			/>
 		</section>

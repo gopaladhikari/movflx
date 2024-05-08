@@ -74,19 +74,11 @@ export async function Header() {
 								<DropdownMenuTrigger asChild>
 									<Avatar>
 										<AvatarImage
-											src={
-												session?.user?.avatar ||
-												session?.user?.image
-											}
-											alt={
-												session?.user?.name ||
-												session?.user.fullName
-											}
+											src={session?.user?.avatar || session?.user?.image}
+											alt={session?.user?.name || session?.user.fullName}
 										/>
 
-										<AvatarFallback>
-											{session?.user?.name}
-										</AvatarFallback>
+										<AvatarFallback>{session?.user?.name}</AvatarFallback>
 									</Avatar>
 								</DropdownMenuTrigger>
 								<DropdownMenuContent className="w-56">
@@ -94,8 +86,10 @@ export async function Header() {
 									<DropdownMenuSeparator />
 									<DropdownMenuGroup>
 										<DropdownMenuItem>
-											<User className="mr-2 size-4" />
-											<span>Profile</span>
+											<Link href="/me" className="flex w-full">
+												<User className="mr-2 size-4" />
+												<span>Profile</span>
+											</Link>
 										</DropdownMenuItem>
 										<DropdownMenuItem>
 											<CreditCard className="mr-2 size-4" />
@@ -145,17 +139,12 @@ export async function Header() {
 										<SheetTitle>
 											<Logo />
 										</SheetTitle>
-										<SheetDescription>
-											{site.description}
-										</SheetDescription>
+										<SheetDescription>{site.description}</SheetDescription>
 									</SheetHeader>
 									<menu className="mt-6 space-y-3">
 										{site.mainNav.map(({ href, id, title }) => (
 											<li key={id}>
-												<SheetClose
-													asChild
-													className="flex justify-between"
-												>
+												<SheetClose asChild className="flex justify-between">
 													<Link href={href}>
 														{title} <MoveRight />
 													</Link>

@@ -123,12 +123,11 @@ export const nextAuthOptions: NextAuthOptions = {
 				const res = await instance.post("/users/logout");
 				if (res.data) {
 					cookieStore.delete("token");
-					cookieStore.delete("next-auth.session-token");
 					instance.defaults.headers.common.Authorization = "";
 				}
 				return res.data;
 			} catch (error) {
-				throw new Error((error as AxiosError).message);
+				return (error as AxiosError).message;
 			}
 		},
 	},
