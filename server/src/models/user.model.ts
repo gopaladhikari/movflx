@@ -1,4 +1,4 @@
-import { Schema, model, InferSchemaType, ObjectId } from "mongoose";
+import { Schema, model, InferSchemaType, Document } from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { env } from "../conf/env";
@@ -79,10 +79,16 @@ userSchema.methods.comparePassword = async function (password: string) {
 	return await bcrypt.compare(password, this.password);
 };
 
-type TUser = InferSchemaType<typeof userSchema> & {
-	_id: ObjectId;
+export interface IUser extends Document, InferSchemaType<typeof userSchema> {
 	generateJwtToken(): string;
 	comparePassword(password: string): Promise<boolean>;
-};
+}
 
-export const User = model<TUser>("User", userSchema);
+declare global {
+	// eslint-disable-next-line @typescript-eslint/no-namespace
+	namespace Express {
+		interface User extends IUser {}
+	}
+}
+
+export const User = model<IUser>("User", userSchema);

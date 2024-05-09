@@ -46,3 +46,11 @@ app.use("/api/v1/contacts", contactRouter);
 app.use("/api/v1/theaters", theaterRouter);
 
 export { app };
+
+// TODO: Add update user details
+// TODO: Subscription feature payment gateway paypal, esewa, khalti
+// TODO: watch list watch history
+// TODO: Add playlist, watch later and liked movies
+/**
+ *  * When the user pays for the subscription, user should be allowed to watch movies. Movies will be received from tmdb.
+ */

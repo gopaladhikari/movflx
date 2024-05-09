@@ -17,14 +17,11 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
 import { toast } from "../ui/use-toast";
 
 const captchaKey = process.env.NEXT_PUBLIC_CAPTCHA_KEY;
 
 export function LoginForm() {
-	const router = useRouter();
-
 	const form = useForm<TLoginSchema>({
 		resolver: zodResolver(loginSchema),
 	});
@@ -33,11 +30,11 @@ export function LoginForm() {
 		const res = await signIn("credentials", {
 			email,
 			password,
-			redirect: false,
+			redirect: true,
+			callbackUrl: "/me",
 		});
 
-		if (res?.ok) router.push("/me");
-		else
+		if (res?.error)
 			toast({
 				title: "Login failed",
 				description: res?.error || "Something went wrong",
@@ -106,7 +103,7 @@ export function LoginForm() {
 				className="!w-full"
 				onClick={async () => {
 					await signIn("google", {
-						redirect: false,
+						redirect: true,
 						callbackUrl: "/me",
 					});
 				}}

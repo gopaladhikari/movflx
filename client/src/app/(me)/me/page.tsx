@@ -1,17 +1,8 @@
 import { getCurrentUser } from "@/utils/session";
-import { Metadata, ResolvingMetadata } from "next";
+import type { Metadata } from "next";
 
-export const generateMetadata = async (
-	_: unknown,
-	parent: ResolvingMetadata
-): Promise<Metadata> => {
+export const generateMetadata = async (): Promise<Metadata> => {
 	const session = await getCurrentUser();
-
-	const url =
-		session?.user?.avatar ||
-		session?.user?.image ||
-		session?.user?.picture ||
-		"";
 
 	let fullName: string = "Me";
 
@@ -19,21 +10,9 @@ export const generateMetadata = async (
 	else if (session?.user?.firstName && session?.user?.lastName)
 		fullName = `${session?.user?.firstName} ${session?.user?.lastName}`;
 
-	const previousImages = (await parent).openGraph?.images || [];
-
 	return {
 		title: fullName,
 		description: `Profile page for the user ${fullName} on Movflx`,
-		openGraph: {
-			images: [
-				{
-					url,
-					height: 350,
-					width: 350,
-				},
-			],
-			...previousImages,
-		},
 	};
 };
 

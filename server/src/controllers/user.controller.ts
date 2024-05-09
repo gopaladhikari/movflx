@@ -25,9 +25,7 @@ const registerUser = dbHandler(async (req, res) => {
 		!phoneNumber ||
 		!avatarLocalPath
 	)
-		return res
-			.status(400)
-			.json(new ApiError(400, "All fields are required."));
+		return res.status(400).json(new ApiError(400, "All fields are required."));
 
 	const existedUser = await User.findOne({ email });
 
@@ -66,7 +64,6 @@ const registerUser = dbHandler(async (req, res) => {
 const loginUser = dbHandler(async (req, res) => {
 	const user = req.user;
 
-	// @ts-expect-error generateJwtToken is available
 	const token = user?.generateJwtToken();
 
 	return res
@@ -79,17 +76,15 @@ const loginWithGoogle = dbHandler(async (req, res) => {
 	const { firstName, lastName, avatar, email, isEmailVerified } = req.body;
 
 	if (!firstName || !lastName || !avatar || !email)
-		return res
-			.status(400)
-			.json(new ApiError(400, "All fields are required."));
+		return res.status(400).json(new ApiError(400, "All fields are required."));
 
 	const user = await User.findOne({ email }).select("-password");
 
 	if (user) {
 		const token = user.generateJwtToken();
-		res.status(200).json(
-			new ApiResponse(200, { user, token }, "Login successful")
-		);
+		return res
+			.status(200)
+			.json(new ApiResponse(200, { user, token }, "Login successful"));
 	}
 
 	const newUser = await User.create({
@@ -117,15 +112,16 @@ const getMe = dbHandler(async (req, res) => {
 
 	if (!user) return res.status(404).json(new ApiError(404, "User not found."));
 
-	res.status(200).json(
-		new ApiResponse(200, { user }, "User fetched sucessfully")
-	);
+	res
+		.status(200)
+		.json(new ApiResponse(200, { user }, "User fetched sucessfully"));
 });
 
 const logoutUser = dbHandler(async (req, res) => {
 	delete req.user;
 
-	res.status(200)
+	res
+		.status(200)
 		.clearCookie("token", cookieOptions)
 		.json(new ApiResponse(200, null, "Logout successful"));
 });
@@ -145,9 +141,9 @@ const verifyUsersEmail = dbHandler(async (req, res) => {
 	user.emailVerificationTokenExpiry = undefined;
 	await user.save({ validateBeforeSave: false });
 
-	res.status(200).json(
-		new ApiResponse(200, null, "Email verified successfully")
-	);
+	res
+		.status(200)
+		.json(new ApiResponse(200, null, "Email verified successfully"));
 });
 
 const requestForgotPassword = dbHandler(async (req, res) => {
@@ -156,14 +152,13 @@ const requestForgotPassword = dbHandler(async (req, res) => {
 	try {
 		const user = await User.findOne({ email });
 
-		if (!user)
-			return res.status(400).json(new ApiError(400, "User not found"));
+		if (!user) return res.status(400).json(new ApiError(400, "User not found"));
 
 		await sendMail(user.email, "reset", user._id);
 
-		res.status(200).json(
-			new ApiResponse(200, null, "Password reset email sent")
-		);
+		res
+			.status(200)
+			.json(new ApiResponse(200, null, "Password reset email sent"));
 	} catch (error) {
 		throw new ApiError(500, `Internal Server Error ${error}`);
 	}
@@ -196,15 +191,13 @@ const resetForgotPassword = dbHandler(async (req, res) => {
 
 		await user.save();
 
-		res.status(200).json(
-			new ApiResponse(200, null, "Password reset successfully")
-		);
+		res
+			.status(200)
+			.json(new ApiResponse(200, null, "Password reset successfully"));
 	} catch (error) {
 		throw new ApiError(500, `Internal Server Error ${error}`);
 	}
 });
-
-// TODO: Add update user details
 
 export {
 	registerUser,
