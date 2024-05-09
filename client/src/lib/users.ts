@@ -2,22 +2,9 @@
 
 import { instance } from "@/config/axios";
 import { TLoginSchema } from "@/schemas/loginSchema";
+import { ApiError } from "@/types/axios-errror";
 import { TUserResponse } from "@/types/user.types";
-import { AxiosError } from "axios";
 import { cookies } from "next/headers";
-
-interface CustomError extends AxiosError {
-	response: {
-		data: {
-			message: string;
-		};
-		message: string;
-		status: number;
-		statusText: string;
-		headers: any;
-		config: any;
-	};
-}
 
 export const registerUser = async (formData: FormData) => {
 	try {
@@ -25,9 +12,7 @@ export const registerUser = async (formData: FormData) => {
 
 		return { data: res.data.data, ok: true };
 	} catch (error) {
-		const message =
-			(error as CustomError).response?.data.message ||
-			"Something went wrong";
+		const message = (error as ApiError).response?.data.message;
 		return { error: message, ok: false };
 	}
 };
@@ -50,24 +35,18 @@ export const loginUser = async (formData: TLoginSchema) => {
 
 		return { data: res.data, ok: true };
 	} catch (error) {
-		const message =
-			(error as CustomError).response?.data?.message ||
-			"Something went wrong";
+		const message = (error as ApiError).response?.data?.message;
 		return { error: message, ok: false };
 	}
 };
 
 export const verifyUserEmail = async (token: string) => {
 	try {
-		const res = await instance.post(
-			`/users/verify-users-email?token=${token}`
-		);
+		const res = await instance.post(`/users/verify-users-email?token=${token}`);
 
 		return { data: res.data, ok: true };
 	} catch (error) {
-		const message =
-			(error as CustomError).response?.data.message ||
-			"Something went wrong";
+		const message = (error as ApiError).response?.data.message;
 		return { error: message, ok: false };
 	}
 };
@@ -75,11 +54,9 @@ export const verifyUserEmail = async (token: string) => {
 export const getMe = async () => {
 	try {
 		const res = await instance.get<TUserResponse>("/users/me");
-
 		return { data: res.data.data.user, ok: true };
 	} catch (error) {
-		const message =
-			(error as CustomError).response?.data || "Something went wrong";
+		const message = (error as ApiError).response?.data;
 
 		return { error: message, ok: false };
 	}
@@ -107,8 +84,7 @@ export const logoutUser = async () => {
 		instance.defaults.headers.common.Authorization = "";
 		return { data: res.data, ok: true };
 	} catch (error) {
-		const message =
-			(error as CustomError).response?.data || "Something went wrong";
+		const message = (error as ApiError).response?.data;
 		return { error: message, ok: false };
 	}
 };
@@ -120,9 +96,7 @@ export const requestResetPassword = async (email: string) => {
 		});
 		return { data: res.data, ok: true };
 	} catch (error) {
-		const message =
-			(error as CustomError).response?.data.message ||
-			"Something went wrong";
+		const message = (error as ApiError).response?.data.message;
 		return { error: message, ok: false };
 	}
 };
@@ -142,9 +116,7 @@ export const resetForgotPassword = async (
 		);
 		return { data: res.data, ok: true };
 	} catch (error) {
-		const message =
-			(error as CustomError).response?.data.message ||
-			"Something went wrong";
+		const message = (error as ApiError).response?.data.message;
 		return { error: message, ok: false };
 	}
 };

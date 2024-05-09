@@ -35,27 +35,40 @@ export const site = {
 	pricingPlans: [
 		{
 			id: 1,
-			title: "BASIC",
-			price: 7.99,
+			plan: "basic",
+			price: 799,
 			videoQuality: "Good",
 			videoResolution: "480p",
 			screens: 1,
 		},
 		{
 			id: 2,
-			title: "STANDARD",
-			price: 9.99,
+			plan: "standard",
+			price: 999,
 			videoQuality: "Better",
 			videoResolution: "1080p",
 			screens: 2,
 		},
 		{
 			id: 3,
-			title: "PREMIUM",
-			price: 12.99,
+			plan: "premium",
+			price: 1299,
 			videoQuality: "Best",
 			videoResolution: "4k+HDR",
 			screens: 4,
+		},
+	],
+
+	paymentMethod: [
+		{
+			id: 1,
+			name: "Esewa",
+			img: "/esewa.png",
+		},
+		{
+			id: 2,
+			name: "Khalti",
+			img: "/khalti.png",
 		},
 	],
 };

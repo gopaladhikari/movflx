@@ -40,24 +40,17 @@ export default function page() {
 					</h1>
 					<div className="my-8 grid grid-cols-3 gap-12">
 						{site.pricingPlans.map(
-							({
-								id,
-								price,
-								title,
-								screens,
-								videoQuality,
-								videoResolution,
-							}) => (
+							({ id, price, plan, screens, videoQuality, videoResolution }) => (
 								<Card
 									key={id}
 									className="bg-background-secondary py-8 outline outline-background-secondary transition-all duration-700 hover:outline-yellow"
 								>
 									<CardHeader>
 										<CardTitle className="text-center text-sm">
-											{title}
+											{plan.toUpperCase()}
 										</CardTitle>
 										<div className="mx-auto flex w-fit flex-col items-center justify-center rounded-xl bg-yellow p-6 text-lg font-bold text-black shadow-lg">
-											${price}
+											NPR {price}
 											<span>Monthly</span>
 										</div>
 									</CardHeader>
@@ -89,7 +82,7 @@ export default function page() {
 									</CardContent>
 									<CardFooter>
 										<Link
-											href="/"
+											href={`/pricing/${plan}`}
 											className="mx-auto rounded-full border border-yellow bg-background-secondary px-8 py-2 font-semibold transition-all duration-300 hover:bg-yellow hover:text-black "
 										>
 											Buy Now
