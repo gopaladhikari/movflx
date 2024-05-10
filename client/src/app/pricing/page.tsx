@@ -7,7 +7,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { site } from "@/config/site";
+import { toast } from "@/components/ui/use-toast";
+import { getPricingPlans } from "@/lib/pricing";
 import { Check } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -16,7 +17,15 @@ export const metadata: Metadata = {
 	title: "Pricing",
 };
 
-export default function page() {
+export default async function page() {
+	const res = await getPricingPlans();
+
+	if (res?.error)
+		toast({
+			variant: "destructive",
+			title: res.error,
+		});
+
 	return (
 		<>
 			<section>
@@ -39,7 +48,7 @@ export default function page() {
 						Our Pricing Strategy
 					</h1>
 					<div className="my-8 grid grid-cols-3 gap-12">
-						{site.pricingPlans.map(
+						{res?.data?.map(
 							({ id, price, plan, screens, videoQuality, videoResolution }) => (
 								<Card
 									key={id}

@@ -1,5 +1,7 @@
 import { PaymentOptions } from "@/components/auth/PaymentOptions";
 import { MaxwidthWrapper } from "@/components/common/MaxwidthWrapper";
+import { toast } from "@/components/ui/use-toast";
+import { getPaymentOptions } from "@/lib/pricing";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
@@ -22,8 +24,11 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 // TODO: Here to show the details of choosed plan and show payment options
 
-export default function Page({ params }: Params) {
+export default async function Page({ params }: Params) {
 	if (!params?.plan) return redirect("/pricing");
+
+	const res = await getPaymentOptions();
+	if (!res.ok) toast({ title: res.error, variant: "destructive" });
 
 	return (
 		<section>
@@ -34,7 +39,7 @@ export default function Page({ params }: Params) {
 					<strong> {params.plan} plan</strong> .
 				</p>
 
-				<PaymentOptions />
+				<PaymentOptions paymentMethods={res?.data} />
 			</MaxwidthWrapper>
 		</section>
 	);

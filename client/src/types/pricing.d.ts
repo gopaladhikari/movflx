@@ -11,7 +11,6 @@ interface Pricing {
 }
 
 interface Payment {
-	_id: string;
 	id: number;
 	name: string;
 	img: string;
@@ -25,4 +24,4 @@ interface IPaymentOptions extends Success {
 	data: Payment[];
 }
 
-export { IPricingPlan, IPaymentOptions };
+export { IPricingPlan, IPaymentOptions, Payment };

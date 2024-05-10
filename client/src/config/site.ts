@@ -32,33 +32,6 @@ export const site = {
 		},
 	],
 
-	pricingPlans: [
-		{
-			id: 1,
-			plan: "basic",
-			price: 799,
-			videoQuality: "Good",
-			videoResolution: "480p",
-			screens: 1,
-		},
-		{
-			id: 2,
-			plan: "standard",
-			price: 999,
-			videoQuality: "Better",
-			videoResolution: "1080p",
-			screens: 2,
-		},
-		{
-			id: 3,
-			plan: "premium",
-			price: 1299,
-			videoQuality: "Best",
-			videoResolution: "4k+HDR",
-			screens: 4,
-		},
-	],
-
 	paymentMethod: [
 		{
 			id: 1,

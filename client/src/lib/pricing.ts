@@ -1,6 +1,6 @@
 import { instance } from "@/config/axios";
 import { ApiError } from "@/types/axios-response";
-import { IPricingPlan } from "@/types/pricing";
+import { IPaymentOptions, IPricingPlan } from "@/types/pricing";
 
 const getPricingPlans = async () => {
 	try {
@@ -8,9 +8,20 @@ const getPricingPlans = async () => {
 		return { data: res.data.data, ok: true };
 	} catch (error) {
 		const message = (error as ApiError).response?.data.message;
-
 		return { error: message, ok: false };
 	}
 };
 
-export { getPricingPlans };
+const getPaymentOptions = async () => {
+	try {
+		const res = await instance.get<IPaymentOptions>(
+			"/pricing/get-payment-options"
+		);
+		return { data: res.data.data, ok: true };
+	} catch (error) {
+		const message = (error as ApiError).response?.data.message;
+		return { error: message, ok: false };
+	}
+};
+
+export { getPricingPlans, getPaymentOptions };

@@ -13,10 +13,14 @@ import {
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { PaymentSchema, PaymentType } from "@/schemas/paymentSchema";
-import { site } from "@/config/site";
 import Image from "next/image";
+import { Payment } from "@/types/pricing";
 
-export function PaymentOptions() {
+interface Props {
+	paymentMethods: Payment[] | undefined;
+}
+
+export function PaymentOptions({ paymentMethods }: Props) {
 	const form = useForm<PaymentType>({
 		resolver: zodResolver(PaymentSchema),
 	});
@@ -39,7 +43,7 @@ export function PaymentOptions() {
 									defaultValue={field.value}
 									className="flex flex-col space-y-1"
 								>
-									{site.paymentMethod.map(({ id, name, img }) => (
+									{paymentMethods?.map(({ id, name, img }) => (
 										<FormItem
 											key={id}
 											className="flex w-full items-center gap-3 border px-4"
