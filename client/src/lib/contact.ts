@@ -2,7 +2,7 @@
 
 import { instance } from "@/config/axios";
 import { TContactSchema } from "@/schemas/contactSchema";
-import { IContactResponse } from "@/types/contact.types";
+import { IContactResponse } from "@/types/contact";
 
 export const createContact = async (data: TContactSchema) => {
 	try {

@@ -1,6 +1,5 @@
 "use client";
 
-import { IComment } from "@/types/comments.type";
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -21,14 +20,14 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import { deleteCommentById } from "@/lib/comments";
-
+import { Comment } from "@/types/comments";
 import { Button } from "../ui/button";
 
 type Props = {
-	comment: IComment;
+	comment: Comment;
 };
 
-function timeAgo(dateString: string): string {
+function timeAgo(dateString: Date): string {
 	const currentDate = new Date();
 	const previousDate = new Date(dateString);
 
@@ -101,13 +100,10 @@ export async function CommentCard({ comment }: Props) {
 
 								<DialogContent>
 									<DialogHeader>
-										<DialogTitle>
-											Are you absolutely sure?
-										</DialogTitle>
+										<DialogTitle>Are you absolutely sure?</DialogTitle>
 										<DialogDescription>
-											This action cannot be undone. This will
-											permanently delete your account and remove your
-											data from our servers.
+											This action cannot be undone. This will permanently delete
+											your account and remove your data from our servers.
 										</DialogDescription>
 									</DialogHeader>
 									<DialogFooter className="justify-end">

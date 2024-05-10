@@ -1,3 +1,5 @@
+import { Success } from "./axios-response";
+
 interface Theater {
 	location: {
 		address: {
@@ -15,9 +17,6 @@ interface Theater {
 	theaterId: number;
 }
 
-export interface GetAllTheater {
-	statusCode: number;
+export interface GetAllTheater extends Success {
 	data: Theater[];
-	message: string;
-	sucess: boolean;
 }

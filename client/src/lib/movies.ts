@@ -1,5 +1,5 @@
 import { instance } from "@/config/axios";
-import { IMovieResponse, IMoviesResponse } from "@/types/movie.types";
+import { IMovieResponse, IMoviesResponse } from "@/types/movie";
 import { cache } from "react";
 
 export const getMovies = cache(async (skip = 0, limit = 8) => {

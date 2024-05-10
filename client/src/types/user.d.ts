@@ -1,3 +1,5 @@
+import { Success } from "./axios-response";
+
 export type TUser = {
 	_id: string;
 	firstName: string;
@@ -13,8 +15,8 @@ export type TUser = {
 	__v: number;
 };
 
-export type TUserResponse = {
+export interface TUserResponse extends Success {
 	data: {
 		user: TUser;
 	};
-};
+}

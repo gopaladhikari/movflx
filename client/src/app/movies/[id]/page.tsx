@@ -142,12 +142,8 @@ export default async function page({ params }: Params) {
 						</li>
 						<li>Actors : {movie?.cast?.join(", ")}</li>
 					</ul>
-					<h3 className="text-xl font-bold text-yellow">
-						Movie Storyline
-					</h3>
-					<p className="text-white/80">
-						{movie?.fullplot || movie?.plot}{" "}
-					</p>
+					<h3 className="text-xl font-bold text-yellow">Movie Storyline</h3>
+					<p className="text-white/80">{movie?.fullplot || movie?.plot} </p>
 				</MaxwidthWrapper>
 			</section>
 
@@ -174,10 +170,7 @@ export default async function page({ params }: Params) {
 						</h3>
 						<div className="grid gap-8 sm:grid-cols-2 md:grid-cols-none">
 							{res?.movies?.map((upComingMovie) => (
-								<MovieCard
-									key={upComingMovie?._id}
-									movie={upComingMovie}
-								/>
+								<MovieCard key={upComingMovie?._id} movie={upComingMovie} />
 							))}
 						</div>
 					</aside>

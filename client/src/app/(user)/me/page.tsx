@@ -17,8 +17,5 @@ export const generateMetadata = async (): Promise<Metadata> => {
 };
 
 export default async function page() {
-	const session = await getCurrentUser();
-	console.log(session);
-
 	return <main>Me</main>;
 }

@@ -5,7 +5,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { IMovie } from "@/types/movie.types";
+import { IMovie } from "@/types/movie";
+
 import { Clock, MessageCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

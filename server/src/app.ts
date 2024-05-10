@@ -32,6 +32,7 @@ import { movieRouter } from "./routes/movie.routes";
 import { commentRouter } from "./routes/comment.routes";
 import { contactRouter } from "./routes/contact.routes";
 import { theaterRouter } from "./routes/theater.routes";
+import { paymentRouter } from "./routes/pricing.routes";
 
 // routes declaration
 
@@ -44,6 +45,7 @@ app.use("/api/v1/movies", movieRouter);
 app.use("/api/v1/comments", commentRouter);
 app.use("/api/v1/contacts", contactRouter);
 app.use("/api/v1/theaters", theaterRouter);
+app.use("/api/v1/pricing", paymentRouter);
 
 export { app };
 

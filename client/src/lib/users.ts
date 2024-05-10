@@ -2,8 +2,8 @@
 
 import { instance } from "@/config/axios";
 import { TLoginSchema } from "@/schemas/loginSchema";
-import { ApiError } from "@/types/axios-errror";
-import { TUserResponse } from "@/types/user.types";
+import { ApiError } from "@/types/axios-response";
+import { TUserResponse } from "@/types/user";
 import { cookies } from "next/headers";
 
 export const registerUser = async (formData: FormData) => {

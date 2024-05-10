@@ -9,4 +9,11 @@ interface Error {
 	error?: string;
 }
 
-export interface ApiError extends AxiosError<Error> {}
+interface Success {
+	statusCode: number;
+	message: string;
+	sucess: true;
+}
+
+interface ApiError extends AxiosError<Error> {}
+export { Success, ApiError };
