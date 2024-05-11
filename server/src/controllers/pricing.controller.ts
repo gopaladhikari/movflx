@@ -31,6 +31,4 @@ const getPricingPlans = dbHandler(async (req, res) => {
 		.json(new ApiResponse(200, plans, "Payment options fetched successfully."));
 });
 
-const esewaPayment = dbHandler(async (req, res) => {});
-
-export { esewaPayment, getPricingPlans, getPaymentOptions };
+export { getPricingPlans, getPaymentOptions };

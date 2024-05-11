@@ -14,6 +14,9 @@ const {
 	DOMAIN,
 	GOOGLE_CLIENT_ID,
 	GOOGLE_CLIENT_SECRET,
+	ESEWA_SECRET_KEY,
+	ESEWA_GATEWAY_URL,
+	ESEWA_PRODUCT_CODE,
 } = process.env;
 
 const envSchema = z.object({
@@ -46,6 +49,15 @@ const envSchema = z.object({
 		.string()
 		.min(1, { message: "Google client secret is required" }),
 	bakendUri: z.string().min(1, { message: "Backend URL is required" }),
+	esewaSecretKey: z
+		.string()
+		.min(1, { message: "Esewa secret key is required" }),
+	esewaGatewayUrl: z
+		.string()
+		.min(1, { message: "Esewa gateway URL is required" }),
+	esewaProductCode: z
+		.string()
+		.min(1, { message: "Esewa product code is required" }),
 });
 
 const validatedEnv = envSchema.safeParse({
@@ -62,6 +74,9 @@ const validatedEnv = envSchema.safeParse({
 	googleClientId: GOOGLE_CLIENT_ID,
 	googleClientSecret: GOOGLE_CLIENT_SECRET,
 	bakendUri: BACKEND_URI,
+	esewaSecretKey: ESEWA_SECRET_KEY,
+	esewaGatewayUrl: ESEWA_GATEWAY_URL,
+	esewaProductCode: ESEWA_PRODUCT_CODE,
 });
 
 if (!validatedEnv.success) throw new Error(validatedEnv.error.message);
