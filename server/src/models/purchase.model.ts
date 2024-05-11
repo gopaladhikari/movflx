@@ -2,8 +2,13 @@ import { Schema, model, InferSchemaType } from "mongoose";
 
 const purchaseSchema = new Schema(
 	{
-		user_id: { type: Schema.Types.ObjectId, ref: "User" },
+		user_email: {
+			type: String,
+			required: true,
+		},
+
 		transactionId: { type: String, required: true, unique: true },
+
 		purchasePlan: {
 			type: String,
 			enum: ["basic", "standard", "premium"],

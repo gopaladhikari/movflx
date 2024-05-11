@@ -26,7 +26,10 @@ export function LoginForm() {
 		resolver: zodResolver(loginSchema),
 	});
 
-	const onSubmit: SubmitHandler<TLoginSchema> = async ({ email, password }) => {
+	const onSubmit: SubmitHandler<TLoginSchema> = async ({
+		email,
+		password,
+	}) => {
 		const res = await signIn("credentials", {
 			email,
 			password,
@@ -45,7 +48,9 @@ export function LoginForm() {
 	return (
 		<section className="max-w-screen-sm space-y-3">
 			<Form {...form}>
-				<h2 className="text-3xl font-bold md:text-4xl">Hey, Welcome Back!</h2>
+				<h2 className="text-3xl font-bold md:text-4xl">
+					Hey, Welcome Back!
+				</h2>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 					<FormField
 						control={form.control}
@@ -67,7 +72,11 @@ export function LoginForm() {
 							<FormItem>
 								<FormLabel className="font-semibold">Password</FormLabel>
 								<FormControl>
-									<Input type="password" placeholder="********" {...field} />
+									<Input
+										type="password"
+										placeholder="********"
+										{...field}
+									/>
 								</FormControl>
 								<FormMessage className="text-red-500" />
 							</FormItem>

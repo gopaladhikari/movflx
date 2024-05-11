@@ -1,12 +1,14 @@
 import { env } from "../conf/env";
 import { Pricing } from "../models/pricing.model";
+import { Purchase } from "../models/purchase.model";
 import { ApiError } from "../utils/ApiError";
+import { ApiResponse } from "../utils/ApiResponse";
 import { dbHandler } from "../utils/dbHandler";
 import crypto from "crypto";
 
 // For Esewa
 
-function getEsewaHash(amount: string, transaction_uuid: string) {
+function getEsewaHash(amount: number, transaction_uuid: string) {
 	const data = `total_amount=${amount},transaction_uuid=${transaction_uuid},product_code=${env.esewaProductCode}`;
 
 	const hash = crypto
@@ -14,63 +16,14 @@ function getEsewaHash(amount: string, transaction_uuid: string) {
 		.update(data)
 		.digest("base64");
 
-	return {
-		signature: hash,
-		signed_field_names: "total_amount,transaction_uuid,product_code",
-	};
+	return hash;
 }
 
-async function verifyEsewaPayment(encoded: string) {
-	const decoded = atob(encoded);
-
-	const decodedData = JSON.parse(decoded);
-	console.log("decoded", decoded);
-	console.log("decodedData", decodedData);
-
-	const message = `transaction_code=${decodedData.transaction_code},status=${decodedData.status},total_amount=${decodedData.total_amount},transaction_uuid=${decodedData.transaction_uuid},product_code=${env.esewaProductCode},signed_field_names=${decodedData.signed_field_names}`;
-
-	console.log("Test");
-	const hash = crypto
-		.createHmac("sha256", env.esewaSecretKey)
-		.update(message)
-		.digest("base64");
-
-	console.log("verifyEsewaPayment hash", hash);
-
-	try {
-		const response = await fetch(
-			env.esewaGatewayUrl.concat(
-				`/api/epay/transaction/status/?product_code=${env.esewaProductCode}&total_amount=${decodedData.total_amount}&transaction_uuid=${decodedData.transaction_uuid}`
-			),
-			{
-				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-				},
-			}
-		);
-		const data = await response.json();
-
-		console.log("verifyEsewaPayment data", data);
-
-		if (
-			data.status !== "COMPLETE" ||
-			data.transaction_uuid !== decodedData.transaction_uuid ||
-			Number(data.total_amount) !== Number(decodedData.total_amount)
-		)
-			return { message: "Invalid Info", decodedData };
-
-		return data;
-	} catch (error) {
-		console.error(`VerifyEsewaPayment error ${error}`);
-		return null;
-	}
-}
-
-const esewaPayment = dbHandler(async (req, res) => {
+const createEsewaPayment = dbHandler(async (req, res) => {
 	const { plan } = req.params;
+	const { email } = req.body;
 
-	if (!plan)
+	if (!plan || !email)
 		return res
 			.status(400)
 			.json(new ApiError(400, "All fields are required."));
@@ -83,20 +36,65 @@ const esewaPayment = dbHandler(async (req, res) => {
 	if (!option)
 		return res.status(400).json(new ApiError(400, "Invalid plan."));
 
-	const { signature } = getEsewaHash(
-		option.price.toString(),
-		option.id.toString()
-	);
+	const uuid = crypto.randomUUID().toString();
 
-	const response = await verifyEsewaPayment(signature);
+	const signature = getEsewaHash(option.price, uuid);
 
-	if (!response)
-		return res.status(400).json(new ApiError(400, "Invalid signature."));
+	const formData = {
+		amount: option.price,
+		failure_url: env.bakendUri.concat("/api/v1/payment/esewa/failure"),
+		product_delivery_charge: "0",
+		product_service_charge: "0",
+		product_code: env.esewaProductCode,
+		signature,
+		signed_field_names: "total_amount,transaction_uuid,product_code",
+		success_url: env.bakendUri.concat("/api/v1/payment/esewa/success"),
+		tax_amount: 0,
+		total_amount: option.price,
+		transaction_uuid: uuid,
+	};
 
-	res.status(200).json({
-		message: "Payment options fetched successfully.",
-		paymentOptions: option,
+	const purchase = await Purchase.create({
+		user_email: email,
+		transactionId: uuid,
+		purchasePlan: plan,
+		amount: option.price,
+		paymentMethod: "Esewa",
+		status: "pending",
+		paymentDate: new Date(),
 	});
+
+	if (!purchase)
+		return res
+			.status(500)
+			.json(new ApiError(500, "Failed to create purchase."));
+
+	res
+		.status(200)
+		.json(new ApiResponse(200, formData, "Esewa payment data"));
 });
 
-export { esewaPayment };
+const esewaSuccess = dbHandler(async (req, res) => {
+	const { data } = req.query;
+
+	const decodedData = JSON.parse(
+		Buffer.from(data as string, "base64").toString()
+	);
+	console.log(decodedData);
+
+	if (decodedData.status !== "COMPLETE")
+		return res.redirect(env.domain.concat("/pricing/failure"));
+
+	const purchase = await Purchase.findOneAndUpdate(
+		{ transactionId: decodedData.transaction_uuid },
+		{ status: "success" },
+		{ new: true }
+	);
+
+	if (!purchase)
+		return res.redirect(env.domain.concat("/pricing/failure"));
+
+	res.redirect(env.domain.concat("/pricing/success"));
+});
+
+export { createEsewaPayment, esewaSuccess };

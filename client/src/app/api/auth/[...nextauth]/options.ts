@@ -76,7 +76,7 @@ export const nextAuthOptions: NextAuthOptions = {
 				try {
 					const res = await instance.post("/users/auth/google", userData);
 					const token = res?.data.data.token;
-					instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+
 					cookieStore.set("token", token, {
 						httpOnly: true,
 						sameSite: "strict",
@@ -91,7 +91,9 @@ export const nextAuthOptions: NextAuthOptions = {
 
 			return false;
 		},
-		async session({ session, token }) {
+		async session({ session, token, user }) {
+			console.log("user from session", user);
+
 			if (session?.user)
 				return {
 					...session,
@@ -103,6 +105,7 @@ export const nextAuthOptions: NextAuthOptions = {
 
 			return session;
 		},
+
 		async jwt({ token, user }) {
 			if (token && user)
 				return {

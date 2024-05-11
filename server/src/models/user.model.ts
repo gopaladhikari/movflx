@@ -25,6 +25,7 @@ export const userSchema = new Schema(
 			index: true,
 			lowercase: true,
 			trim: true,
+			unique: true,
 		},
 
 		avatar: {
@@ -79,7 +80,9 @@ userSchema.methods.comparePassword = async function (password: string) {
 	return await bcrypt.compare(password, this.password);
 };
 
-export interface IUser extends Document, InferSchemaType<typeof userSchema> {
+export interface IUser
+	extends Document,
+		InferSchemaType<typeof userSchema> {
 	generateJwtToken(): string;
 	comparePassword(password: string): Promise<boolean>;
 }

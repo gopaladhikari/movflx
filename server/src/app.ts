@@ -55,6 +55,7 @@ export { app };
 // TODO: Subscription feature payment gateway paypal, esewa, khalti
 // TODO: watch list watch history
 // TODO: Add playlist, watch later and liked movies
+// TODO: User can have on subscription at a time. If registered for new subscription, previous subscription will be cancelled.
 /**
  *  * When the user pays for the subscription, user should be allowed to watch movies. Movies will be received from tmdb.
  */

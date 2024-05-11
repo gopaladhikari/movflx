@@ -15,20 +15,60 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { PaymentSchema, PaymentType } from "@/schemas/paymentSchema";
 import Image from "next/image";
 import { Payment } from "@/types/pricing";
+import { createEsewaPayment } from "@/lib/payment";
+import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { toast } from "../ui/use-toast";
+
+const esewaGatewayUrl = process.env.NEXT_PUBLIC_ESEWA_GATEWAY_URL;
 
 interface Props {
 	paymentMethods: Payment[] | undefined;
+	plan: string;
 }
 
-export function PaymentOptions({ paymentMethods }: Props) {
+export function PaymentOptions({ paymentMethods, plan }: Props) {
+	const session = useSession();
+
 	const form = useForm<PaymentType>({
 		resolver: zodResolver(PaymentSchema),
 	});
 
-	const onSubmit: SubmitHandler<PaymentType> = async (data) => {
-		console.log(data);
-	};
+	const onSubmit: SubmitHandler<PaymentType> = async (option) => {
+		if (session.status === "unauthenticated") {
+			toast({
+				title: "Unauthenticated",
+				description: "You need to be logged in to make a payment.",
+				variant: "destructive",
+			});
+			return;
+		}
 
+		if (option.name === "Esewa") {
+			const email = session.data?.user?.email;
+			const res = await createEsewaPayment(plan, email);
+			if (res?.sucess) {
+				const paymentForm = document.createElement("form");
+				paymentForm.setAttribute("method", "post");
+				paymentForm.setAttribute("action", String(esewaGatewayUrl));
+
+				Object.entries(res.data).forEach(([key, value]) => {
+					const input = document.createElement("input");
+					input.setAttribute("type", "hidden");
+					input.setAttribute("name", key);
+					input.setAttribute("value", String(value));
+					paymentForm.appendChild(input);
+				});
+				document.body.appendChild(paymentForm);
+				paymentForm.submit();
+			} else
+				toast({
+					title: "Payment failed",
+					description: res?.message || "Something went wrong",
+					variant: "destructive",
+				});
+		}
+	};
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -73,9 +113,16 @@ export function PaymentOptions({ paymentMethods }: Props) {
 						</FormItem>
 					)}
 				/>
-				<Button type="submit" variant="yellow" className="w-full">
-					Continue
-				</Button>
+				{form.formState.isSubmitting ? (
+					<Button disabled variant="yellow" className="w-full">
+						<Loader2 className="mr-2 size-4 animate-spin" />
+						Please wait
+					</Button>
+				) : (
+					<Button variant="yellow" type="submit" className="w-full">
+						Continue
+					</Button>
+				)}
 			</form>
 		</Form>
 	);
