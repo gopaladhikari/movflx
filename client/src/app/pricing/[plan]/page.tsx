@@ -22,8 +22,6 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 	return { title };
 }
 
-// TODO: Here to show the details of choosed plan and show payment options
-
 export default async function Page({ params }: Params) {
 	if (!params?.plan) return redirect("/pricing");
 
@@ -35,8 +33,7 @@ export default async function Page({ params }: Params) {
 			<MaxwidthWrapper className="mt-16 max-w-lg space-y-4 border p-6 md:py-16">
 				<h1 className="text-center text-3xl font-bold">Payment Plan</h1>
 				<p className="text-center">
-					Choose for payment method below for
-					<strong> {params.plan} plan</strong> .
+					How do you want to pay ?<strong> {params.plan} plan</strong> .
 				</p>
 
 				<PaymentOptions paymentMethods={res?.data} />
