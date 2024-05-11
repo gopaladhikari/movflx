@@ -25,7 +25,8 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params }: Params) {
-	if (!params?.plan) return redirect("/pricing");
+	if (!params?.plan || params.plan === "undefined")
+		return redirect("/pricing");
 
 	const res = await getPaymentOptions();
 
