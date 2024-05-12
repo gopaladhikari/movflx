@@ -43,9 +43,12 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const { common } = instance.defaults.headers;
+
 	const token = cookies().get("token")?.value;
-	if (token)
-		instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+
+	if (token && !common.Authorization)
+		common.Authorization = `Bearer ${token}`;
 
 	return (
 		<html lang="en" className="dark" suppressHydrationWarning>

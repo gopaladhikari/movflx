@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { getAllMovies, getMovieById } from "../controllers/movie.controller";
+import {
+	getAllMovies,
+	getMovieById,
+} from "../controllers/movie.controller";
 
 const movieRouter = Router();
 

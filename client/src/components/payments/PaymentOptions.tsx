@@ -15,9 +15,10 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { PaymentSchema, PaymentType } from "@/schemas/paymentSchema";
 import Image from "next/image";
 import { Payment } from "@/types/pricing";
-import { createEsewaPayment } from "@/lib/payment";
+import { createEsewaPayment, createKhaltiPayment } from "@/lib/payment";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { toast } from "../ui/use-toast";
 
 const esewaGatewayUrl = process.env.NEXT_PUBLIC_ESEWA_GATEWAY_URL;
@@ -29,6 +30,14 @@ interface Props {
 
 export function PaymentOptions({ paymentMethods, plan }: Props) {
 	const session = useSession();
+
+	const router = useRouter();
+
+	let fullName: string = "Me";
+
+	if (session?.data?.user?.name) fullName = session?.data?.user?.name;
+	else if (session?.data?.user?.firstName && session?.data?.user?.lastName)
+		fullName = `${session?.data?.user?.firstName} ${session?.data?.user?.lastName}`;
 
 	const form = useForm<PaymentType>({
 		resolver: zodResolver(PaymentSchema),
@@ -47,6 +56,7 @@ export function PaymentOptions({ paymentMethods, plan }: Props) {
 		if (option.name === "Esewa") {
 			const email = session.data?.user?.email;
 			const res = await createEsewaPayment(plan, email);
+
 			if (res?.sucess) {
 				const paymentForm = document.createElement("form");
 				paymentForm.setAttribute("method", "post");
@@ -64,7 +74,19 @@ export function PaymentOptions({ paymentMethods, plan }: Props) {
 			} else
 				toast({
 					title: "Payment failed",
-					description: res?.message || "Something went wrong",
+					description:
+						res?.message || String(res) || "Something went wrong",
+					variant: "destructive",
+				});
+		} else if (option.name === "Khalti") {
+			const email = session.data?.user?.email;
+			const res = await createKhaltiPayment(plan, email, fullName);
+
+			if (res.ok) router.push(String(res?.data?.payment_url));
+			else
+				toast({
+					title: "Payment failed",
+					description: res?.error || "Something went wrong",
 					variant: "destructive",
 				});
 		}

@@ -80,7 +80,6 @@ const esewaSuccess = dbHandler(async (req, res) => {
 	const decodedData = JSON.parse(
 		Buffer.from(data as string, "base64").toString()
 	);
-	console.log(decodedData);
 
 	if (decodedData.status !== "COMPLETE")
 		return res.redirect(env.domain.concat("/pricing/failure"));
@@ -97,4 +96,172 @@ const esewaSuccess = dbHandler(async (req, res) => {
 	res.redirect(env.domain.concat("/pricing/success"));
 });
 
-export { createEsewaPayment, esewaSuccess };
+const esewaFailure = dbHandler(async (req, res) => {
+	res.redirect(env.domain.concat("/pricing/failure"));
+});
+
+type KhaltiData = {
+	pidx: string;
+	payment_url: string;
+	expires_at: Date;
+	expires_in: number;
+};
+
+type KhaltiError = {
+	customer_info: { [key: string]: string[] };
+	error_key: string;
+};
+
+type KhaltiResponse = KhaltiError | KhaltiData;
+
+const createKhaltiPayment = dbHandler(async (req, res) => {
+	const { plan } = req.params;
+	const { email, name } = req.body;
+
+	if (!plan || !email || !name)
+		return res
+			.status(400)
+			.json(new ApiError(400, "All fields are required."));
+
+	const pricing = await Pricing.find();
+	const paymentOptions = pricing[0].pricing_plans;
+
+	const option = paymentOptions.find((option) => option.plan === plan);
+
+	if (!option)
+		return res.status(400).json(new ApiError(400, "Invalid plan."));
+
+	const uuid = crypto.randomUUID().toString();
+
+	const formData = {
+		return_url: env.bakendUri.concat("/api/v1/payment/khalti/callback"),
+		website_url: env.domain,
+		amount: option.price * 100,
+		purchase_order_id: uuid,
+		purchase_order_name: option.plan,
+		customer_info: { email, name },
+	};
+
+	const url = env.khaltiApi.concat("/epayment/initiate/");
+
+	try {
+		const response = await fetch(url, {
+			method: "POST",
+			headers: {
+				Authorization: `key ${env.khaltiKey}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(formData),
+		});
+
+		const data: KhaltiResponse = await response.json();
+
+		console.log("data from createKhaltiPayment", data);
+
+		if ("error_key" in data) {
+			const message = Object.entries(data.customer_info).map(
+				([key, value]) => `${key}: ${value[0]}`
+			);
+
+			return res
+				.status(500)
+				.json(new ApiError(500, message[0], data.error_key));
+		}
+
+		const purchase = await Purchase.findOne({
+			user_email: email,
+			status: "pending",
+			purchasePlan: plan,
+		});
+
+		if (purchase)
+			return res
+				.status(200)
+				.json(
+					new ApiResponse(200, data, "Khalti intitialzed successfully.")
+				);
+
+		const newPurchase = await Purchase.create({
+			user_email: email,
+			transactionId: uuid,
+			purchasePlan: plan,
+			amount: option.price,
+			paymentMethod: "Khalti",
+			pidx: data.pidx,
+		});
+
+		if (!newPurchase)
+			return res
+				.status(500)
+				.json(new ApiError(500, "Failed to create purchase."));
+
+		res.redirect(data.payment_url);
+	} catch (error) {
+		res
+			.status(500)
+			.json(
+				new ApiError(
+					500,
+					(error as Error).message || "Something went wrong"
+				)
+			);
+	}
+});
+
+const khaltiSuccess = dbHandler(async (req, res) => {
+	const { pidx, status, transaction_id } = req.query;
+
+	console.log(pidx, status, transaction_id);
+
+	if (status !== "COMPLETED")
+		return res.redirect(env.domain.concat("/pricing/failure"));
+
+	const url = env.khaltiApi.concat("/epayment/lookup/");
+
+	try {
+		const response = await fetch(url, {
+			method: "POST",
+			headers: {
+				Authorization: `key ${env.khaltiKey}`,
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ pidx }),
+		});
+
+		const data = await response.json();
+
+		console.log("data from khalti success", data);
+
+		if (data.status !== "COMPLETED")
+			return res.redirect(env.domain.concat("/pricing/failure"));
+
+		const purchase = await Purchase.findOneAndUpdate(
+			{
+				pidx,
+			},
+			{
+				status: "success",
+				transactionId: transaction_id,
+				updatedAt: new Date(),
+			},
+			{
+				new: true,
+			}
+		);
+
+		if (!purchase)
+			return res.redirect(env.domain.concat("/pricing/failure"));
+
+		res.redirect(env.domain.concat("/pricing/success"));
+	} catch (error) {
+		res.redirect(env.domain.concat("/pricing/failure"));
+	}
+});
+
+export {
+	createEsewaPayment,
+	esewaSuccess,
+	createKhaltiPayment,
+	khaltiSuccess,
+	esewaFailure,
+};

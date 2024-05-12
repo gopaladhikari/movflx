@@ -91,9 +91,7 @@ export const nextAuthOptions: NextAuthOptions = {
 
 			return false;
 		},
-		async session({ session, token, user }) {
-			console.log("user from session", user);
-
+		async session({ session, token }) {
 			if (session?.user)
 				return {
 					...session,
@@ -123,11 +121,13 @@ export const nextAuthOptions: NextAuthOptions = {
 
 			try {
 				const res = await instance.post("/users/logout");
-				if (res.data) {
+
+				if (res.data.sucess) {
 					cookieStore.delete("token");
-					instance.defaults.headers.common.Authorization = "";
+					delete instance.defaults.headers.common.Authorization;
+					return res.data;
 				}
-				return res.data;
+				return false;
 			} catch (error) {
 				return (error as AxiosError).message;
 			}

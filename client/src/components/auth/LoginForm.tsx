@@ -1,7 +1,6 @@
 "use client";
 
 import ReCAPTCHA from "react-google-recaptcha";
-import GoogleButton from "react-google-button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, TLoginSchema } from "@/schemas/loginSchema";
@@ -18,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "../ui/use-toast";
+import { GoogleButton } from "../icons/GoogleButton";
 
 const captchaKey = process.env.NEXT_PUBLIC_CAPTCHA_KEY;
 
@@ -109,13 +109,11 @@ export function LoginForm() {
 			</Form>
 			<div className="h-[2px] w-full bg-slate-300" />
 			<GoogleButton
-				className="!w-full"
-				onClick={async () => {
-					await signIn("google", {
-						redirect: true,
+				onClick={() =>
+					signIn("google", {
 						callbackUrl: "/me",
-					});
-				}}
+					})
+				}
 			/>
 		</section>
 	);

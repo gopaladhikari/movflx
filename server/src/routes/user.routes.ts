@@ -22,7 +22,7 @@ userRouter
 	.route("/login")
 	.post(passport.authenticate("local", { session: false }), loginUser);
 
-userRouter.post("/auth/google", loginWithGoogle);
+userRouter.route("/auth/google").post(loginWithGoogle);
 
 userRouter.route("/verify-users-email").post(verifyUsersEmail);
 

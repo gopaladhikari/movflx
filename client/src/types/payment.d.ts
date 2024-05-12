@@ -15,3 +15,12 @@ interface CreateEsewaPaymentResponse extends Success {
 		transaction_uuid: number;
 	};
 }
+
+export interface KhaltiData extends Success {
+	data: {
+		pidx: string;
+		payment_url: string;
+		expires_at: Date;
+		expires_in: number;
+	};
+}

@@ -7,7 +7,11 @@ const purchaseSchema = new Schema(
 			required: true,
 		},
 
-		transactionId: { type: String, required: true, unique: true },
+		pidx: {
+			type: String, // Only for Khalti dudes
+		},
+
+		transactionId: { type: String },
 
 		purchasePlan: {
 			type: String,
