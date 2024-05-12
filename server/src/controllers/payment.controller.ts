@@ -156,8 +156,6 @@ const createKhaltiPayment = dbHandler(async (req, res) => {
 
 		const data: KhaltiResponse = await response.json();
 
-		console.log("data from createKhaltiPayment", data);
-
 		if ("error_key" in data) {
 			const message = Object.entries(data.customer_info).map(
 				([key, value]) => `${key}: ${value[0]}`
@@ -174,16 +172,18 @@ const createKhaltiPayment = dbHandler(async (req, res) => {
 			purchasePlan: plan,
 		});
 
-		if (purchase)
+		if (purchase) {
+			purchase.pidx = data.pidx;
+			await purchase.save();
 			return res
 				.status(200)
 				.json(
 					new ApiResponse(200, data, "Khalti intitialzed successfully.")
 				);
+		}
 
 		const newPurchase = await Purchase.create({
 			user_email: email,
-			transactionId: uuid,
 			purchasePlan: plan,
 			amount: option.price,
 			paymentMethod: "Khalti",
@@ -195,7 +195,11 @@ const createKhaltiPayment = dbHandler(async (req, res) => {
 				.status(500)
 				.json(new ApiError(500, "Failed to create purchase."));
 
-		res.redirect(data.payment_url);
+		res
+			.status(200)
+			.json(
+				new ApiResponse(200, data, "Khalti intitialzed successfully.")
+			);
 	} catch (error) {
 		res
 			.status(500)
@@ -211,9 +215,7 @@ const createKhaltiPayment = dbHandler(async (req, res) => {
 const khaltiSuccess = dbHandler(async (req, res) => {
 	const { pidx, status, transaction_id } = req.query;
 
-	console.log(pidx, status, transaction_id);
-
-	if (status !== "COMPLETED")
+	if (status !== "Completed")
 		return res.redirect(env.domain.concat("/pricing/failure"));
 
 	const url = env.khaltiApi.concat("/epayment/lookup/");
@@ -230,9 +232,7 @@ const khaltiSuccess = dbHandler(async (req, res) => {
 
 		const data = await response.json();
 
-		console.log("data from khalti success", data);
-
-		if (data.status !== "COMPLETED")
+		if (data.status !== "Completed")
 			return res.redirect(env.domain.concat("/pricing/failure"));
 
 		const purchase = await Purchase.findOneAndUpdate(
@@ -242,7 +242,6 @@ const khaltiSuccess = dbHandler(async (req, res) => {
 			{
 				status: "success",
 				transactionId: transaction_id,
-				updatedAt: new Date(),
 			},
 			{
 				new: true,
