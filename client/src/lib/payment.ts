@@ -40,8 +40,6 @@ const createKhaltiPayment = async (
 			{ email, name }
 		);
 
-		console.log("res", res.data);
-
 		return { data: res.data.data, ok: true };
 	} catch (error) {
 		const err = error as ApiError;
