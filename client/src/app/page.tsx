@@ -2,6 +2,8 @@ import { HomepageHeroSection } from "@/components/Home/HeroSection";
 import { MaxwidthWrapper } from "@/components/common/MaxwidthWrapper";
 import { MovieCard } from "@/components/movie/MovieCard";
 import { getMovies } from "@/lib/movies";
+import { Separator } from "@radix-ui/react-dropdown-menu";
+import { Clapperboard, SwitchCamera } from "lucide-react";
 import Image from "next/image";
 
 export default async function page() {
@@ -16,7 +18,9 @@ export default async function page() {
 			<section>
 				<MaxwidthWrapper className="my-8 space-y-4 md:my-16">
 					<p className="text-sm font-bold text-yellow">ONLINE STREAMING</p>
-					<h3 className="text-xl font-bold md:text-3xl">Upcoming Movies</h3>
+					<h3 className="text-xl font-bold md:text-3xl">
+						Upcoming Movies
+					</h3>
 					<div className="grid gap-6 sm:grid-cols-2 md:gap-12 lg:grid-cols-3">
 						{res?.movies?.slice(0, 6).map((movie) => (
 							<MovieCard key={movie?._id} movie={movie} />
@@ -42,29 +46,31 @@ export default async function page() {
 						<h3 className="text-3xl font-bold md:text-4xl">
 							Download Your Shows Watch Offline.
 						</h3>
-						<p>Get the latest movies and shows in your phone. Watch offline.</p>
+						<p>
+							Get the latest movies and shows in your phone. Watch offline.
+						</p>
 						<div className="flex items-center gap-6">
 							<span className="rounded-full border border-yellow p-4 shadow-lg transition-colors hover:bg-yellow hover:text-black">
-								icon
+								<Clapperboard />
 							</span>
 							<div className="space-y-2">
 								<h3 className="text-xl font-bold">Enjoy on Your TV.</h3>
 								<p className="max-w-sm text-sm">
-									Lorem ipsum dolor sit amet, consecetur adipiscing elit, sed do
-									eiusmod tempor.
+									Lorem ipsum dolor sit amet, consecetur adipiscing elit,
+									sed do eiusmod tempor.
 								</p>
 							</div>
 						</div>
-						divider
+						<hr />
 						<div className="flex items-center gap-6">
 							<span className="rounded-full border border-yellow p-4 shadow-lg transition-colors hover:bg-yellow hover:text-black">
-								camera icon
+								<SwitchCamera />
 							</span>
 							<div className="space-y-2">
 								<h3 className="text-xl font-bold">Watch Everywhere.</h3>
 								<p className="max-w-sm text-sm">
-									Lorem ipsum dolor sit amet, consecetur adipiscing elit, sed do
-									eiusmod tempor.
+									Lorem ipsum dolor sit amet, consecetur adipiscing elit,
+									sed do eiusmod tempor.
 								</p>
 							</div>
 						</div>
@@ -100,7 +106,9 @@ export default async function page() {
 						<h3 className="text-3xl font-bold md:text-4xl">
 							Live Movie & TV Shows For Friends & Family
 						</h3>
-						<p>Get the latest movies and shows in your phone. Watch offline.</p>
+						<p>
+							Get the latest movies and shows in your phone. Watch offline.
+						</p>
 						button
 					</div>
 
