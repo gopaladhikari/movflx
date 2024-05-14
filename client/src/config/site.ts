@@ -31,17 +31,4 @@ export const site = {
 			href: "/contact",
 		},
 	],
-
-	paymentMethod: [
-		{
-			id: 1,
-			name: "Esewa",
-			img: "/esewa.png",
-		},
-		{
-			id: 2,
-			name: "Khalti",
-			img: "/khalti.png",
-		},
-	],
 };

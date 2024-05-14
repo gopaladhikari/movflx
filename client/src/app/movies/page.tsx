@@ -23,7 +23,7 @@ type SearchParams = {
 	};
 };
 
-export default async function page({ searchParams }: SearchParams) {
+export default async function Page({ searchParams }: SearchParams) {
 	const currentPage = searchParams?.page;
 	if (!currentPage || +currentPage < 1) return redirect("/movies?page=1");
 

@@ -2,7 +2,6 @@ import { HomepageHeroSection } from "@/components/Home/HeroSection";
 import { MaxwidthWrapper } from "@/components/common/MaxwidthWrapper";
 import { MovieCard } from "@/components/movie/MovieCard";
 import { getMovies } from "@/lib/movies";
-import { Separator } from "@radix-ui/react-dropdown-menu";
 import { Clapperboard, SwitchCamera } from "lucide-react";
 import Image from "next/image";
 
