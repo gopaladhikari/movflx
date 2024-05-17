@@ -8,6 +8,9 @@ import {
 	requestForgotPassword,
 	resetForgotPassword,
 	verifyUsersEmail,
+	updateAvatar,
+	updateUser,
+	refreshJwtToken,
 } from "../controllers/user.controller";
 import { upload } from "../middlewares/multer.middleware";
 import passport from "passport";
@@ -47,5 +50,19 @@ userRouter
 userRouter
 	.route("/me")
 	.get(passport.authenticate("jwt", { session: false }), getMe);
+
+userRouter
+	.route("/update-avatar")
+	.post(
+		passport.authenticate("jwt", { session: false }),
+		upload.single("avatar"),
+		updateAvatar
+	);
+
+userRouter
+	.route("/update-user")
+	.post(passport.authenticate("jwt", { session: false }), updateUser);
+
+userRouter.route("/refesh-jwt-token").post(refreshJwtToken);
 
 export { userRouter };

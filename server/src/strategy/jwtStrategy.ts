@@ -3,6 +3,7 @@ import {
 	Strategy as JwtStrategy,
 	StrategyOptions,
 } from "passport-jwt";
+import { TokenExpiredError } from "jsonwebtoken";
 
 import passport from "passport";
 import { User } from "../models/user.model";
@@ -20,6 +21,8 @@ passport.use(
 			if (!user) return done(null, false);
 			return done(null, user);
 		} catch (error) {
+			if (error instanceof TokenExpiredError)
+				return done("Token expired", false);
 			return done(error, false);
 		}
 	})
