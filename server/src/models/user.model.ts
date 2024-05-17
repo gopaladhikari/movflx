@@ -57,6 +57,11 @@ export const userSchema = new Schema(
 			type: Boolean,
 			default: false,
 		},
+
+		JwtToken: {
+			type: String,
+			required: true,
+		},
 	},
 	{
 		timestamps: true,

@@ -7,6 +7,7 @@ import { dbHandler } from "../utils/dbHandler";
 import { sendMail } from "../utils/sendMail";
 import { CookieOptions } from "express";
 import { env } from "../conf/env";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 const cookieOptions: CookieOptions = {
 	httpOnly: true,
@@ -70,6 +71,11 @@ const loginUser = dbHandler(async (req, res) => {
 	const user = req.user;
 
 	const token = user?.generateJwtToken();
+
+	if (!token || !user)
+		return res.status(400).json(new ApiError(400, "Login failed."));
+
+	user.JwtToken = token;
 
 	return res
 		.status(200)
@@ -188,6 +194,84 @@ const resetForgotPassword = dbHandler(async (req, res) => {
 	}
 });
 
+const updateAvatar = dbHandler(async (req, res) => {
+	const { email } = req.body;
+
+	const avatarPath = req.file?.path;
+
+	if (!email || !avatarPath)
+		return res
+			.status(400)
+			.json(new ApiError(400, "Invalid email or avatar path"));
+
+	const user = await User.findOne({ email });
+
+	if (!user)
+		return res.status(404).json(new ApiError(404, "User not found"));
+
+	const avatar = await uploadOnCloudinary(avatarPath);
+
+	if (!avatar) {
+		fs.unlinkSync(avatarPath);
+		return res.status(500).json(new ApiError(500, "File upload failed."));
+	}
+
+	user.avatar = avatar;
+	await user.save();
+
+	res.status(200).json(new ApiResponse(200, user, "Avatar updated"));
+});
+
+const updateUser = dbHandler(async (req, res) => {
+	const { id } = req.params;
+
+	const { firstName, lastName, phoneNumber } = req.body;
+
+	if (!id || !firstName || !lastName || !phoneNumber)
+		return res
+			.status(400)
+			.json(new ApiError(400, "All fields are required."));
+
+	const user = await User.findByIdAndUpdate(
+		id,
+		{
+			firstName,
+			lastName,
+			phoneNumber,
+		},
+		{
+			new: true,
+		}
+	).select("-password");
+
+	if (!user)
+		return res.status(404).json(new ApiError(404, "User not found"));
+});
+
+const refreshJwtToken = dbHandler(async (req, res) => {
+	const { token } = req.query;
+
+	if (!token)
+		return res.status(400).json(new ApiError(400, "Token is required"));
+
+	const decoded = jwt.verify(String(token), env.jwtSecret) as JwtPayload;
+
+	const user = await User.findById(decoded._id);
+
+	if (!user)
+		return res.status(404).json(new ApiError(404, "Invalid token"));
+
+	if (user.JwtToken !== token)
+		return res.status(400).json(new ApiError(400, "Invalid token"));
+
+	const newToken = user.generateJwtToken();
+	user.JwtToken = newToken;
+
+	await user.save();
+
+	res.status(200).json(new ApiResponse(200, newToken, "Token refreshed"));
+});
+
 export {
 	registerUser,
 	loginUser,
@@ -197,4 +281,7 @@ export {
 	googleLoginCallback,
 	requestForgotPassword,
 	resetForgotPassword,
+	updateAvatar,
+	updateUser,
+	refreshJwtToken,
 };
