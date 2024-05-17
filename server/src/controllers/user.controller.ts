@@ -6,6 +6,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary";
 import { dbHandler } from "../utils/dbHandler";
 import { sendMail } from "../utils/sendMail";
 import { CookieOptions } from "express";
+import { env } from "../conf/env";
 
 const cookieOptions: CookieOptions = {
 	httpOnly: true,
@@ -25,7 +26,9 @@ const registerUser = dbHandler(async (req, res) => {
 		!phoneNumber ||
 		!avatarLocalPath
 	)
-		return res.status(400).json(new ApiError(400, "All fields are required."));
+		return res
+			.status(400)
+			.json(new ApiError(400, "All fields are required."));
 
 	const existedUser = await User.findOne({ email });
 
@@ -54,7 +57,9 @@ const registerUser = dbHandler(async (req, res) => {
 	const user = await User.findById(createdUser?._id).select("-password");
 
 	if (!user)
-		return res.status(400).json(new ApiError(400, "User creation failed."));
+		return res
+			.status(400)
+			.json(new ApiError(400, "User creation failed."));
 
 	await sendMail(user.email, "verify", user._id);
 
@@ -72,45 +77,25 @@ const loginUser = dbHandler(async (req, res) => {
 		.json(new ApiResponse(200, { user, token }, "Login sucessfull"));
 });
 
-const loginWithGoogle = dbHandler(async (req, res) => {
-	const { firstName, lastName, avatar, email, isEmailVerified } = req.body;
+const googleLoginCallback = dbHandler(async (req, res) => {
+	const { code } = req.query;
 
-	if (!firstName || !lastName || !avatar || !email)
-		return res.status(400).json(new ApiError(400, "All fields are required."));
+	if (!code)
+		return res.status(400).json(new ApiError(400, "Invalid code."));
 
-	const user = await User.findOne({ email }).select("-password");
-
-	if (user) {
-		const token = user.generateJwtToken();
-		return res
-			.status(200)
-			.json(new ApiResponse(200, { user, token }, "Login successful"));
+	try {
+		console.log("Hello");
+	} catch (error) {
+		console.error("Error:", error);
+		res.redirect(env.domain.concat("/auth/login"));
 	}
-
-	const newUser = await User.create({
-		firstName,
-		lastName,
-		email,
-		avatar,
-		isEmailVerified,
-	});
-
-	if (!newUser)
-		return res.status(400).json(new ApiError(400, "User creation failed."));
-
-	const token = newUser.generateJwtToken();
-
-	await newUser.save({ validateBeforeSave: false });
-
-	return res
-		.status(201)
-		.json(new ApiResponse(201, { user: newUser, token }, "User created"));
 });
 
 const getMe = dbHandler(async (req, res) => {
 	const user = req.user;
 
-	if (!user) return res.status(404).json(new ApiError(404, "User not found."));
+	if (!user)
+		return res.status(404).json(new ApiError(404, "User not found."));
 
 	res
 		.status(200)
@@ -134,7 +119,8 @@ const verifyUsersEmail = dbHandler(async (req, res) => {
 		emailVerificationTokenExpiry: { $gt: Date.now() },
 	});
 
-	if (!user) return res.status(404).json(new ApiError(404, "User not found."));
+	if (!user)
+		return res.status(404).json(new ApiError(404, "User not found."));
 
 	user.isEmailVerified = true;
 	user.emailVerificationToken = undefined;
@@ -152,7 +138,8 @@ const requestForgotPassword = dbHandler(async (req, res) => {
 	try {
 		const user = await User.findOne({ email });
 
-		if (!user) return res.status(400).json(new ApiError(400, "User not found"));
+		if (!user)
+			return res.status(400).json(new ApiError(400, "User not found"));
 
 		await sendMail(user.email, "reset", user._id);
 
@@ -169,7 +156,9 @@ const resetForgotPassword = dbHandler(async (req, res) => {
 	const { password, confirmPassword } = req.body;
 
 	if (password !== confirmPassword)
-		return res.status(400).json(new ApiError(400, "Passwords do not match"));
+		return res
+			.status(400)
+			.json(new ApiError(400, "Passwords do not match"));
 
 	if (!token)
 		return res.status(400).json(new ApiError(400, "Token is required"));
@@ -205,7 +194,7 @@ export {
 	getMe,
 	logoutUser,
 	verifyUsersEmail,
-	loginWithGoogle,
+	googleLoginCallback,
 	requestForgotPassword,
 	resetForgotPassword,
 };

@@ -1,4 +1,4 @@
-// ! It stays here but this is not being used
+// ! It stays here it is not used.
 
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
@@ -10,10 +10,15 @@ passport.use(
 		{
 			clientID: env.googleClientId,
 			clientSecret: env.googleClientSecret,
-			callbackURL: `${env.bakendUri}/api/v1/users/auth/google/callback`,
+			callbackURL: env.bakendUri.concat(
+				"/api/v1/users/auth/google/callback"
+			),
+			scope: ["profile email"],
 		},
 		async function (accessToken, refreshToken, profile, done) {
 			try {
+				console.log("profile: ", profile.emails);
+
 				const existedUser = await User.findOne({
 					email: profile.emails?.[0].value,
 				});

@@ -109,11 +109,11 @@ export function LoginForm() {
 			</Form>
 			<div className="h-[2px] w-full bg-slate-300" />
 			<GoogleButton
-				onClick={() =>
-					signIn("google", {
+				onClick={async () => {
+					await await signIn("google", {
 						callbackUrl: "/me",
-					})
-				}
+					});
+				}}
 			/>
 		</section>
 	);

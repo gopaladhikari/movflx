@@ -52,6 +52,14 @@ export const nextAuthOptions: NextAuthOptions = {
 		GoogleProvider({
 			clientId: env.googleClientId,
 			clientSecret: env.googleClientSecret,
+
+			authorization: {
+				params: {
+					redirect_uri: env.backendUrl.concat(
+						"/api/v1/users/auth/google/callback"
+					),
+				},
+			},
 		}),
 	],
 	pages: {
@@ -59,38 +67,38 @@ export const nextAuthOptions: NextAuthOptions = {
 	},
 
 	callbacks: {
-		async signIn({ account, profile }) {
-			if (account?.provider === "credentials") return true;
+		// async signIn({ account, profile }) {
+		// 	if (account?.provider === "credentials") return true;
 
-			if (account?.provider === "google") {
-				const cookieStore = cookies();
+		// 	if (account?.provider === "google") {
+		// 		const cookieStore = cookies();
 
-				const userData = {
-					firstName: profile?.given_name,
-					lastName: profile?.family_name,
-					email: profile?.email,
-					avatar: profile?.picture,
-					isEmailVerified: profile?.email_verified,
-				};
+		// 		const userData = {
+		// 			firstName: profile?.given_name,
+		// 			lastName: profile?.family_name,
+		// 			email: profile?.email,
+		// 			avatar: profile?.picture,
+		// 			isEmailVerified: profile?.email_verified,
+		// 		};
 
-				try {
-					const res = await instance.post("/users/auth/google", userData);
-					const token = res?.data.data.token;
+		// 		try {
+		// 			const res = await instance.post("/users/auth/google", userData);
+		// 			const token = res?.data.data.token;
 
-					cookieStore.set("token", token, {
-						httpOnly: true,
-						sameSite: "strict",
-						secure: true,
-						maxAge: 60 * 60 * 24 * 30,
-					});
-					return true;
-				} catch (error) {
-					return false;
-				}
-			}
+		// 			cookieStore.set("token", token, {
+		// 				httpOnly: true,
+		// 				sameSite: "strict",
+		// 				secure: true,
+		// 				maxAge: 60 * 60 * 24 * 30,
+		// 			});
+		// 			return true;
+		// 		} catch (error) {
+		// 			return false;
+		// 		}
+		// 	}
 
-			return false;
-		},
+		// 	return false;
+		// },
 		async session({ session, token }) {
 			if (session?.user)
 				return {
@@ -105,13 +113,10 @@ export const nextAuthOptions: NextAuthOptions = {
 		},
 
 		async jwt({ token, user }) {
-			if (token && user)
-				return {
-					...token,
-					...user,
-				};
-
-			return token;
+			return {
+				...token,
+				...user,
+			};
 		},
 	},
 
@@ -136,6 +141,10 @@ export const nextAuthOptions: NextAuthOptions = {
 
 	session: {
 		strategy: "jwt",
+		maxAge: 60 * 60 * 24 * 30,
+	},
+
+	jwt: {
 		maxAge: 60 * 60 * 24 * 30,
 	},
 
