@@ -5,6 +5,7 @@ import { ApiError } from "../utils/ApiError";
 import { ApiResponse } from "../utils/ApiResponse";
 import { dbHandler } from "../utils/dbHandler";
 import crypto from "crypto";
+import axios from "axios";
 
 // For Esewa
 
@@ -145,16 +146,14 @@ const createKhaltiPayment = dbHandler(async (req, res) => {
 	const url = env.khaltiApi.concat("/epayment/initiate/");
 
 	try {
-		const response = await fetch(url, {
-			method: "POST",
+		const { data } = await axios.post<KhaltiResponse>(url, formData, {
 			headers: {
 				Authorization: `key ${env.khaltiKey}`,
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(formData),
 		});
 
-		const data: KhaltiResponse = await response.json();
+		console.log("data create khalti payment:", data);
 
 		if ("error_key" in data) {
 			const message = Object.entries(data.customer_info).map(
@@ -201,6 +200,7 @@ const createKhaltiPayment = dbHandler(async (req, res) => {
 				new ApiResponse(200, data, "Khalti intitialzed successfully.")
 			);
 	} catch (error) {
+		console.error("error khalti payment:", error);
 		res
 			.status(500)
 			.json(
@@ -221,16 +221,18 @@ const khaltiSuccess = dbHandler(async (req, res) => {
 	const url = env.khaltiApi.concat("/epayment/lookup/");
 
 	try {
-		const response = await fetch(url, {
-			method: "POST",
-			headers: {
-				Authorization: `key ${env.khaltiKey}`,
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ pidx }),
-		});
+		const { data } = await axios.post(
+			url,
+			{ pidx },
+			{
+				headers: {
+					Authorization: `key ${env.khaltiKey}`,
+					"Content-Type": "application/json",
+				},
+			}
+		);
 
-		const data = await response.json();
+		console.log("data khalti success:", data);
 
 		if (data.status !== "Completed")
 			return res.redirect(env.domain.concat("/pricing/failure"));
@@ -253,6 +255,7 @@ const khaltiSuccess = dbHandler(async (req, res) => {
 
 		res.redirect(env.domain.concat("/pricing/success"));
 	} catch (error) {
+		console.error("error khalti success:", error);
 		res.redirect(env.domain.concat("/pricing/failure"));
 	}
 });

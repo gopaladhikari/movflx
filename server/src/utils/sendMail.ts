@@ -5,6 +5,8 @@ import { ObjectId } from "mongoose";
 import { User } from "../models/user.model";
 import { getForgotPasswordTemplate } from "../templates/forgotPasswordTemplate";
 
+const { googleMailPassword, domain, from } = env;
+
 export const sendMail = async (
 	email: string,
 	type: "verify" | "reset",
@@ -16,7 +18,7 @@ export const sendMail = async (
 	const mailOptions: SendMailOptions = {
 		from: {
 			name: "Movflx",
-			address: env.from,
+			address: from,
 		},
 		to: email,
 		subject,
@@ -32,7 +34,7 @@ export const sendMail = async (
 				emailVerificationTokenExpiry: Date.now() + 3600000,
 			});
 
-			mailOptions.html = `<p> Click on the link to ${type} your account: <a href="${env.domain}/auth/${type}?token=${hasedToken}"> ${env.domain}/auth/${type}?token=${hasedToken}</a> </p>`;
+			mailOptions.html = `<p> Click on the link to ${type} your account: <a href="${domain}/auth/${type}?token=${hasedToken}"> ${env.domain}/auth/${type}?token=${hasedToken}</a> </p>`;
 		}
 
 		if (type === "reset") {
@@ -51,8 +53,8 @@ export const sendMail = async (
 			port: 587,
 			secure: false,
 			auth: {
-				user: "alva.graham@ethereal.email",
-				pass: "RsdYZMUFCmh4btanMS",
+				user: from,
+				pass: googleMailPassword,
 			},
 		});
 

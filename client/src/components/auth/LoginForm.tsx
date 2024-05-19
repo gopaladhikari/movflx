@@ -110,9 +110,14 @@ export function LoginForm() {
 			<div className="h-[2px] w-full bg-slate-300" />
 			<GoogleButton
 				onClick={async () => {
-					await await signIn("google", {
-						callbackUrl: "/me",
-					});
+					try {
+						const res = await signIn("google", {
+							redirect: false,
+						});
+						console.log(res);
+					} catch (error) {
+						console.error(error);
+					}
 				}}
 			/>
 		</section>

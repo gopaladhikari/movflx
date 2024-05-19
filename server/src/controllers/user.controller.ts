@@ -8,11 +8,19 @@ import { sendMail } from "../utils/sendMail";
 import { CookieOptions } from "express";
 import { env } from "../conf/env";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
+import axios from "axios";
+
+const googleClient = new OAuth2Client({
+	clientId: env.googleClientId,
+	clientSecret: env.googleClientSecret,
+	redirectUri: env.bakendUri.concat("/api/v1/users/auth/google/callback"),
+});
 
 const cookieOptions: CookieOptions = {
 	httpOnly: true,
 	secure: true,
-	maxAge: 60 * 60 * 24 * 30,
+	maxAge: 60 * 60 * 24, // 1 day
 };
 
 const registerUser = dbHandler(async (req, res) => {
@@ -90,7 +98,25 @@ const googleLoginCallback = dbHandler(async (req, res) => {
 		return res.status(400).json(new ApiError(400, "Invalid code."));
 
 	try {
-		console.log("Hello");
+		const tokenResponse = await googleClient.getToken(String(code));
+
+		console.log("tokenResponse:", tokenResponse);
+
+		const { data } = await axios.get(
+			"https://www.googleapis.com/oauth2/v3/userinfo",
+			{
+				headers: {
+					Authorization: `Bearer ${googleClient.credentials.access_token}`,
+				},
+				params: {
+					access_token: googleClient.credentials.access_token,
+				},
+			}
+		);
+
+		console.log("data from google:", data);
+		// Implement business logic based on retrieved user data
+		res.redirect(env.domain.concat("/me"));
 	} catch (error) {
 		console.error("Error:", error);
 		res.redirect(env.domain.concat("/auth/login"));

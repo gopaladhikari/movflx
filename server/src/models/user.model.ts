@@ -60,7 +60,6 @@ export const userSchema = new Schema(
 
 		JwtToken: {
 			type: String,
-			required: true,
 		},
 	},
 	{

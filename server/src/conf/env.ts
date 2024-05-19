@@ -18,6 +18,7 @@ const {
 	ESEWA_PRODUCT_CODE,
 	KHALTI_API,
 	KHALTI_KEY,
+	GOOGLE_MAIL_PASSWORD,
 } = process.env;
 
 const envSchema = z.object({
@@ -58,6 +59,9 @@ const envSchema = z.object({
 		.min(1, { message: "Esewa product code is required" }),
 	khaltiApi: z.string().min(1, { message: "Khalti Api is required" }),
 	khaltiKey: z.string().min(1, { message: "Khalti key is required" }),
+	googleMailPassword: z
+		.string()
+		.min(1, { message: "Google Mail password is required" }),
 });
 
 const validatedEnv = envSchema.safeParse({
@@ -78,6 +82,7 @@ const validatedEnv = envSchema.safeParse({
 	esewaProductCode: ESEWA_PRODUCT_CODE,
 	khaltiApi: KHALTI_API,
 	khaltiKey: KHALTI_KEY,
+	googleMailPassword: GOOGLE_MAIL_PASSWORD,
 });
 
 if (!validatedEnv.success) throw new Error(validatedEnv.error.message);

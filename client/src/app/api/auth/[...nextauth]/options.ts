@@ -52,7 +52,6 @@ export const nextAuthOptions: NextAuthOptions = {
 		GoogleProvider({
 			clientId: env.googleClientId,
 			clientSecret: env.googleClientSecret,
-
 			authorization: {
 				params: {
 					redirect_uri: env.backendUrl.concat(
