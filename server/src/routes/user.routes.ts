@@ -25,7 +25,6 @@ userRouter
 	.post(passport.authenticate("local", { session: false }), loginUser);
 
 /**
- * --> This route is not begin because
  * * userRouter.route("/auth/google").get(passport.authenticate("google",
  * * { session: false }),(req, res) => {
  * * 	console.log(req);

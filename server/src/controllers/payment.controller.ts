@@ -153,8 +153,6 @@ const createKhaltiPayment = dbHandler(async (req, res) => {
 			},
 		});
 
-		console.log("data create khalti payment:", data);
-
 		if ("error_key" in data) {
 			const message = Object.entries(data.customer_info).map(
 				([key, value]) => `${key}: ${value[0]}`
@@ -232,8 +230,6 @@ const khaltiSuccess = dbHandler(async (req, res) => {
 			}
 		);
 
-		console.log("data khalti success:", data);
-
 		if (data.status !== "Completed")
 			return res.redirect(env.domain.concat("/pricing/failure"));
 
@@ -253,7 +249,7 @@ const khaltiSuccess = dbHandler(async (req, res) => {
 		if (!purchase)
 			return res.redirect(env.domain.concat("/pricing/failure"));
 
-		res.redirect(env.domain.concat("/pricing/success"));
+		res.redirect(env.domain.concat(`/pricing/success?id=${purchase._id}`));
 	} catch (error) {
 		console.error("error khalti success:", error);
 		res.redirect(env.domain.concat("/pricing/failure"));

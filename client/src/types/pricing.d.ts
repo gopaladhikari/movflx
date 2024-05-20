@@ -24,4 +24,21 @@ interface IPaymentOptions extends Success {
 	data: Payment[];
 }
 
-export { IPricingPlan, IPaymentOptions, Payment };
+interface PurchaseInfo {
+	data: {
+		_id: string;
+		user_email: string;
+		pidx: "EZEgVNnC6sMsHAS5JJpVxY";
+		purchasePlan: "standard";
+		amount: number;
+		paymentMethod: string;
+		status: string;
+		paymentDate: string;
+		createdAt: Date;
+		updatedAt: Date;
+		__v: number;
+		transactionId: string;
+	};
+}
+
+export { IPricingPlan, IPaymentOptions, Payment, PurchaseInfo };
