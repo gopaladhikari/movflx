@@ -33,7 +33,7 @@ export default async function Page({ searchParams }: SearchParams) {
 	return (
 		<section>
 			<div className="flex min-h-[90vh] flex-col items-center justify-center">
-				<Card className="w-full max-w-md space-y-6 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-800">
+				<Card className="w-full max-w-md space-y-6 rounded-lg  p-6 shadow-lg">
 					<div className="flex flex-col items-center">
 						<CirclecheckIcon />
 						<h1 className="mt-4 text-3xl font-bold text-gray-50">

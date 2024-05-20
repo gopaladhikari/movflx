@@ -94,7 +94,7 @@ const esewaSuccess = dbHandler(async (req, res) => {
 	if (!purchase)
 		return res.redirect(env.domain.concat("/pricing/failure"));
 
-	res.redirect(env.domain.concat("/pricing/success"));
+	res.redirect(env.domain.concat(`/pricing/success?id=${purchase._id}`));
 });
 
 const esewaFailure = dbHandler(async (req, res) => {

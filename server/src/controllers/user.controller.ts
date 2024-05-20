@@ -85,6 +85,8 @@ const loginUser = dbHandler(async (req, res) => {
 
 	user.JwtToken = token;
 
+	await user.save({ validateBeforeSave: false });
+
 	return res
 		.status(200)
 		.cookie("token", token, cookieOptions)
