@@ -10,7 +10,7 @@ import { env } from "../conf/env";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 import axios from "axios";
-import mongoose from "mongoose";
+import { isValidObjectId, ObjectId } from "mongoose";
 
 const googleClient = new OAuth2Client({
 	clientId: env.googleClientId,
@@ -68,16 +68,13 @@ const registerUser = dbHandler(async (req, res) => {
 			.status(500)
 			.json(new ApiError(500, "Failed to create user."));
 
-	const user = await User.findById(createdUser._id);
+	delete createdUser.password;
 
-	if (!user)
-		return res
-			.status(400)
-			.json(new ApiError(400, "User creation failed."));
+	await sendMail(createdUser.email, "verify", createdUser._id as ObjectId);
 
-	await sendMail(user.email, "verify", user._id);
-
-	res.status(201).json(new ApiResponse(201, { user }, "User created"));
+	res
+		.status(201)
+		.json(new ApiResponse(201, { user: createdUser }, "User created"));
 });
 
 const loginUser = dbHandler(async (req, res) => {
@@ -258,15 +255,18 @@ const updateAvatar = dbHandler(async (req, res) => {
 const updateUser = dbHandler(async (req, res) => {
 	const { id } = req.params;
 
+	if (!isValidObjectId(id))
+		return res.status(400).json(new ApiError(400, "Invalid id"));
+
 	const { firstName, lastName, phoneNumber } = req.body;
 
-	if (!id || !firstName || !lastName || !phoneNumber)
+	if (!firstName || !lastName || !phoneNumber)
 		return res
 			.status(400)
 			.json(new ApiError(400, "All fields are required."));
 
 	const user = await User.findByIdAndUpdate(
-		new mongoose.Types.ObjectId(id),
+		id,
 		{
 			firstName,
 			lastName,
