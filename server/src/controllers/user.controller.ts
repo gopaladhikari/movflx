@@ -177,7 +177,7 @@ const requestForgotPassword = dbHandler(async (req, res) => {
 		if (!user)
 			return res.status(400).json(new ApiError(400, "User not found"));
 
-		await sendMail(user.email, "reset", user._id);
+		await sendMail(user.email, "reset", user._id as ObjectId);
 
 		res
 			.status(200)
