@@ -10,6 +10,7 @@ import { env } from "../conf/env";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 import axios from "axios";
+import mongoose from "mongoose";
 
 const googleClient = new OAuth2Client({
 	clientId: env.googleClientId,
@@ -62,8 +63,12 @@ const registerUser = dbHandler(async (req, res) => {
 		avatar,
 	});
 
-	await createdUser.save({ validateBeforeSave: false });
-	const user = await User.findById(createdUser?._id).select("-password");
+	if (!createdUser)
+		return res
+			.status(500)
+			.json(new ApiError(500, "Failed to create user."));
+
+	const user = await User.findById(createdUser._id);
 
 	if (!user)
 		return res
@@ -261,7 +266,7 @@ const updateUser = dbHandler(async (req, res) => {
 			.json(new ApiError(400, "All fields are required."));
 
 	const user = await User.findByIdAndUpdate(
-		id,
+		new mongoose.Types.ObjectId(id),
 		{
 			firstName,
 			lastName,
