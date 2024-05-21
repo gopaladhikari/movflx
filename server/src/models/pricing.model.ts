@@ -30,7 +30,11 @@ const pricingSchema = new Schema(
 		payment_options: [
 			{
 				id: { type: Number, required: true },
-				name: { type: String, enum: ["Esewa", "Khalti"], required: true },
+				name: {
+					type: String,
+					enum: ["Esewa", "Khalti", "Paypal"],
+					required: true,
+				},
 				img: { type: String, required: true },
 			},
 		],

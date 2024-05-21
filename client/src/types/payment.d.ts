@@ -24,3 +24,11 @@ export interface KhaltiData extends Success {
 		expires_in: number;
 	};
 }
+
+export interface PaypalData extends Success {
+	data: {
+		href: URL;
+		rel: string;
+		method: string;
+	};
+}

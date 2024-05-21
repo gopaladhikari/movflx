@@ -15,7 +15,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { PaymentSchema, PaymentType } from "@/schemas/paymentSchema";
 import Image from "next/image";
 import { Payment } from "@/types/pricing";
-import { createEsewaPayment, createKhaltiPayment } from "@/lib/payment";
+import {
+	createEsewaPayment,
+	createKhaltiPayment,
+	createPaypalPayment,
+} from "@/lib/payment";
 import { Loader2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -52,9 +56,9 @@ export function PaymentOptions({ paymentMethods, plan }: Props) {
 			});
 			return;
 		}
+		const email = session.data?.user?.email;
 
 		if (option.name === "Esewa") {
-			const email = session.data?.user?.email;
 			const res = await createEsewaPayment(plan, email);
 
 			if (res?.sucess) {
@@ -79,7 +83,6 @@ export function PaymentOptions({ paymentMethods, plan }: Props) {
 					variant: "destructive",
 				});
 		} else if (option.name === "Khalti") {
-			const email = session.data?.user?.email;
 			const res = await createKhaltiPayment(plan, email, fullName);
 
 			if (res.ok) router.push(String(res?.data?.payment_url));
@@ -89,6 +92,15 @@ export function PaymentOptions({ paymentMethods, plan }: Props) {
 					description: res?.error || "Something went wrong",
 					variant: "destructive",
 				});
+		} else if (option.name === "Paypal") {
+			const res = await createPaypalPayment(plan, email);
+			if (!res.ok)
+				toast({
+					title: "Payment failed",
+					description: res?.error || "Something went wrong",
+					variant: "destructive",
+				});
+			else router.push(String(res?.data?.href));
 		}
 	};
 	return (

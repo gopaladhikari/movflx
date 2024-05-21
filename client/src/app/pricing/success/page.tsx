@@ -6,16 +6,14 @@ import { getPurchasedInfo } from "@/lib/pricing";
 
 type SearchParams = {
 	searchParams?: {
-		id: string;
+		id: string | undefined;
 	};
 };
 
 export default async function Page({ searchParams }: SearchParams) {
-	const id = searchParams?.id;
+	console.log("searchParams", searchParams);
 
-	if (!id) return redirect("/");
-
-	const res = await getPurchasedInfo(id);
+	const res = await getPurchasedInfo(String(searchParams?.id));
 
 	if (!res.ok) return redirect("/");
 

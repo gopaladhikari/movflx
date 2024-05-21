@@ -19,6 +19,9 @@ const {
 	KHALTI_API,
 	KHALTI_KEY,
 	GOOGLE_MAIL_PASSWORD,
+	PAYPAL_CLIENT_ID,
+	PAYPAL_CLIENT_SECRET,
+	PAYPAL_BASE_URL,
 } = process.env;
 
 const envSchema = z.object({
@@ -62,6 +65,16 @@ const envSchema = z.object({
 	googleMailPassword: z
 		.string()
 		.min(1, { message: "Google Mail password is required" }),
+
+	paypalClientId: z
+		.string()
+		.min(1, { message: "Paypal client ID is required" }),
+	paypalClientSecret: z
+		.string()
+		.min(1, { message: "Paypal client secret is required" }),
+	paypalBaseUrl: z
+		.string()
+		.min(1, { message: "Paypal base URL is required" }),
 });
 
 const validatedEnv = envSchema.safeParse({
@@ -83,6 +96,9 @@ const validatedEnv = envSchema.safeParse({
 	khaltiApi: KHALTI_API,
 	khaltiKey: KHALTI_KEY,
 	googleMailPassword: GOOGLE_MAIL_PASSWORD,
+	paypalClientId: PAYPAL_CLIENT_ID,
+	paypalClientSecret: PAYPAL_CLIENT_SECRET,
+	paypalBaseUrl: PAYPAL_BASE_URL,
 });
 
 if (!validatedEnv.success) throw new Error(validatedEnv.error.message);

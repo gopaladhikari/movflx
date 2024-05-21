@@ -2,7 +2,11 @@
 
 import { instance } from "@/config/axios";
 import { ApiError } from "@/types/axios-response";
-import { CreateEsewaPaymentResponse, KhaltiData } from "@/types/payment";
+import {
+	CreateEsewaPaymentResponse,
+	KhaltiData,
+	PaypalData,
+} from "@/types/payment";
 import { cookies } from "next/headers";
 
 const createEsewaPayment = async (
@@ -56,4 +60,33 @@ const createKhaltiPayment = async (
 	}
 };
 
-export { createEsewaPayment, createKhaltiPayment };
+const createPaypalPayment = async (
+	plan: string,
+	email: string | undefined
+) => {
+	try {
+		const token = cookies().get("token")?.value;
+
+		instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+
+		const { data } = await instance.post<PaypalData>(
+			`/payment/create-paypal-payment/${plan}`,
+			{ email }
+		);
+
+		return { data: data.data, ok: true };
+	} catch (error) {
+		const err = error as ApiError;
+
+		const msg =
+			typeof err.response?.data === "string"
+				? err.response?.data
+				: err.response?.data.message;
+		return {
+			error: msg,
+			ok: false,
+		};
+	}
+};
+
+export { createEsewaPayment, createKhaltiPayment, createPaypalPayment };

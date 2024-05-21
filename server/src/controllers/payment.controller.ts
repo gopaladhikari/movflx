@@ -6,6 +6,7 @@ import { ApiResponse } from "../utils/ApiResponse";
 import { dbHandler } from "../utils/dbHandler";
 import crypto from "crypto";
 import axios from "axios";
+import paypal, { Payment } from "paypal-rest-sdk";
 
 // For Esewa
 
@@ -100,6 +101,8 @@ const esewaSuccess = dbHandler(async (req, res) => {
 const esewaFailure = dbHandler(async (req, res) => {
 	res.redirect(env.domain.concat("/pricing/failure"));
 });
+
+// For Khalti
 
 type KhaltiData = {
 	pidx: string;
@@ -256,10 +259,153 @@ const khaltiSuccess = dbHandler(async (req, res) => {
 	}
 });
 
+// For Paypal
+
+paypal.configure({
+	mode: "sandbox", // live
+	client_id: env.paypalClientId,
+	client_secret: env.paypalClientSecret,
+});
+
+const createPaypalPayment = dbHandler(async (req, res) => {
+	console.log("paypal create payment");
+	const { plan } = req.params;
+	const { email } = req.body;
+	if (!plan || !email)
+		return res
+			.status(400)
+			.json(new ApiError(400, "All fields are required."));
+
+	try {
+		const pricing = await Pricing.find();
+		const paymentOptions = pricing[0].pricing_plans;
+
+		const option = paymentOptions.find((option) => option.plan === plan);
+
+		if (!option)
+			return res.status(400).json(new ApiError(400, "Invalid plan."));
+
+		const create_payment_json: Payment = {
+			intent: "sale",
+			payer: {
+				payment_method: "paypal",
+			},
+			redirect_urls: {
+				return_url: env.bakendUri.concat(
+					"/api/v1/payment/paypal/callback"
+				),
+				cancel_url: env.bakendUri.concat("/api/v1/payment/paypal/cancel"),
+			},
+			transactions: [
+				{
+					item_list: {
+						items: [
+							{
+								name: `${option.plan} plan`,
+								sku: "Subscription",
+								price: "1.00",
+								currency: "USD",
+								quantity: 1,
+							},
+						],
+					},
+					amount: {
+						currency: "USD",
+						total: "1.00",
+					},
+					description: "This is the payment description.",
+				},
+			],
+		};
+
+		paypal.payment.create(
+			create_payment_json,
+			async function (error, payment) {
+				if (error) {
+					return res.status(500).json(new ApiError(500, error.message));
+				} else {
+					if (payment.links) {
+						for (const link of payment.links) {
+							if (link.rel === "approval_url") {
+								const purchase = await Purchase.findOne({
+									email: email,
+									status: "pending",
+									purchasePlan: plan,
+								});
+
+								if (purchase) {
+									purchase.transactionId = payment.id;
+									await purchase.save();
+								}
+
+								const newPurchase = await Purchase.create({
+									user_email: email,
+									purchasePlan: plan,
+									amount: option.price,
+									paymentMethod: "Paypal",
+									status: "pending",
+									paymentDate: new Date(),
+									transactionId: payment.id,
+								});
+
+								if (!newPurchase) {
+									res
+										.status(500)
+										.json(new ApiError(500, "Failed to create purchase."));
+									break;
+								}
+
+								res
+									.status(200)
+									.json(new ApiResponse(200, link, "Paypal payment data"));
+								break;
+							}
+						}
+					} else {
+						return res
+							.status(500)
+							.json(new ApiError(500, "Payment failed."));
+					}
+				}
+			}
+		);
+	} catch (error) {
+		console.log("error paypal payment:", error);
+		res.redirect(env.domain.concat("/payment/failure"));
+	}
+});
+
+const paypalSuccess = dbHandler(async (req, res) => {
+	const { paymentId } = req.query;
+
+	try {
+		const purchase = await Purchase.findOne({
+			transactionId: paymentId,
+			status: "pending",
+		});
+
+		if (!purchase)
+			return res.redirect(env.domain.concat("/pricing/failure"));
+
+		purchase.status = "success";
+		await purchase.save();
+
+		return res.redirect(
+			env.domain.concat(`/pricing/success?id=${purchase._id}`)
+		);
+	} catch (error) {
+		console.log("error paypal payment:", error);
+
+		return res.redirect(env.domain.concat("/pricing/failure"));
+	}
+});
+
 export {
 	createEsewaPayment,
 	esewaSuccess,
 	createKhaltiPayment,
 	khaltiSuccess,
 	esewaFailure,
+	createPaypalPayment,
+	paypalSuccess,
 };

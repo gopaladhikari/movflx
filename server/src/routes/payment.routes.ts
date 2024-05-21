@@ -3,9 +3,11 @@ import { Router } from "express";
 import {
 	createEsewaPayment,
 	createKhaltiPayment,
+	createPaypalPayment,
 	esewaFailure,
 	esewaSuccess,
 	khaltiSuccess,
+	paypalSuccess,
 } from "../controllers/payment.controller";
 
 const paymentRouter = Router();
@@ -33,5 +35,14 @@ paymentRouter
 	);
 
 paymentRouter.route("/khalti/callback").get(khaltiSuccess);
+
+paymentRouter
+	.route("/create-paypal-payment/:plan")
+	.post(
+		passport.authenticate("jwt", { session: false }),
+		createPaypalPayment
+	);
+
+paymentRouter.route("/paypal/callback").get(paypalSuccess);
 
 export { paymentRouter };

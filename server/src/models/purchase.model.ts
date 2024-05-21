@@ -27,7 +27,7 @@ const purchaseSchema = new Schema(
 
 		paymentMethod: {
 			type: String,
-			enum: ["Esewa", "Khalti"],
+			enum: ["Esewa", "Khalti", "Paypal"],
 			required: true,
 		},
 
