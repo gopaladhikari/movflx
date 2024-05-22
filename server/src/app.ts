@@ -52,7 +52,6 @@ app.use("/api/v1/payment", paymentRouter);
 export { app };
 
 // TODO: Subscription feature payment gateway paypal, cards
-// TODO: watch list watch history
 // TODO: Add playlist, watch later and liked movies
 // TODO: User can have one subscription at a time. If registered for new subscription, previous subscription will be cancelled.
 

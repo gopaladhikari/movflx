@@ -11,9 +11,11 @@ type SearchParams = {
 };
 
 export default async function Page({ searchParams }: SearchParams) {
-	console.log("searchParams", searchParams);
+	const id = searchParams?.id;
 
-	const res = await getPurchasedInfo(String(searchParams?.id));
+	if (!id) return redirect("/pricing");
+
+	const res = await getPurchasedInfo(id);
 
 	if (!res.ok) return redirect("/");
 
