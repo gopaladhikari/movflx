@@ -371,7 +371,7 @@ const createPaypalPayment = dbHandler(async (req, res) => {
 		);
 	} catch (error) {
 		console.log("error paypal payment:", error);
-		res.redirect(env.domain.concat("/payment/failure"));
+		res.status(500).json(new ApiError(500, "Payment failed."));
 	}
 });
 
