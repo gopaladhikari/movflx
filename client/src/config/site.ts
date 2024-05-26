@@ -31,4 +31,22 @@ export const site = {
 			href: "/contact",
 		},
 	],
+
+	footerNav: [
+		{
+			id: 1,
+			title: "Privacy Policy",
+			href: "/privacy-policy",
+		},
+		{
+			id: 2,
+			title: "Terms of Use",
+			href: "/terms-of-use",
+		},
+		{
+			id: 3,
+			title: "Legal Notice",
+			href: "/legal-notices",
+		},
+	],
 };
