@@ -32,7 +32,7 @@ export function Footer() {
 						<div className="max-w-sm items-start lg:max-w-none">
 							<Image src="/logo.png" alt="logo" width={200} height={200} />
 						</div>
-						<nav className="space-x-3 space-y-4">
+						<nav className="space-x-6 space-y-4">
 							{site.footerNav.map(({ id, title, href }) => (
 								<Link key={id} href={href} className="font-bold">
 									{title}

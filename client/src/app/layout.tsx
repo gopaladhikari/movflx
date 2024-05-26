@@ -11,6 +11,7 @@ import { cookies } from "next/headers";
 import { instance } from "@/config/axios";
 import ChatBot from "@/components/common/ChatBot";
 import { Suspense } from "react";
+import TopLoadingBar from "@/components/common/TopLoadingBar";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["400"] });
 
@@ -62,6 +63,7 @@ export default async function RootLayout({
 					<Footer />
 					<Toaster />
 					<Suspense>
+						<TopLoadingBar />
 						<ChatBot />
 					</Suspense>
 				</SessionProvider>
