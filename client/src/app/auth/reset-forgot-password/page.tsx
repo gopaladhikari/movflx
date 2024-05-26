@@ -20,9 +20,7 @@ export default function page({ searchParams }: SeachParams) {
 	return (
 		<main>
 			<MaxwidthWrapper>
-				<h1 className="text-center text-3xl font-bold">
-					Reset your password
-				</h1>
+				<h1 className="text-center">Reset your password</h1>
 				<ResetForgotPassword token={token} />
 			</MaxwidthWrapper>
 		</main>

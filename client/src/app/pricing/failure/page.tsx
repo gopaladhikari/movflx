@@ -10,7 +10,7 @@ export default function Page() {
 						<TriangleAlertIcon className="size-8" />
 					</div>
 					<div className="space-y-2 text-center">
-						<h2 className="text-2xl font-bold">Payment Failed</h2>
+						<h1>Payment Failed</h1>
 						<p className="text-gray-500 dark:text-gray-400">
 							There was an issue processing your payment. Please try again.
 						</p>

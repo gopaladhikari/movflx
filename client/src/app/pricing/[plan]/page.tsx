@@ -35,7 +35,7 @@ export default async function Page({ params }: Params) {
 	return (
 		<section>
 			<MaxwidthWrapper className="mt-16 max-w-lg space-y-4 border p-6 md:py-16">
-				<h1 className="text-center text-3xl font-bold">Payment Plan</h1>
+				<h1 className="text-center ">Payment Plan</h1>
 				<p className="text-center">
 					How do you want to pay ?<strong> {params.plan} plan</strong> .
 				</p>

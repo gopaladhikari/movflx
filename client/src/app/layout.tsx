@@ -1,9 +1,8 @@
-import "../styles/globals.css";
-import type { Metadata } from "next";
+import "../styles/main.scss";
+import type { Metadata, Viewport } from "next";
 import { site } from "@/config/site";
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
-import { Poppins } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import { SessionProvider } from "@/context/sessionProvider";
@@ -12,8 +11,7 @@ import { instance } from "@/config/axios";
 import ChatBot from "@/components/common/ChatBot";
 import { Suspense } from "react";
 import TopLoadingBar from "@/components/common/TopLoadingBar";
-
-const poppins = Poppins({ subsets: ["latin"], weight: ["400"] });
+import { poppins, inter } from "@/config/font";
 
 export const metadata: Metadata = {
 	title: {
@@ -39,6 +37,10 @@ export const metadata: Metadata = {
 	},
 };
 
+export const viewport: Viewport = {
+	colorScheme: "dark",
+};
+
 export default async function RootLayout({
 	children,
 }: Readonly<{
@@ -52,9 +54,9 @@ export default async function RootLayout({
 		common.Authorization = `Bearer ${token}`;
 
 	return (
-		<html lang="en" className="dark" suppressHydrationWarning>
+		<html lang="en" suppressHydrationWarning className={poppins.variable}>
 			<body
-				className={cn("bg-background", poppins.className)}
+				className={cn("bg-background", inter.className)}
 				suppressHydrationWarning
 			>
 				<SessionProvider>

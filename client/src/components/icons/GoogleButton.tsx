@@ -1,6 +1,6 @@
 "use client";
 
-import "@/styles/google-button.css";
+import "@/styles/google-button.scss";
 import { ButtonProps } from "../ui/button";
 
 export function GoogleButton({ onClick }: ButtonProps) {

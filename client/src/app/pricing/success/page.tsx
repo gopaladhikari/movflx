@@ -36,9 +36,7 @@ export default async function Page({ searchParams }: SearchParams) {
 				<Card className="w-full max-w-md space-y-6 rounded-lg  p-6 shadow-lg">
 					<div className="flex flex-col items-center">
 						<CirclecheckIcon />
-						<h1 className="mt-4 text-3xl font-bold text-gray-50">
-							Payment Successful
-						</h1>
+						<h1 className="mt-4 text-gray-50">Payment Successful</h1>
 						<p className="mt-2 text-gray-500 dark:text-gray-400">
 							Thank you for your payment. Your order is being processed.
 						</p>
