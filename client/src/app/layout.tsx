@@ -39,6 +39,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
 	colorScheme: "dark",
+	themeColor: "#0F0E16",
 };
 
 export default async function RootLayout({
@@ -54,7 +55,11 @@ export default async function RootLayout({
 		common.Authorization = `Bearer ${token}`;
 
 	return (
-		<html lang="en" suppressHydrationWarning className={poppins.variable}>
+		<html
+			lang="en"
+			suppressHydrationWarning
+			className={cn("dark", poppins.variable)}
+		>
 			<body
 				className={cn("bg-background", inter.className)}
 				suppressHydrationWarning
