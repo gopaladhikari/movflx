@@ -28,7 +28,9 @@
 		"**/*.ts",
 		"**/*.tsx",
 		".next/types/**/*.ts",
-		"src/app/(static)/privacy-policy/page.mdx"
+		"src/app/(static)/privacy-policy/page.mdx",
+		"src/app/(static)/legal-notices/page.mdx",
+		"src/app/(static)/terms-of-use/page.mdx"
 	],
 	"exclude": ["node_modules"]
 }
