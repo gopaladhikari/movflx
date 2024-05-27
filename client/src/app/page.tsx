@@ -2,15 +2,11 @@ import { HomepageHeroSection } from "@/components/Home/HeroSection";
 import { MaxwidthWrapper } from "@/components/common/MaxwidthWrapper";
 import { MovieCard } from "@/components/movie/MovieCard";
 import { getMovies } from "@/lib/movies";
-import { getCurrentUser } from "@/utils/session";
 import { Clapperboard, SwitchCamera } from "lucide-react";
 import Image from "next/image";
 
 export default async function page() {
 	const res = await getMovies(0, 12);
-
-	const user = await getCurrentUser();
-	console.log(user);
 
 	return (
 		<main>
