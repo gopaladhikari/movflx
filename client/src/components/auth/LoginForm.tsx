@@ -109,16 +109,12 @@ export function LoginForm() {
 			</Form>
 			<div className="h-[2px] w-full bg-slate-300" />
 			<GoogleButton
-				onClick={async () => {
-					try {
-						const res = await signIn("google", {
-							redirect: false,
-						});
-						console.log(res);
-					} catch (error) {
-						console.error(error);
-					}
-				}}
+				onClick={() =>
+					signIn("google", {
+						redirect: true,
+						callbackUrl: "/me",
+					})
+				}
 			/>
 		</section>
 	);

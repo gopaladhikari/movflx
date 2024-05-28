@@ -22,6 +22,6 @@ const watchlistSchema = new Schema(
 type TWatchlistSchema = InferSchemaType<typeof watchlistSchema>;
 
 export const Watchlist = model<TWatchlistSchema>(
-	"PlayList",
+	"Watchlist",
 	watchlistSchema
 );

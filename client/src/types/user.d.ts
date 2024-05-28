@@ -20,3 +20,18 @@ export interface TUserResponse extends Success {
 		user: TUser;
 	};
 }
+
+interface LoginWithGoogle extends Success {
+	data: {
+		_id: string;
+		firstName: string;
+		lastName: string;
+		email: string;
+		avatar: string;
+		isEmailVerified: boolean;
+		createdAt: Date;
+		updatedAt: Date;
+		__v: 0;
+		JwtToken: string;
+	};
+}

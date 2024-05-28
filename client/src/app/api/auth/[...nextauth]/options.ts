@@ -5,6 +5,7 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { cookies } from "next/headers";
 import GoogleProvider from "next-auth/providers/google";
+import { loginWithGoogle } from "@/lib/users";
 
 export const nextAuthOptions: NextAuthOptions = {
 	providers: [
@@ -52,13 +53,6 @@ export const nextAuthOptions: NextAuthOptions = {
 		GoogleProvider({
 			clientId: env.googleClientId,
 			clientSecret: env.googleClientSecret,
-			authorization: {
-				params: {
-					redirect_uri: env.backendUrl.concat(
-						"/api/v1/users/auth/google/callback"
-					),
-				},
-			},
 		}),
 	],
 	pages: {
@@ -66,38 +60,26 @@ export const nextAuthOptions: NextAuthOptions = {
 	},
 
 	callbacks: {
-		// async signIn({ account, profile }) {
-		// 	if (account?.provider === "credentials") return true;
+		async signIn({ account }) {
+			if (account?.provider === "credentials") return true;
 
-		// 	if (account?.provider === "google") {
-		// 		const cookieStore = cookies();
+			if (account?.provider === "google") {
+				const accessToken = account.access_token;
+				if (!accessToken) return false;
 
-		// 		const userData = {
-		// 			firstName: profile?.given_name,
-		// 			lastName: profile?.family_name,
-		// 			email: profile?.email,
-		// 			avatar: profile?.picture,
-		// 			isEmailVerified: profile?.email_verified,
-		// 		};
+				try {
+					const response = await loginWithGoogle(accessToken);
 
-		// 		try {
-		// 			const res = await instance.post("/users/auth/google", userData);
-		// 			const token = res?.data.data.token;
+					if (response?.sucess) return true;
 
-		// 			cookieStore.set("token", token, {
-		// 				httpOnly: true,
-		// 				sameSite: "strict",
-		// 				secure: true,
-		// 				maxAge: 60 * 60 * 24 * 30,
-		// 			});
-		// 			return true;
-		// 		} catch (error) {
-		// 			return false;
-		// 		}
-		// 	}
+					return true;
+				} catch (error) {
+					return false;
+				}
+			}
 
-		// 	return false;
-		// },
+			return false;
+		},
 		async session({ session, token }) {
 			if (session?.user)
 				return {

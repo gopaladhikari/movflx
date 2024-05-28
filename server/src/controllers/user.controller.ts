@@ -8,15 +8,8 @@ import { sendMail } from "../utils/sendMail";
 import { CookieOptions } from "express";
 import { env } from "../conf/env";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { OAuth2Client } from "google-auth-library";
-import axios from "axios";
 import { isValidObjectId, ObjectId } from "mongoose";
-
-const googleClient = new OAuth2Client({
-	clientId: env.googleClientId,
-	clientSecret: env.googleClientSecret,
-	redirectUri: env.bakendUri.concat("/api/v1/users/auth/google/callback"),
-});
+import axios from "axios";
 
 const cookieOptions: CookieOptions = {
 	httpOnly: true,
@@ -95,35 +88,47 @@ const loginUser = dbHandler(async (req, res) => {
 		.json(new ApiResponse(200, { user, token }, "Login sucessfull"));
 });
 
-const googleLoginCallback = dbHandler(async (req, res) => {
-	const { code } = req.query;
+const loginWithGoogle = dbHandler(async (req, res) => {
+	const { accessToken } = req.query;
 
-	if (!code)
-		return res.status(400).json(new ApiError(400, "Invalid code."));
+	if (!accessToken)
+		return res
+			.status(401)
+			.json(new ApiError(401, "Access token not provided."));
 
 	try {
-		const tokenResponse = await googleClient.getToken(String(code));
-
-		console.log("tokenResponse:", tokenResponse);
-
 		const { data } = await axios.get(
-			"https://www.googleapis.com/oauth2/v3/userinfo",
-			{
-				headers: {
-					Authorization: `Bearer ${googleClient.credentials.access_token}`,
-				},
-				params: {
-					access_token: googleClient.credentials.access_token,
-				},
-			}
+			`https://www.googleapis.com/oauth2/v3/userinfo?access_token=${accessToken}`
 		);
 
-		console.log("data from google:", data);
-		// Implement business logic based on retrieved user data
-		res.redirect(env.domain.concat("/me"));
+		const user = await User.findOne({ email: data.email });
+
+		if (user)
+			return res
+				.status(200)
+				.json(new ApiResponse(200, user, "Login sucessfull"));
+
+		const newUser = await User.create({
+			firstName: data.given_name,
+			lastName: data.family_name,
+			email: data.email,
+			avatar: data.picture,
+			isEmailVerified: data.isEmailVerified,
+		});
+
+		const token = newUser.generateJwtToken();
+
+		newUser.JwtToken = token;
+
+		await newUser.save({ validateBeforeSave: false });
+
+		res
+			.status(201)
+			.json(
+				new ApiResponse(201, { user: newUser, token }, "Login sucessfull")
+			);
 	} catch (error) {
-		console.error("Error:", error);
-		res.redirect(env.domain.concat("/auth/login"));
+		return res.status(500).json(new ApiError(500, "Login failed"));
 	}
 });
 
@@ -311,7 +316,7 @@ export {
 	getMe,
 	logoutUser,
 	verifyUsersEmail,
-	googleLoginCallback,
+	loginWithGoogle,
 	requestForgotPassword,
 	resetForgotPassword,
 	updateAvatar,

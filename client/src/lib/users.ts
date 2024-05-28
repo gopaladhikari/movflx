@@ -3,7 +3,7 @@
 import { instance } from "@/config/axios";
 import { TLoginSchema } from "@/schemas/loginSchema";
 import { ApiError } from "@/types/axios-response";
-import { TUserResponse } from "@/types/user";
+import { LoginWithGoogle, TUserResponse } from "@/types/user";
 import { cookies } from "next/headers";
 
 export const registerUser = async (formData: FormData) => {
@@ -40,9 +40,42 @@ export const loginUser = async (formData: TLoginSchema) => {
 	}
 };
 
+export const loginWithGoogle = async (accessToken: string) => {
+	try {
+		const { data } = await instance.post<LoginWithGoogle>(
+			"/users/login/google",
+			{},
+			{
+				params: {
+					accessToken,
+				},
+			}
+		);
+
+		const token = data.data.JwtToken;
+		instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+
+		const cookieStore = cookies();
+
+		cookieStore.set("token", token, {
+			httpOnly: true,
+			sameSite: "strict",
+			secure: true,
+			maxAge: 60 * 60 * 24 * 30,
+		});
+
+		return data;
+	} catch (error) {
+		const axiosError = (error as ApiError).response?.data;
+		return axiosError;
+	}
+};
+
 export const verifyUserEmail = async (token: string) => {
 	try {
-		const res = await instance.post(`/users/verify-users-email?token=${token}`);
+		const res = await instance.post(
+			`/users/verify-users-email?token=${token}`
+		);
 
 		return { data: res.data, ok: true };
 	} catch (error) {

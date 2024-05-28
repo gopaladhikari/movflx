@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
 	getMe,
 	loginUser,
-	googleLoginCallback,
+	loginWithGoogle,
 	logoutUser,
 	registerUser,
 	requestForgotPassword,
@@ -32,7 +32,7 @@ userRouter
  * * });
  */
 
-userRouter.get("/auth/google/callback", googleLoginCallback);
+userRouter.route("/login/google").post(loginWithGoogle);
 
 userRouter.route("/verify-users-email").post(verifyUsersEmail);
 
