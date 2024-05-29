@@ -68,7 +68,6 @@ export const nextAuthOptions: NextAuthOptions = {
 				if (!accessToken) return false;
 
 				const response = await loginWithGoogle(accessToken);
-				console.log("response", response);
 				if (response?.sucess) return true;
 				return false;
 			}

@@ -2,51 +2,56 @@
 
 ## Description
 
-Movflx is a MERN stack website that allows users to explore and interact with a collection of movies and TV shows. It provides features for user authentication, including Google authentication and email/password authentication. Users can perform CRUD operations on movies and TV shows, as well as interact with the content through comments, likes, and replies.
+Movflx is a MERN stack website that allows users to explore and interact with a collection of movies and TV shows. It provides features for user authentication, including Google authentication and email/password authentication. Users can add movie in watch later to view the movie later.
 
 ## Technologies Used
 
--  MongoDB: A NoSQL database used for storing application data.
--  Express.js: A Node.js framework used for building web applications and APIs.
--  Next.js: A JavaScript library used for building user interfaces and sever logic.
--  Node.js: A JavaScript runtime used for server-side development.
+- MongoDB: A NoSQL database used for storing application data.
+- Express.js: A Node.js framework used for building web applications and APIs.
+- Next.js: A JavaScript library used for building user interfaces and sever logic.
+- Node.js: A JavaScript runtime used for server-side development.
 
 ## Features
 
 1. **User Authentication**
 
-   -  Google authentication
-   -  Email/password authentication
+   - Google authentication
+   - Email/password authentication
 
 2. **Movie and TV Show Management**
 
-   -  Create, Read, Update, Delete (CRUD) operations
-
-   -  Authentication using Google
+   - Movie are streamed to authenticated users
+   - User can add watch later
 
 3. **User Interactions**
-   -  Comments
-   -  Likes
-   -  Replies to comments
+
+   - Comments
+   - Likes
+   - Replies to comments
+
+4. **Payment Gateway**
+   - Paypal
+   - Esewa
+   - Khalti
 
 ## File Structure
 
--  **server (node.js/express)**
+- **server (node.js/express)**
 
-   -  Routes
-   -  Controllers
-   -  Models
-   -  Authentication middleware
+  - Routes
+  - Controllers
+  - Models
+  - Authentication middleware
 
--  **client (next.js)**
-   -  Components
-   -  Redux for state management
-   -  API calls to backend
+- **client (next.js)**
+  - Components
+  - Redux for state management
+  - API calls to backend
 
 ## Authentication Flow
 
--  Google OAuth
--  Email/password authentication
+- Google OAuth
+- Email/password authentication
 
 ## To run this application locally
 
@@ -56,8 +61,8 @@ Follow these instructions to get the project up and running on your local machin
 
 Make sure you have the following software installed on your system:
 
--  Node.js and npm (Node Package Manager)
--  MongoDB
+- Node.js and npm (Node Package Manager)
+- MongoDB
 
 **Installation**
 
