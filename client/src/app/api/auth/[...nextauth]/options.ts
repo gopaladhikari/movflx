@@ -67,18 +67,13 @@ export const nextAuthOptions: NextAuthOptions = {
 				const accessToken = account.access_token;
 				if (!accessToken) return false;
 
-				try {
-					const response = await loginWithGoogle(accessToken);
-
-					if (response?.sucess) return true;
-
-					return true;
-				} catch (error) {
-					return false;
-				}
+				const response = await loginWithGoogle(accessToken);
+				console.log("response", response);
+				if (response?.sucess) return true;
+				return false;
 			}
 
-			return false;
+			return true;
 		},
 		async session({ session, token }) {
 			if (session?.user)
