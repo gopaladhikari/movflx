@@ -72,7 +72,7 @@ export const nextAuthOptions: NextAuthOptions = {
 
 					if (response?.sucess) return true;
 
-					return false;
+					return true;
 				} catch (error) {
 					return false;
 				}

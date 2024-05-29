@@ -124,6 +124,7 @@ const loginWithGoogle = dbHandler(async (req, res) => {
 
 		res
 			.status(201)
+			.cookie("token", token, cookieOptions)
 			.json(
 				new ApiResponse(201, { user: newUser, token }, "Login sucessfull")
 			);
