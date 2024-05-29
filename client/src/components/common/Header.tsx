@@ -1,6 +1,10 @@
 import { getCurrentUser } from "@/utils/session";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage,
+} from "@/components/ui/avatar";
 import {
 	Sheet,
 	SheetClose,
@@ -31,9 +35,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import { site } from "@/config/site";
-
 import { MaxwidthWrapper } from "./MaxwidthWrapper";
 import { Logo } from "./Logo";
 import { LogoutButton } from "../auth/LogoutButton";
@@ -144,7 +146,10 @@ export async function Header() {
 									<menu className="mt-6 space-y-3">
 										{site.mainNav.map(({ href, id, title }) => (
 											<li key={id}>
-												<SheetClose asChild className="flex justify-between">
+												<SheetClose
+													asChild
+													className="flex justify-between"
+												>
 													<Link href={href}>
 														{title} <MoveRight />
 													</Link>

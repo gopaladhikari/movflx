@@ -12,6 +12,7 @@ import ChatBot from "@/components/common/ChatBot";
 import { Suspense } from "react";
 import TopLoadingBar from "@/components/common/TopLoadingBar";
 import { poppins, inter } from "@/config/font";
+import { IsAuthenticated } from "@/components/common/IsAuthenticated";
 
 export const metadata: Metadata = {
 	title: {
@@ -47,12 +48,10 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const { common } = instance.defaults.headers;
-
 	const token = cookies().get("token")?.value;
 
-	if (token && !common.Authorization)
-		common.Authorization = `Bearer ${token}`;
+	if (token)
+		instance.defaults.headers.common.Authorization = `Bearer ${token}`;
 
 	return (
 		<html
@@ -65,6 +64,9 @@ export default async function RootLayout({
 				suppressHydrationWarning
 			>
 				<SessionProvider>
+					<Suspense>
+						<IsAuthenticated token={token} />
+					</Suspense>
 					<Header />
 					<main className="min-h-screen antialiased">{children}</main>
 					<Footer />

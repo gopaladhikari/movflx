@@ -72,7 +72,7 @@ export const nextAuthOptions: NextAuthOptions = {
 
 					if (response?.sucess) return true;
 
-					return true;
+					return false;
 				} catch (error) {
 					return false;
 				}
@@ -106,14 +106,14 @@ export const nextAuthOptions: NextAuthOptions = {
 			const cookieStore = cookies();
 
 			try {
-				const res = await instance.post("/users/logout");
+				const { data } = await instance.post("/users/logout");
 
-				if (res.data.sucess) {
+				if (data.sucess) {
 					cookieStore.delete("token");
 					delete instance.defaults.headers.common.Authorization;
-					return res.data;
 				}
-				return false;
+
+				return data;
 			} catch (error) {
 				return (error as AxiosError).message;
 			}
