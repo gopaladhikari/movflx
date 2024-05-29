@@ -8,9 +8,8 @@ import { CommentCard } from "@/components/movie/CommentCard";
 import { AddComment } from "@/components/movie/AddComment";
 import { MovieCard } from "@/components/movie/MovieCard";
 import { ShareButton } from "@/components/movie/ShareButton";
-import { AddToWatchlist } from "@/components/movie/AddToWatchlist";
 import { ArrowDownToLine, Calendar, Clock } from "lucide-react";
-import { Suspense } from "react";
+import { AddToWatchlist } from "@/components/movie/AddToWatchlist";
 
 type Params = {
 	params?: { id: string };
@@ -52,7 +51,7 @@ export default async function page({ params }: Params) {
 	const comments = await getCommentsByMovieId(movie._id);
 
 	return (
-		<main>
+		<article>
 			<section
 				style={{
 					background:
@@ -97,18 +96,13 @@ export default async function page({ params }: Params) {
 								</p>
 							)}
 						</div>
-						<div className="grid grid-cols-12 place-content-center rounded-full bg-[#242C38] p-2 py-4">
+						<div className="grid grid-cols-12 place-content-center rounded-full bg-background-secondary p-2 py-4">
 							<ShareButton className="col-span-3 m-auto" />
 							<p className="col-span-6 m-auto flex flex-col items-center justify-center text-sm sm:text-lg">
 								<strong>Prime Video</strong>
 								<strong>Streaming Channels</strong>
 							</p>
-							<Suspense>
-								<AddToWatchlist
-									className="col-span-3 m-auto"
-									movieId={params.id}
-								/>
-							</Suspense>
+							<AddToWatchlist className="col-span-3 m-auto" />
 						</div>
 					</div>
 					<div
@@ -187,6 +181,6 @@ export default async function page({ params }: Params) {
 					</aside>
 				</MaxwidthWrapper>
 			</section>
-		</main>
+		</article>
 	);
 }

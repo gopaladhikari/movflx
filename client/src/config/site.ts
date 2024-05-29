@@ -1,3 +1,12 @@
+import {
+	// Home,
+	Clock,
+	ThumbsUp,
+	Flame,
+	RotateCw,
+	Settings,
+} from "lucide-react";
+
 export const site = {
 	name: "Movflx - Online Movies & Tv Shows",
 	description:
@@ -47,6 +56,45 @@ export const site = {
 			id: 3,
 			title: "Legal Notice",
 			href: "/legal-notices",
+		},
+	],
+
+	userNav: [
+		// {
+		// 	id: 1,
+		// 	title: "Home",
+		// 	href: "/",
+		// 	Icon: Home,
+		// },
+		{
+			id: 2,
+			title: "Watchlist",
+			href: "/me/watchlist",
+			Icon: Clock,
+		},
+		{
+			id: 3,
+			title: "Liked videos",
+			href: "/me/liked-videos",
+			Icon: ThumbsUp,
+		},
+		{
+			id: 4,
+			title: "Watch trending",
+			href: "/me/watch-trending",
+			Icon: Flame,
+		},
+		{
+			id: 5,
+			title: "History",
+			href: "/me/history",
+			Icon: RotateCw,
+		},
+		{
+			id: 6,
+			title: "Setting",
+			href: "/me/setting",
+			Icon: Settings,
 		},
 	],
 };

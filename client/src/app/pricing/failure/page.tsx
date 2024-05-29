@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Page() {
 	return (
-		<div className="flex min-h-[90vh] flex-col items-center justify-center   px-4 py-12">
+		<section className="flex min-h-[90vh] flex-col items-center justify-center   px-4 py-12">
 			<div className="mx-auto w-full max-w-md rounded-lg  bg-gray-900 p-8 shadow-lg">
 				<div className="flex flex-col items-center space-y-6">
 					<div className="rounded-full bg-red-500 p-4 text-white">
@@ -18,6 +18,6 @@ export default function Page() {
 					<Button className="w-full">Try Again</Button>
 				</div>
 			</div>
-		</div>
+		</section>
 	);
 }

@@ -33,7 +33,7 @@ export default async function Page({ searchParams }: SearchParams) {
 	const totalPages = Math.floor(Number(res?.totalMovies) / 16);
 
 	return (
-		<main>
+		<>
 			<MoviepageHeroSection>
 				<div className="grid h-[70vh] place-content-center space-y-2">
 					<h1>
@@ -112,6 +112,6 @@ export default async function Page({ searchParams }: SearchParams) {
 					</MaxwidthWrapper>
 				</section>
 			)}
-		</main>
+		</>
 	);
 }

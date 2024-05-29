@@ -17,5 +17,5 @@ export const generateMetadata = async (): Promise<Metadata> => {
 };
 
 export default async function page() {
-	return <main>Me</main>;
+	return <section>page</section>;
 }

@@ -5,20 +5,21 @@ import { Plus, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import { addToWatchlist } from "@/lib/watchlist";
+import { useParams } from "next/navigation";
 import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
 
 interface Props {
 	className?: string;
-	movieId: string;
 }
 
-export function AddToWatchlist({ className, movieId }: Props) {
+export function AddToWatchlist({ className }: Props) {
+	const { id: movieId } = useParams();
+
 	const {
 		handleSubmit,
-		formState: { isLoading },
+		formState: { isSubmitting },
 	} = useForm();
-
 	const { data, status } = useSession();
 
 	const onSubmit = async () => {
@@ -43,7 +44,7 @@ export function AddToWatchlist({ className, movieId }: Props) {
 				});
 				return;
 			}
-			const res = await addToWatchlist(userId, movieId);
+			const res = await addToWatchlist(userId, movieId as string);
 
 			if (res?.sucess)
 				toast({
@@ -59,9 +60,9 @@ export function AddToWatchlist({ className, movieId }: Props) {
 		}
 	};
 
-	if (isLoading)
+	if (isSubmitting)
 		return (
-			<Button disabled aria-label="Loading">
+			<Button disabled aria-label="Loading" className={cn(className)}>
 				<Loader2 className="animate-spin" />
 			</Button>
 		);

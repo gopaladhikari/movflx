@@ -20,11 +20,9 @@ export const addToWatchlist = async (userId: string, movieId: string) => {
 				},
 			}
 		);
-		console.log("watch to list", data);
 		return data;
 	} catch (error) {
 		const axiosError = (error as ApiError).response?.data;
-		console.log(axiosError);
 		return axiosError;
 	}
 };
