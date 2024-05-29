@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/sheet";
 import {
 	CreditCard,
-	Github,
 	LifeBuoy,
 	Plus,
 	Settings,
@@ -115,10 +114,7 @@ export async function Header() {
 										</DropdownMenuItem>
 									</DropdownMenuGroup>
 									<DropdownMenuSeparator />
-									<DropdownMenuItem>
-										<Github className="mr-2 size-4" />
-										<span>GitHub</span>
-									</DropdownMenuItem>
+
 									<DropdownMenuItem>
 										<LifeBuoy className="mr-2 size-4" />
 										<span>Support</span>

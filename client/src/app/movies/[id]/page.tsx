@@ -3,11 +3,13 @@ import { getMovieById, getMovies } from "@/lib/movies";
 import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-
 import { getCommentsByMovieId } from "@/lib/comments";
 import { CommentCard } from "@/components/movie/CommentCard";
 import { AddComment } from "@/components/movie/AddComment";
 import { MovieCard } from "@/components/movie/MovieCard";
+import { ShareButton } from "@/components/movie/ShareButton";
+import { AddToWatchlist } from "@/components/movie/AddToWatchlist";
+import { ArrowDownToLine, Calendar, Clock } from "lucide-react";
 
 type Params = {
 	params?: { id: string };
@@ -61,6 +63,7 @@ export default async function page({ params }: Params) {
 							alt={`movie poster for ${movie?.title}`}
 							width={300}
 							height={450}
+							className="mx-auto"
 						/>
 					</div>
 					<div className="col-span-6 space-y-4">
@@ -76,33 +79,28 @@ export default async function page({ params }: Params) {
 							<p className="flex items-center">
 								{movie?.genres?.map((genre) => genre).join(", ")}
 							</p>
+
 							{movie?.year && (
 								<p className="flex items-center gap-2">
-									icon
+									<Calendar size={16} className="text-yellow" />
 									{movie.year}
 								</p>
 							)}
 
 							{movie?.year && (
 								<p className="flex items-center gap-2">
-									icon {movie?.runtime} min
+									<Clock size={16} className="text-yellow" />
+									{movie?.runtime} min
 								</p>
 							)}
 						</div>
-						<div className="grid-cols-12 place-content-center gap-4 space-y-4 rounded-full bg-[#242C38] p-16 sm:grid sm:p-8">
-							<button
-								type="button"
-								className="col-span-3 flex w-full flex-col items-center justify-center gap-2"
-							>
-								icon Share
-							</button>
-							<p className="col-span-5 flex w-full flex-col items-center gap-2 text-lg">
-								Prime Video
-								<span className="text-sm text-white/80">
-									Streaming Channels
-								</span>
+						<div className="grid grid-cols-12 place-content-center rounded-full bg-[#242C38] p-2 py-4">
+							<ShareButton className="col-span-3 m-auto" />
+							<p className="col-span-6 m-auto flex flex-col items-center justify-center text-sm sm:text-lg">
+								<strong>Prime Video</strong>
+								<strong>Streaming Channels</strong>
 							</p>
-							button
+							<AddToWatchlist className="col-span-3 m-auto" />
 						</div>
 					</div>
 					<div
@@ -111,7 +109,7 @@ export default async function page({ params }: Params) {
 							writingMode: "vertical-lr",
 						}}
 					>
-						Download now icon
+						<ArrowDownToLine />
 					</div>
 				</MaxwidthWrapper>
 			</section>
