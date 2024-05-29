@@ -12,7 +12,6 @@ import ChatBot from "@/components/common/ChatBot";
 import { Suspense } from "react";
 import TopLoadingBar from "@/components/common/TopLoadingBar";
 import { poppins, inter } from "@/config/font";
-import { IsAuthenticated } from "@/components/common/IsAuthenticated";
 
 export const metadata: Metadata = {
 	title: {
@@ -64,9 +63,6 @@ export default async function RootLayout({
 				suppressHydrationWarning
 			>
 				<SessionProvider>
-					<Suspense>
-						<IsAuthenticated token={token} />
-					</Suspense>
 					<Header />
 					<main className="min-h-screen antialiased">{children}</main>
 					<Footer />
