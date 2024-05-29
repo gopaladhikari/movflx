@@ -43,6 +43,11 @@ const addToWatchlist = dbHandler(async (req, res) => {
 			.json(new ApiResponse(201, newWatchList, "Watch list created"));
 	}
 
+	if (watchlist.movie_id.includes(new mongoose.Types.ObjectId(movieId)))
+		return res
+			.status(409)
+			.json(new ApiError(409, "Movie is already in wacth list"));
+
 	watchlist.movie_id.push(new mongoose.Types.ObjectId(movieId));
 	await watchlist.save();
 

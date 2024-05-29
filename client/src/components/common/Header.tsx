@@ -41,6 +41,7 @@ import { LogoutButton } from "../auth/LogoutButton";
 
 export async function Header() {
 	const session = await getCurrentUser();
+
 	return (
 		<header>
 			<nav>

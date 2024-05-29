@@ -10,6 +10,7 @@ import { MovieCard } from "@/components/movie/MovieCard";
 import { ShareButton } from "@/components/movie/ShareButton";
 import { AddToWatchlist } from "@/components/movie/AddToWatchlist";
 import { ArrowDownToLine, Calendar, Clock } from "lucide-react";
+import { Suspense } from "react";
 
 type Params = {
 	params?: { id: string };
@@ -40,7 +41,9 @@ export async function generateMetadata(
 }
 
 export default async function page({ params }: Params) {
-	const movie = await getMovieById(params?.id);
+	if (!params?.id) return notFound();
+
+	const movie = await getMovieById(params.id);
 
 	if (!movie) return notFound();
 
@@ -100,7 +103,12 @@ export default async function page({ params }: Params) {
 								<strong>Prime Video</strong>
 								<strong>Streaming Channels</strong>
 							</p>
-							<AddToWatchlist className="col-span-3 m-auto" />
+							<Suspense>
+								<AddToWatchlist
+									className="col-span-3 m-auto"
+									movieId={params.id}
+								/>
+							</Suspense>
 						</div>
 					</div>
 					<div

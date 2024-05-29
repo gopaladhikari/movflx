@@ -60,7 +60,7 @@ export const nextAuthOptions: NextAuthOptions = {
 	},
 
 	callbacks: {
-		async signIn({ account }) {
+		async signIn({ account, user }) {
 			if (account?.provider === "credentials") return true;
 
 			if (account?.provider === "google") {
@@ -68,7 +68,15 @@ export const nextAuthOptions: NextAuthOptions = {
 				if (!accessToken) return false;
 
 				const response = await loginWithGoogle(accessToken);
-				if (response?.sucess) return true;
+
+				if (response?.sucess) {
+					user._id = response.data._id;
+					user.avatar = response.data.avatar;
+					user.firstName = response.data.firstName;
+					user.lastName = response.data.lastName;
+					user.email = response.data.email;
+					return true;
+				}
 				return false;
 			}
 
