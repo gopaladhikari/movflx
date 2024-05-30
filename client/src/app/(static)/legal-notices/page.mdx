@@ -1,11 +1,8 @@
 import { MaxwidthWrapper } from "@/components/common/MaxwidthWrapper";
 
 export const metadata = {
-	title: "Legal Notices",
+  title: "Legal Notices",
 };
-
-<section> 
-<MaxwidthWrapper className="space-y-4">
 
 # Legal Notices
 
@@ -31,5 +28,10 @@ Movflx applications and services are covered by patents. For information on pate
 
 Movflx applications, software development kits (SDKs) and other Movflx products may contain software available under open source or free software licenses (“Open Source Software”). The Movflx Terms of Use do not alter any rights or obligations you may have under those Open Source Software licenses. Additional information about Open Source Software, including required acknowledgements, license terms and notices, can be found below.
 
-</MaxwidthWrapper>
-</section>
+export default function page({ children }) {
+  return (
+    <MaxwidthWrapper>
+      <div className="prose prose-invert max-w-full mb-16">{children}</div>
+    </MaxwidthWrapper>
+  );
+}

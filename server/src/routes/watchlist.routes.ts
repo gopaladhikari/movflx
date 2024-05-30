@@ -11,28 +11,23 @@ const watchlistRouter = Router();
 
 // private routes
 
-watchlistRouter.get(
-	"/get-watch-list",
-	passport.authenticate("jwt", { session: false }),
-	getWatchlist
-);
+watchlistRouter
+	.route("/get-watch-list")
+	.get(passport.authenticate("jwt", { session: false }), getWatchlist);
 
-watchlistRouter.post(
-	"/add-to-watch-list/:movieId",
-	passport.authenticate("jwt", { session: false }),
-	addToWatchlist
-);
+watchlistRouter
+	.route("/add-to-watch-list/:movieId")
+	.post(passport.authenticate("jwt", { session: false }), addToWatchlist);
 
-watchlistRouter.delete(
-	"/delete-from-watch-list/:movieId",
-	passport.authenticate("jwt", { session: false }),
-	deleteFromWatchlist
-);
+watchlistRouter
+	.route("/delete-from-watch-list/:movieId")
+	.delete(
+		passport.authenticate("jwt", { session: false }),
+		deleteFromWatchlist
+	);
 
-watchlistRouter.delete(
-	"/",
-	passport.authenticate("jwt", { session: false }),
-	deleteWatchlist
-);
+watchlistRouter
+	.route("/clear-watchlist")
+	.post(passport.authenticate("jwt", { session: false }), deleteWatchlist);
 
 export { watchlistRouter };

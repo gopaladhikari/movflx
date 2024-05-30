@@ -1,14 +1,11 @@
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 import { fontFamily } from "tailwindcss/defaultTheme";
+import typography from "@tailwindcss/typography";
 
 const config: Config = {
 	darkMode: ["class"],
-	content: [
-		"./components/**/*.{ts,tsx}",
-		"./app/**/*.{ts,tsx}",
-		"./src/**/*.{ts,tsx}",
-	],
+	content: ["./src/**/*.{ts,tsx,mdx}"],
 	prefix: "",
 	theme: {
 		container: {
@@ -83,7 +80,7 @@ const config: Config = {
 			},
 		},
 	},
-	plugins: [tailwindcssAnimate],
+	plugins: [tailwindcssAnimate, typography],
 };
 
 export default config;

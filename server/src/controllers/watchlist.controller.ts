@@ -19,7 +19,7 @@ const getWatchlist = dbHandler(async (req, res) => {
 	res
 		.status(200)
 		.json(
-			new ApiResponse(200, Watchlist, "Watchlist fetched sucessfully")
+			new ApiResponse(200, watchlist, "Watchlist fetched sucessfully")
 		);
 });
 

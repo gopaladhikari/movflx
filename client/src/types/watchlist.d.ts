@@ -7,6 +7,17 @@ export interface IAddToWatchlist extends Success {
 		movie_id: string[];
 		createdAt: Date;
 		updatedAt: Date;
-		__v: 2;
+		__v: number;
+	};
+}
+
+export interface IWatchlist extends Success {
+	data: {
+		_id: string;
+		user_id: string;
+		movie_id: string[];
+		createdAt: Date;
+		updatedAt: Date;
+		__v: number;
 	};
 }

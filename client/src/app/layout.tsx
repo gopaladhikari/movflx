@@ -14,65 +14,65 @@ import TopLoadingBar from "@/components/common/TopLoadingBar";
 import { poppins, inter } from "@/config/font";
 
 export const metadata: Metadata = {
-	title: {
-		default: site.name,
-		template: `%s | ${site.name}`,
-	},
+  title: {
+    default: site.name,
+    template: `%s | ${site.name}`,
+  },
 
-	description: site.description,
+  description: site.description,
 
-	icons: {
-		icon: "/favicon.png",
-	},
+  icons: {
+    icon: "/favicon.png",
+  },
 
-	metadataBase: new URL(site.url),
+  metadataBase: new URL(site.url),
 
-	openGraph: {
-		title: site.name,
-		description: site.description,
-		siteName: site.name,
-		url: site.url,
-		locale: "en-US",
-		type: "website",
-	},
+  openGraph: {
+    title: site.name,
+    description: site.description,
+    siteName: site.name,
+    url: site.url,
+    locale: "en-US",
+    type: "website",
+  },
 };
 
 export const viewport: Viewport = {
-	colorScheme: "dark",
-	themeColor: "#0F0E16",
+  colorScheme: "dark",
+  themeColor: "#0F0E16",
 };
 
 export default async function RootLayout({
-	children,
+  children,
 }: Readonly<{
-	children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-	const token = cookies().get("token")?.value;
+  const token = cookies().get("token")?.value;
 
-	if (token)
-		instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+  if (token)
+    instance.defaults.headers.common.Authorization = `Bearer ${token}`;
 
-	return (
-		<html
-			lang="en"
-			suppressHydrationWarning
-			className={cn("dark", poppins.variable)}
-		>
-			<body
-				className={cn("bg-background", inter.className)}
-				suppressHydrationWarning
-			>
-				<SessionProvider>
-					<Header />
-					<main className="min-h-screen antialiased">{children}</main>
-					<Footer />
-					<Toaster />
-					<Suspense>
-						<TopLoadingBar />
-						<ChatBot />
-					</Suspense>
-				</SessionProvider>
-			</body>
-		</html>
-	);
+  return (
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={cn("dark", poppins.variable)}
+    >
+      <body
+        className={cn("bg-background", inter.className)}
+        suppressHydrationWarning
+      >
+        <SessionProvider>
+          <Header />
+          <main className="min-h-screen antialiased">{children}</main>
+          <Footer />
+          <Toaster />
+          <Suspense>
+            <TopLoadingBar />
+            <ChatBot />
+          </Suspense>
+        </SessionProvider>
+      </body>
+    </html>
+  );
 }

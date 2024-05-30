@@ -1,12 +1,8 @@
 import { MaxwidthWrapper } from "@/components/common/MaxwidthWrapper";
 
 export const metadata = {
-	title: "Terms of Use",
+  title: "Terms of Use",
 };
-
-<section>
-
-<MaxwidthWrapper className="space-y-2">
 
 # Movflx Terms of Use
 
@@ -86,5 +82,10 @@ These Terms of Use govern your use of our service. As used in these Terms of Use
 
     8.6. Electronic Communications. We will send you information relating to your account (e.g. payment authorizations, invoices, changes in password or Payment Method, confirmation messages, notices) in electronic form only, for example via emails to your email address provided during registration.
 
-</MaxwidthWrapper>
-</section>
+export default function page({ children }) {
+  return (
+    <MaxwidthWrapper>
+      <div className="prose prose-invert max-w-full mb-16">{children}</div>
+    </MaxwidthWrapper>
+  );
+}

@@ -2,7 +2,8 @@
 
 import { instance } from "@/config/axios";
 import { ApiError } from "@/types/axios-response";
-import { IAddToWatchlist } from "@/types/watchlist";
+import { IAddToWatchlist, IWatchlist } from "@/types/watchlist";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 export const addToWatchlist = async (userId: string, movieId: string) => {
@@ -20,6 +21,24 @@ export const addToWatchlist = async (userId: string, movieId: string) => {
 				},
 			}
 		);
+
+		revalidatePath("/me/watchlist");
+		return data;
+	} catch (error) {
+		const axiosError = (error as ApiError).response?.data;
+		return axiosError;
+	}
+};
+
+export const getWatchlist = async (userId: string) => {
+	try {
+		const { data } = await instance.get<IWatchlist>(
+			"/watchlist/get-watch-list",
+			{
+				data: { userId },
+			}
+		);
+
 		return data;
 	} catch (error) {
 		const axiosError = (error as ApiError).response?.data;

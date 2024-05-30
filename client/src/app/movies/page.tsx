@@ -60,7 +60,7 @@ export default async function Page({ searchParams }: SearchParams) {
 								<MovieCard key={movie._id} movie={movie} />
 							))}
 						</div>
-						<Pagination className="mt-8">
+						<Pagination className="mt-8 list-none">
 							<PaginationContent>
 								{+currentPage > 1 && (
 									<PaginationItem>

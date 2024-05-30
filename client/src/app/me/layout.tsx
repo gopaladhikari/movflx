@@ -19,8 +19,8 @@ export default async function layout({
 		fullName = `${session?.user?.firstName} ${session?.user?.lastName}`;
 
 	return (
-		<MaxwidthWrapper className="mb-16 grid min-h-[90vh] grid-cols-12 gap-4">
-			<aside className="col-span-3 rounded-xl bg-background-secondary">
+		<MaxwidthWrapper className="mb-16 grid grid-cols-12 gap-4">
+			<aside className="col-span-3 h-[90vh] rounded-xl bg-background-secondary">
 				<nav>
 					<menu className="flex flex-col gap-3 p-3">
 						<li>
