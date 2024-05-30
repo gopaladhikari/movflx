@@ -1,9 +1,9 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Theaters",
+  title: "Theaters",
 };
 
 export default function page() {
-	return <div>page</div>;
+  return <div>page</div>;
 }
