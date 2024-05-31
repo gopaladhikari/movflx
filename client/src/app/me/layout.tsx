@@ -6,46 +6,46 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 export default async function layout({
-	children,
+  children,
 }: {
-	children: ReactNode;
+  children: ReactNode;
 }) {
-	const session = await getCurrentUser();
+  const session = await getCurrentUser();
 
-	let fullName: string = "Me";
+  let fullName: string = "Me";
 
-	if (session?.user?.name) fullName = session?.user?.name;
-	else if (session?.user?.firstName && session?.user?.lastName)
-		fullName = `${session?.user?.firstName} ${session?.user?.lastName}`;
+  if (session?.user?.name) fullName = session?.user?.name;
+  else if (session?.user?.firstName && session?.user?.lastName)
+    fullName = `${session?.user?.firstName} ${session?.user?.lastName}`;
 
-	return (
-		<MaxwidthWrapper className="mb-16 grid grid-cols-12 gap-4">
-			<aside className="col-span-3 h-[90vh] rounded-xl bg-background-secondary">
-				<nav>
-					<menu className="flex flex-col gap-3 p-3">
-						<li>
-							<Link
-								href="/me"
-								className="flex items-center gap-4 rounded-md p-3 hover:bg-black"
-							>
-								<User size={18} />
-								{fullName}
-							</Link>
-						</li>
-						{site.userNav.map(({ id, href, title, Icon }) => (
-							<li key={id}>
-								<Link
-									href={href}
-									className="flex items-center gap-4 rounded-md p-3 hover:bg-black"
-								>
-									<Icon size={18} /> {title}
-								</Link>
-							</li>
-						))}
-					</menu>
-				</nav>
-			</aside>
-			<div className="col-span-9">{children}</div>
-		</MaxwidthWrapper>
-	);
+  return (
+    <MaxwidthWrapper className="mb-16 grid grid-cols-12 gap-8">
+      <aside className="col-span-3 h-[90vh] rounded-xl bg-background-secondary">
+        <nav>
+          <menu className="flex flex-col gap-3 p-3">
+            <li>
+              <Link
+                href="/me"
+                className="flex items-center gap-4 rounded-md p-3 hover:bg-black"
+              >
+                <User size={18} />
+                {fullName}
+              </Link>
+            </li>
+            {site.userNav.map(({ id, href, title, Icon }) => (
+              <li key={id}>
+                <Link
+                  href={href}
+                  className="flex items-center gap-4 rounded-md p-3 hover:bg-black"
+                >
+                  <Icon size={18} /> {title}
+                </Link>
+              </li>
+            ))}
+          </menu>
+        </nav>
+      </aside>
+      <div className="col-span-9">{children}</div>
+    </MaxwidthWrapper>
+  );
 }

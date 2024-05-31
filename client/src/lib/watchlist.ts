@@ -1,7 +1,7 @@
 "use server";
 
 import { instance } from "@/config/axios";
-import { ApiError } from "@/types/axios-response";
+import { ApiError, Success } from "@/types/axios-response";
 import { IAddToWatchlist, IWatchlist } from "@/types/watchlist";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -46,4 +46,47 @@ const getWatchlist = async (userId: string) => {
   }
 };
 
-export { addToWatchlist, getWatchlist };
+const deleteFromWatchlist = async (
+  userId: string | undefined,
+  movieId: string | undefined
+) => {
+  try {
+    const { data } = await instance.delete<Success>(
+      `watchlist/delete-from-watch-list/${movieId}`,
+      {
+        data: { userId },
+      }
+    );
+    revalidatePath("/me/watchlist");
+    return data;
+  } catch (error) {
+    const axiosError = (error as ApiError).response?.data;
+    return axiosError;
+  }
+};
+
+const clearWatchlist = async (userId: string | undefined) => {
+  try {
+    const { data } = await instance.delete<Success>(
+      "watchlist/clear-watchlist",
+      {
+        data: { userId },
+      }
+    );
+
+    revalidatePath("/me/watchlist");
+
+    return data;
+  } catch (error) {
+    const axiosError = (error as ApiError).response?.data;
+
+    return axiosError;
+  }
+};
+
+export {
+  addToWatchlist,
+  getWatchlist,
+  deleteFromWatchlist,
+  clearWatchlist,
+};
