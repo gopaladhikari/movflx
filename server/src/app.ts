@@ -13,10 +13,10 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 app.use(
-	cors({
-		origin: env.corsOrigin,
-		credentials: true,
-	})
+  cors({
+    origin: env.corsOrigin,
+    credentials: true,
+  })
 );
 
 // passport middleware
@@ -39,7 +39,7 @@ import { watchlistRouter } from "./routes/watchlist.routes";
 // routes declaration
 
 app.get("/", (req, res) => {
-	res.json(new ApiResponse(200, "Server is up and running", "Welcome"));
+  res.json(new ApiResponse(200, "Server is up and running", "Welcome"));
 });
 
 app.use("/api/v1/users", userRouter);
@@ -53,7 +53,7 @@ app.use("/api/v1/watchlist", watchlistRouter);
 
 export { app };
 
-// TODO: Add watch later and liked movies
+// TODO: liked movies
 // TODO: User can have one subscription at a time. If registered for new subscription, previous subscription will be cancelled.
 
 /**
