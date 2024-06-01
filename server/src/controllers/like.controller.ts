@@ -45,4 +45,22 @@ const toggleLike = dbHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, like, "Liked movie"));
 });
 
-export { toggleLike };
+const getLikedMovies = dbHandler(async (req, res) => {
+  const { userId } = req.body;
+
+  if (!isValidObjectId(userId))
+    return res.status(400).json(new ApiError(400, "Invalid userId"));
+
+  const likedMovies = await Like.find({ user_id: userId });
+
+  if (!likedMovies)
+    return res
+      .status(404)
+      .json(new ApiError(404, "No liked movies found"));
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, likedMovies, "Liked movies"));
+});
+
+export { toggleLike, getLikedMovies };

@@ -51,18 +51,12 @@ app.use("/api/v1/theaters", theaterRouter);
 app.use("/api/v1/pricing", pricingRouter);
 app.use("/api/v1/payment", paymentRouter);
 app.use("/api/v1/watchlist", watchlistRouter);
-app.use("/api/v1/like", likeRouter);
+app.use("/api/v1/likes", likeRouter);
 
 export { app };
 
 // TODO: liked movies
-// TODO: User can have one subscription at a time. If registered for new subscription, previous subscription will be cancelled.
-//  TODO: Personalized Recommendations:
-//  TODO: Social Features
-// TODO: Custom Playlists
 // TODO: Search feature with advanced Search Filters
-// TODO: User Reviews and Ratings
-// TODO: Offline Viewing
 // TODO: Multiple Language Support
 
 /**

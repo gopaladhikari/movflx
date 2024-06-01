@@ -8,4 +8,8 @@ likeRouter
   .route("/toggle-like/:movieId")
   .post(passport.authenticate("jwt", { session: false }), toggleLike);
 
+likeRouter
+  .route("/get-liked-movies")
+  .get(passport.authenticate("jwt", { session: false }), toggleLike);
+
 export { likeRouter };
