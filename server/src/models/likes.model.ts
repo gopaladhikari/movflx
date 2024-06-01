@@ -11,7 +11,7 @@ const likesSchema = new Schema(
     movie_id: [
       {
         type: Schema.Types.ObjectId,
-        ref: "PlayList",
+        ref: "Movie",
         index: true,
       },
     ],
