@@ -26,10 +26,11 @@ const toggleLike = dbHandler(async (req, res) => {
       .json(new ApiResponse(201, newLike, "Liked video"));
   }
 
+  const movieObjectId = new mongoose.Types.ObjectId(movieId);
+
   if (like.movie_id.includes(new mongoose.Types.ObjectId(movieId))) {
-    const index = like.movie_id.indexOf(
-      new mongoose.Types.ObjectId(movieId)
-    );
+    const index = like.movie_id.indexOf(movieObjectId);
+
     like.movie_id.splice(index, 1);
     await like.save();
 
@@ -38,7 +39,7 @@ const toggleLike = dbHandler(async (req, res) => {
       .json(new ApiResponse(200, like, "Like removed"));
   }
 
-  like.movie_id.push(new mongoose.Types.ObjectId(movieId));
+  like.movie_id.push(movieObjectId);
   await like.save();
 
   return res.status(200).json(new ApiResponse(200, like, "Liked movie"));

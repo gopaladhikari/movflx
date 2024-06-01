@@ -57,6 +57,13 @@ export { app };
 
 // TODO: liked movies
 // TODO: User can have one subscription at a time. If registered for new subscription, previous subscription will be cancelled.
+//  TODO: Personalized Recommendations:
+//  TODO: Social Features
+// TODO: Custom Playlists
+// TODO: Search feature with advanced Search Filters
+// TODO: User Reviews and Ratings
+// TODO: Offline Viewing
+// TODO: Multiple Language Support
 
 /**
  *  * When the user pays for the subscription, user should be allowed to watch movies. Movies will be received from tmdb.
