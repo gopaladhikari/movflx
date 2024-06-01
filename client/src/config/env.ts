@@ -6,8 +6,6 @@ const {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   GOOGLE_CHAT_API_KEY,
-  TMDB_API_KEY,
-  TMDB_ACCESS_TOKEN,
 } = process.env;
 
 const envSchema = z.object({
@@ -26,9 +24,6 @@ const envSchema = z.object({
     .min(1, { message: "Google Chat API Key is required" }),
 
   tmdbApiKey: z.string().min(1, { message: "TMDB API Key is required" }),
-  tmdbAccessToken: z
-    .string()
-    .min(1, { message: "TMDB Access Token is required" }),
 });
 
 const validatedEnv = envSchema.safeParse({
@@ -37,8 +32,6 @@ const validatedEnv = envSchema.safeParse({
   googleClientId: GOOGLE_CLIENT_ID,
   googleClientSecret: GOOGLE_CLIENT_SECRET,
   googleChatApiKey: GOOGLE_CHAT_API_KEY,
-  tmdbApiKey: TMDB_API_KEY,
-  tmdbAccessToken: TMDB_ACCESS_TOKEN,
 });
 
 if (!validatedEnv.success) throw new Error(validatedEnv.error.message);
