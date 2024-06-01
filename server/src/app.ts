@@ -35,6 +35,7 @@ import { theaterRouter } from "./routes/theater.routes";
 import { pricingRouter } from "./routes/pricing.routes";
 import { paymentRouter } from "./routes/payment.routes";
 import { watchlistRouter } from "./routes/watchlist.routes";
+import { likeRouter } from "./routes/like.routes";
 
 // routes declaration
 
@@ -50,6 +51,7 @@ app.use("/api/v1/theaters", theaterRouter);
 app.use("/api/v1/pricing", pricingRouter);
 app.use("/api/v1/payment", paymentRouter);
 app.use("/api/v1/watchlist", watchlistRouter);
+app.use("/api/v1/like", likeRouter);
 
 export { app };
 
