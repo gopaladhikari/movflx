@@ -22,8 +22,6 @@ const envSchema = z.object({
   googleChatApiKey: z
     .string()
     .min(1, { message: "Google Chat API Key is required" }),
-
-  tmdbApiKey: z.string().min(1, { message: "TMDB API Key is required" }),
 });
 
 const validatedEnv = envSchema.safeParse({

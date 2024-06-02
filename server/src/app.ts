@@ -58,7 +58,3 @@ export { app };
 // TODO: liked movies
 // TODO: Search feature with advanced Search Filters
 // TODO: Multiple Language Support
-
-/**
- *  * When the user pays for the subscription, user should be allowed to watch movies. Movies will be received from tmdb.
- */
