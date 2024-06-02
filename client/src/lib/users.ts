@@ -2,8 +2,10 @@
 
 import { instance } from "@/config/axios";
 import { TLoginSchema } from "@/schemas/loginSchema";
-import { ApiError } from "@/types/axios-response";
+import { ApiError, Success } from "@/types/axios-response";
 import { LoginWithGoogle, TUserResponse } from "@/types/user";
+import { revalidatePath } from "next/cache";
+
 import { cookies } from "next/headers";
 
 const registerUser = async (formData: FormData) => {
@@ -154,6 +156,31 @@ const resetForgotPassword = async (
   }
 };
 
+const updateUser = async (
+  id: string,
+  firstName: string,
+  lastName: string,
+  phoneNumber: string | undefined
+) => {
+  try {
+    const { data } = await instance.put<Success>(
+      `/users/update-user/${id}`,
+      {
+        firstName,
+        lastName,
+        phoneNumber,
+      }
+    );
+
+    revalidatePath("/me");
+    return data;
+  } catch (error) {
+    const axiosError = (error as ApiError).response?.data;
+
+    return axiosError;
+  }
+};
+
 export {
   registerUser,
   requestResetPassword,
@@ -164,4 +191,5 @@ export {
   getMe,
   getMeFromToken,
   logoutUser,
+  updateUser,
 };

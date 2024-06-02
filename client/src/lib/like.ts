@@ -16,7 +16,7 @@ const toggleLike = async (movieId: string, userId: string) => {
 
 const getLikedMovies = async (userId: string) => {
   try {
-    const { data } = await instance.get(`/api/v1/likes/get-liked-movies`, {
+    const { data } = await instance.get(`/likes/get-liked-movies`, {
       data: { userId },
     });
 
