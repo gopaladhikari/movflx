@@ -59,7 +59,8 @@ const getMovieById = dbHandler(async (req, res) => {
 
   const movie = await Movie.findById(id);
 
-  if (!movie) return res.status(404).json(new ApiError(404, "Movie not found"));
+  if (!movie)
+    return res.status(404).json(new ApiError(404, "Movie not found"));
 
   res.status(200).json(new ApiResponse(200, movie, "Movie fetched"));
 });

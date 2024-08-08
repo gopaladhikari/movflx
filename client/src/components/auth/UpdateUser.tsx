@@ -32,7 +32,6 @@ import { toast } from "../ui/use-toast";
 export function UpdateUser() {
   const { data: session, update } = useSession();
   const user = session?.user;
-  console.log(user);
 
   const form = useForm<TUpdateUserSchema>({
     resolver: zodResolver(updateUserSchema),
